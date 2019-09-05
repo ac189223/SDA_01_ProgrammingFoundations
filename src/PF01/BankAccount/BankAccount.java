@@ -15,7 +15,7 @@ public class BankAccount {
         return balance;
     }
 
-    public void credit(double amount) {
+    public void deposit(double amount) {
         balance += amount;
     }
 
@@ -26,7 +26,7 @@ public class BankAccount {
     public static void test() {
         BankAccount bankAccount = new BankAccount(2000);
         System.out.println(bankAccount.getBalance());
-        bankAccount.credit(300);
+        bankAccount.deposit(300);
         System.out.println(bankAccount.getBalance());
         bankAccount.withdraw(500);
         System.out.println(bankAccount.getBalance());
@@ -52,7 +52,7 @@ public class BankAccount {
                 System.out.print("Enter amount: ");
                 amount = scanner.nextDouble();
                 if (operation == 0) {
-                    bankAccount.credit(amount);
+                    bankAccount.deposit(amount);
                 } else {
                     bankAccount.withdraw(amount);
                 }

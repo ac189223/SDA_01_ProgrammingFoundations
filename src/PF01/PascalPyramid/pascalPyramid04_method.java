@@ -18,7 +18,7 @@ public class pascalPyramid04_method {
             for (int position = 1; position <= row; position++) {
                 System.out.print(pascalTriangle(row, position) + " ");
             }
-            System.out.println("");
+            System.out.println();
         }
     }
 }
