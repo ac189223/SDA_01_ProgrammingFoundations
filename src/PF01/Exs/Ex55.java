@@ -6,6 +6,7 @@ import java.util.Scanner;
 public class Ex55 {
     /*
 Write a Java program to remove a specific element from an array.
+Remove means exchange to zero.
      */
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);

@@ -3,18 +3,16 @@ package PF01.Exs;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Ex55plus {
+public class Ex55plusplus {
     /*
 Write a Java program to remove a specific element from an array.
-Remove it means move all remaining by one and put 0 at the end.
+Magnus method - replace it with last number from array.
      */
     static int[] numbers;
     static int times;
 
     private static void remove(int i) {
-        for (int position = i; position < numbers.length - times; position++)
-            numbers[position] = numbers[position + 1];
-        numbers[numbers.length - times] = 0;
+        numbers[i] = numbers[numbers.length - times];
     }
 
     public static void main(String[] args){
@@ -41,12 +39,14 @@ Remove it means move all remaining by one and put 0 at the end.
                 check = true;
                 times++;
                 remove(i);
+                i--;
+                if (i == (numbers.length - times)) break;
             }
         }
 
         if (check) {
             System.out.println("Value found " + times + " times and removed (see below)");
-            for (int i = 1; i <numbers.length; i++) {
+            for (int i = 1; i <numbers.length - times; i++) {
                 System.out.print(numbers[i] + ", ");
             }
             System.out.println();
