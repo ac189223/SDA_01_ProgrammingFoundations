@@ -1,6 +1,6 @@
-package PF01.MVC_ModelViewController._02_VehiclesRental;
+package PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane;
 
-import PF01.MVC_ModelViewController._02_VehiclesRental.Owners.OwnerController;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Owners.OwnerController;
 
 import java.util.ArrayList;
 

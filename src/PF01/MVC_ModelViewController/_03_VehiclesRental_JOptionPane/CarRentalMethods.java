@@ -1,12 +1,13 @@
-package PF01.MVC_ModelViewController._02_VehiclesRental;
+package PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane;
 
-import PF01.MVC_ModelViewController._02_VehiclesRental.Owners.Owner;
-import PF01.MVC_ModelViewController._02_VehiclesRental.Owners.OwnerController;
-import PF01.MVC_ModelViewController._02_VehiclesRental.Owners.OwnerView;
-import PF01.MVC_ModelViewController._02_VehiclesRental.Vehicles.Car;
-import PF01.MVC_ModelViewController._02_VehiclesRental.Vehicles.CarController;
-import PF01.MVC_ModelViewController._02_VehiclesRental.Vehicles.CarView;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Owners.Owner;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Owners.OwnerController;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Owners.OwnerView;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Vehicles.Car;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Vehicles.CarController;
+import PF01.MVC_ModelViewController._03_VehiclesRental_JOptionPane.Vehicles.CarView;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,11 +20,12 @@ class CarRentalMethods {
     private ArrayList<Integer> doors = new ArrayList<>();
     private ArrayList<Integer> seats = new ArrayList<>();
     private ArrayList[] attributes = {names, colors, doors, seats};
-    private int choice1 = 0;
+    private JFrame frame = new JFrame("JOptionPane showMessageDialog example");
+    private int choice1 = -1;
     private String choice2 = "";
     private int choice3 = 0;
-    private HashMap<Integer, CarController> finalOffer = new HashMap<>();
-    private int choice = 0;
+    private ArrayList<CarController> finalOffer = new ArrayList<>();
+    private String finalChoice = " ";
 
     static void createOwners(CarRental carRental) {
         OwnerView view = new OwnerView();
@@ -65,52 +67,75 @@ class CarRentalMethods {
 
     static void presentOffer(CarRental carRental) {
         updateLists(carRental);
-        System.out.println("Welcome in our CarRental!");
-        System.out.println("We have both manual and automatic cars to offer.");
-        System.out.println("You can choose between " + crm.doors.toString().substring(1, crm.doors.toString().length() - 1)
-                + " doors and " + crm.seats.toString().substring(1, crm.seats.toString().length() -1) + " seats.");
-        System.out.println("Available are " + crm.colors.toString().substring(1, crm.colors.toString().length() - 1) + " cars!");
-        System.out.println("We can offer you " + crm.names.toString().substring(1, crm.names.toString().length() - 1) + ".");
-     }
+        JOptionPane.showMessageDialog(crm.frame,
+                "Welcome in our CarRental!" +
+                "\nWe have both manual and automatic cars to offer." +
+                "\nYou can choose between " + crm.doors.toString().substring(1, crm.doors.toString().length() - 1)
+                + " doors and " + crm.seats.toString().substring(1, crm.seats.toString().length() -1) + " seats." +
+                "\nAvailable are " + crm.colors.toString().substring(1, crm.colors.toString().length() - 1) + " cars!" +
+                "\nWe can offer you " + crm.names.toString().substring(1, crm.names.toString().length() - 1) + ".",
+                "CarRental",
+                JOptionPane.PLAIN_MESSAGE);
+    }
 
-     static void askForPreferences() {
-        Scanner scanner = new Scanner (System.in);
-        System.out.println("\nPlease tell us what is important for you:");
-        System.out.print("1. Brand   2. Color   3. Doors number   4. Seats number   5. Manual/Automatic   ");
-        while (crm.choice1 < 1 || crm.choice1 > 5)
-            crm.choice1 = scanner.nextInt();
-        if (crm.choice1 != 5) {
-            System.out.println("\nPlease choose from below:");
-            System.out.println(crm.attributes[crm.choice1 - 1].toString().substring(1, crm.attributes[crm.choice1 - 1].toString().length() -1));
-            if (crm.choice1 == 1 || crm.choice1 == 2)
-                while (!crm.attributes[crm.choice1 - 1].contains(crm.choice2))
-                    crm.choice2 = scanner.next();
+    static void askForPreferences() {
+        Object[] options = {"Gearbox", "Seats no", "Doors no", "Car color", "Brand"};
+        while (crm.choice1 < 0 || crm.choice1 > 4)
+            crm.choice1 = JOptionPane.showOptionDialog(crm.frame,
+                 "Please tell us what is important for you!" +
+                 "\nChoose from below options.",
+                 "CarRental",
+                 JOptionPane.YES_NO_CANCEL_OPTION,
+                 JOptionPane.PLAIN_MESSAGE,
+                 null,
+                 options,
+                 options[4]);
+
+        if (crm.choice1 != 0) {
+            Object[] possibilities = crm.attributes[4 - crm.choice1].toArray();
+            if (crm.choice1 == 4 || crm.choice1 == 3)
+                while (!crm.attributes[4 - crm.choice1].contains(crm.choice2))
+                    crm.choice2 = (String) JOptionPane.showInputDialog(crm.frame,
+                            "Please choose from below:",
+                            "CarRental",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            possibilities,
+                            possibilities[0]);
             else
-                while (!crm.attributes[crm.choice1 - 1].contains(crm.choice3))
-                    crm.choice3 = scanner.nextInt();
+                while (!crm.attributes[4 - crm.choice1].contains(crm.choice3))
+                    crm.choice3 = (int) JOptionPane.showInputDialog(crm.frame,
+                            "Please choose from below:",
+                            "CarRental",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            possibilities,
+                            possibilities[0]);
         } else {
-            System.out.println("\nPlease choose between manual and automatic: ");
-            while (!crm.choice2.equals("manual") && !crm.choice2.equalsIgnoreCase("automatic"))
-                crm.choice2 = scanner.next().toLowerCase();
+            Object[] possibilities = {"Automatic", "Manual"};
+            while (!crm.choice2.equals("Manual") && !crm.choice2.equals("Automatic"))
+                crm.choice2 = (String) JOptionPane.showInputDialog(crm.frame,
+                        "Please choose from below:",
+                        "CarRental",
+                        JOptionPane.PLAIN_MESSAGE,
+                        null,
+                        possibilities,
+                        possibilities[0]);
         }
-     }
+    }
 
     static void offerCars(CarRental carRental) {
-        System.out.println("\nPlease choose car from below:");
         for (int i = 0; i < carRental.owners.size(); i++) {
             for (int j = 0; j < carRental.owners.get(i).getCars().size(); j++) {
                 CarController car = carRental.owners.get(i).getCars().get(j);
                 if (!car.isDamaged() && !car.isRented()) {
-                    if (((crm.choice1 == 1) && (crm.choice2.equals(car.getCarName()))) ||
-                            ((crm.choice1 == 2) && (crm.choice2.equals(car.getColor()))) ||
-                            ((crm.choice1 == 3) && (crm.choice3 == car.getDoors())) ||
-                            ((crm.choice1 == 4) && (crm.choice3 == car.getSeats())) ||
-                            ((crm.choice1 == 5) && (crm.choice2.equals("manual")) && car.isManual()) ||
-                            ((crm.choice1 == 5) && !(crm.choice2.equals("manual")) && !car.isManual())) {
-                        crm.choice++;
-                        crm.finalOffer.put(crm.choice, car);
-                        System.out.print(crm.choice + ". ");
-                        car.updateView();
+                    if (((crm.choice1 == 4) && (crm.choice2.equals(car.getCarName()))) ||
+                            ((crm.choice1 == 3) && (crm.choice2.equals(car.getColor()))) ||
+                            ((crm.choice1 == 2) && (crm.choice3 == car.getDoors())) ||
+                            ((crm.choice1 == 1) && (crm.choice3 == car.getSeats())) ||
+                            ((crm.choice1 == 0) && (crm.choice2.equals("Manual")) && car.isManual()) ||
+                            ((crm.choice1 == 0) && !(crm.choice2.equals("Manual")) && !car.isManual())) {
+                        crm.finalOffer.add(car);
                     }
                 }
             }
@@ -118,22 +143,44 @@ class CarRentalMethods {
     }
 
     static void askForChoice(CarRental carRental) {
-        System.out.print("\nYour choice: ");
-        Scanner scanner = new Scanner(System.in);
-        int finalChoise = 0;
-        while (finalChoise < 1 || finalChoise > crm.choice)
-            finalChoise = scanner.nextInt();
-        System.out.print("\nGreat! Here is your car: ");
-        crm.finalOffer.get(finalChoise).updateView();
+        Object[] possibilities = new Object[crm.finalOffer.size()];
+        for (int i = 0; i < crm.finalOffer.size(); i++)
+            possibilities[i] = crm.finalOffer.get(i).updateView();
+        crm.finalChoice = (String) JOptionPane.showInputDialog(crm.frame,
+                "Choose one from below cars:",
+                "CarRental",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                possibilities,
+                possibilities[0]);
+
+        if (crm.finalChoice != null) {
+            congratulate();
+            markRented(carRental);
+        }
+        sayBye();
+
+    }
+
+    private static void sayBye() {
+        JOptionPane.showMessageDialog(crm.frame,
+                "Thank you for visiting us and welcome again in the future !",
+                "CarRental",
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private static void congratulate() {
+        JOptionPane.showMessageDialog(crm.frame,
+                "Great! Here is your car:\n" + crm.finalChoice,
+                "CarRental",
+                JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private static void markRented(CarRental carRental) {
         for (int i = 0; i < carRental.owners.size(); i++) {
             for (int j = 0; j < carRental.owners.get(i).getCars().size(); j++) {
                 CarController car = carRental.owners.get(i).getCars().get(j);
-                if (!car.isDamaged() && !car.isRented() &&
-                        (car.getOwner() == crm.finalOffer.get(finalChoise).getOwner()) &&
-                        (car.getSeats() == crm.finalOffer.get(finalChoise).getSeats()) &&
-                        (car.getDoors() == crm.finalOffer.get(finalChoise).getDoors()) &&
-                        (car.getColor().equals(crm.finalOffer.get(finalChoise).getColor())) &&
-                        (car.getCarName().equals(crm.finalOffer.get(finalChoise).getCarName())))
+                if (!car.isDamaged() && !car.isRented() && car.updateView().equals(crm.finalChoice))
                     car.setRented(true);
             }
         }
