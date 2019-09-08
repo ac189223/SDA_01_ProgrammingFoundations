@@ -159,6 +159,7 @@ class CarRentalMethods {
             markRented(carRental);
         }
         sayBye();
+        System.exit(0);
 
     }
 
@@ -167,6 +168,7 @@ class CarRentalMethods {
                 "Thank you for visiting us and welcome again in the future !",
                 "CarRental",
                 JOptionPane.PLAIN_MESSAGE);
+        crm.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private static void congratulate() {
