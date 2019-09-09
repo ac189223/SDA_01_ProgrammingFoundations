@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="ProgrammingFoundations:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/ProgrammingFoundations_jar</output-path>
-    <root id="archive" name="ProgrammingFoundations.jar">
-      <element id="module-output" name="ProgrammingFoundations" />
-    </root>
-  </artifact>
-</component>
