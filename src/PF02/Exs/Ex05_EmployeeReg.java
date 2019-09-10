@@ -3,7 +3,7 @@ package PF02.Exs;
 import java.util.ArrayList;
 
 public class Ex05_EmployeeReg {
-    ArrayList<Ex05_Employee> employees;
+    private ArrayList<Ex05_Employee> employees;
 
     public Ex05_EmployeeReg(ArrayList<Ex05_Employee> employees) { this.employees = employees; }
 

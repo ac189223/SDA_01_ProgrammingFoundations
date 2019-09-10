@@ -1,8 +1,8 @@
 package PF02.Exs;
 
 public class Ex06_Employee {
-    String name;
-    double salary;
+    private String name;
+    private double salary;
 
     public Ex06_Employee(String name, double salary) {
         this.name = name;

@@ -1,9 +1,9 @@
 package PF02.Exs;
 
 public class Ex05_Employee {
-    String ssn;
-    String name;
-    String address;
+    private String ssn;
+    private String name;
+    private String address;
 
     public Ex05_Employee(String ssn, String name, String address) {
         this.ssn = ssn;
