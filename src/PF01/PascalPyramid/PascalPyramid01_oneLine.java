@@ -3,7 +3,7 @@ package PF01.PascalPyramid;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class pascalPyramid01_oneLine {
+public class PascalPyramid01_oneLine {
     public static void main(String[] args) {
         ArrayList<Integer> pyramid = new ArrayList<>();
         pyramid.add(1);

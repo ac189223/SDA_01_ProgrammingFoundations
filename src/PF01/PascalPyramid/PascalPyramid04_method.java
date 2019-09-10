@@ -2,7 +2,7 @@ package PF01.PascalPyramid;
 
 import java.util.Scanner;
 
-public class pascalPyramid04_method {
+public class PascalPyramid04_method {
 
     private static int pascalTriangle(int row, int position) {
         if(position <= 1 || position >= row) return 1;

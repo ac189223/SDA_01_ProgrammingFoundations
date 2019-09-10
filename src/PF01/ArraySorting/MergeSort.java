@@ -3,7 +3,7 @@ package PF01.ArraySorting;
 import java.util.Random;
 import java.util.Scanner;
 
-public class mergeSort {
+public class MergeSort {
 
     private void merge(int[] arrayToMerge, int start, int middle, int end) {
 
@@ -75,7 +75,7 @@ public class mergeSort {
         System.out.println("Array in the beginning");
         printArray(array);
 
-        mergeSort mS = new mergeSort();
+        MergeSort mS = new MergeSort();
         mS.sort(array, 0, array.length-1);
 
         System.out.println("Sorted array");

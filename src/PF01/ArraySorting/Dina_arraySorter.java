@@ -2,7 +2,7 @@ package PF01.ArraySorting;
 
 import java.util.Random;
 
-public class dina_arraySorter {
+public class Dina_arraySorter {
         public static void main(String[] args) {
             // TODO Auto-generated method stub
 

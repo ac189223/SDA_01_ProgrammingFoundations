@@ -2,7 +2,7 @@ package PF01.PascalPyramid;
 
 import java.util.Scanner;
 
-public class pascalPyramid03_mathFormula {
+public class PascalPyramid03_mathFormula {
     /*
                    ( n )       n!
             a(i) = (   ) =  ---------       -->       a(0) = n! / 0! * n! = 1

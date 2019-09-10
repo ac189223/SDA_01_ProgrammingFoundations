@@ -3,7 +3,7 @@ package PF01.ArraySorting;
 import java.util.Random;
 import java.util.Scanner;
 
-public class sortTheArray {
+public class SortTheArray {
     private static int[] arrayToSort;
 
     private static void changePosition(int[] arrayToSort, int i, int j) {
