@@ -25,6 +25,13 @@ public class AccountRegister {
         find(toNbr).deposit(amount);
         System.out.println("Transferred " + amount + " from " + fromNbr + " to " + toNbr);
     }
+
+    public Customer whoOwnsAccount(String nbr) {
+        for (Account account: getAccounts())
+            if (account.getNbr().equals(nbr))
+                return account.getOwner();
+        return null;
+    }
 }
 /*
 Class: AccountRegister:

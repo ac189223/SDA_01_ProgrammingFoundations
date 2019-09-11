@@ -49,5 +49,6 @@ public class Test {
         for (Customer customer: customers)
             customer.printStatus();
 
+        System.out.println("\nAccount 32-4657-134 is owned by " + accReg.whoOwnsAccount("32-4657-134").getName());
     }
 }

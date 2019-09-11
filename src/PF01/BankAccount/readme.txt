@@ -7,7 +7,7 @@ balance : double
 credit(double amount) : void
 withdraw(double amount) : void
 
-A) Implement the Bank account class.
+A) Implement the Bank bankAccount class.
  All variables should be private with public methods.
  The method ”credit” adds value to the variable ”balance” by addition of the variable
 ”balance” and the parameter ”amount”.
@@ -15,9 +15,9 @@ A) Implement the Bank account class.
 variable ”balance” and the parameter ”amount”.
 
 B) Also implement a test method (a main method) that tries out all the methods of the class Bank
-account.
+bankAccount.
 
-C) Write an application where you can deposit and withdraw a certain amount on an account several
+C) Write an application where you can deposit and withdraw a certain amount on an bankAccount several
 times (through a while loop). The program should close down when you press ”Y” to the question
 ”Would you like to exit?”.
 
