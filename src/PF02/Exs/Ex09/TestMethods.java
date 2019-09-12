@@ -53,32 +53,8 @@ class TestMethods {
     }
 
     private static void createOrderLines() {
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
-        tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
+        for (int i = 0; i < 20; i++)
+            tm.orderLineReg.add(new OrderLine(tm.random.nextInt(150) + 15));
     }
 
     private static void createSuppliers() {

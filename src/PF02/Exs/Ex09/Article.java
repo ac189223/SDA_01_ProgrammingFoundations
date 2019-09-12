@@ -47,7 +47,8 @@ public class Article {
         ArrayList<String> ordered = new ArrayList<>();
         for (OrderLine orderline: orderedIn)
             for (Order order: orderline.getInOrders())
-                ordered.add(order.getCustomer().getName());
+                if (!ordered.contains(order.getCustomer().getName()))
+                    ordered.add(order.getCustomer().getName());
         if (ordered.size() > 0)
             return ordered.toString().substring(1, ordered.toString().length() - 1);
         else
