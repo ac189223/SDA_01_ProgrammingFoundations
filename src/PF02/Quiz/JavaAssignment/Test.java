@@ -17,7 +17,9 @@ public class Test {
 
         CustomerRegister customerRegister = new CustomerRegister();
 
-        customerRegister.addCustomer(customer1);
+        ArrayList<Customer> tmpCustomers = new ArrayList<>();
+        tmpCustomers.add(customer1);
+        customerRegister.setCustomers(tmpCustomers);
         customerRegister.addCustomer(customer2);
 
         System.out.println("Initial:");

@@ -7,8 +7,6 @@ public class CustomerRegister {
 
     public CustomerRegister() { }
 
-    public CustomerRegister(ArrayList<Customer> customers) { this.setCustomers(customers); }
-
     public ArrayList<Customer> getCustomers() { return customers; }
 
     public void setCustomers(ArrayList<Customer> customers) { this.customers = customers; }
