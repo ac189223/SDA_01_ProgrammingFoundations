@@ -17,6 +17,7 @@ public class Test {
         house2.addApartment(apartment);
 
         house2.removeApartment(2);
+        house2.removeApartment(2);
 
         System.out.println("Smallest apartment size is " + house2.minApartmentSize());
         System.out.println("Cheapest apartment price is " + house2.minApartmentPrice());
