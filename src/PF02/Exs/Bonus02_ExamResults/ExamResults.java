@@ -1,17 +1,25 @@
 package PF02.Exs.Bonus02_ExamResults;
 
 import javax.swing.*;
+import java.text.DecimalFormat;
 
 public class ExamResults {
     public static void main(String[] args) {
         int[] results = {-1, -1, -1};
-        int choice = -1;
+        int optionChosen;
+        int scoreEntered;
+        int idEntered;
+        int index;
+        int sum;
+        StringBuilder lineToPrint;
         JFrame frame = new JFrame("=-_-=");
+        DecimalFormat df = new DecimalFormat("###.#");
 
+        optionChosen = -1;
         while (true) {
             Object[] options = {6, 5, 4, 3, 2, 1, 0};
-            while (choice < 0 || choice > 6)
-                choice = JOptionPane.showOptionDialog(frame,
+            while (optionChosen < 0 || optionChosen > 6)
+                optionChosen = JOptionPane.showOptionDialog(frame,
                         "Please choose from below options: " +
                                 "\n0: Exit the program" +
                                 "\n1: Add exam score" +
@@ -27,7 +35,7 @@ public class ExamResults {
                         options,
                         options[6]);
 
-            switch (choice) {
+            switch (optionChosen) {
                 case 6:     // Exit program
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     JOptionPane.showMessageDialog(frame,
@@ -37,25 +45,28 @@ public class ExamResults {
                     System.exit(0);
 
                 case 5:     // Add score
+                    scoreEntered = -1;
                     do {
-                        if (choice < -1 || choice > 100)
+                        if (scoreEntered < -1 || scoreEntered > 100)        // Input out of scope
                             JOptionPane.showMessageDialog(frame,
                                     "This value is not allowed !",
                                     "ERM    =-_-=",
                                     JOptionPane.PLAIN_MESSAGE);
-                        choice = Integer.parseInt(JOptionPane.showInputDialog(frame,
-                                "Enter \"-1\" to get back to main menu" +
-                                "\n\nEnter an exam score within 0-100 to add",
-                                "ERM    =-_-=",
-                                JOptionPane.PLAIN_MESSAGE));
-                    } while (choice < -1 || choice > 100);
+                        try {
+                            scoreEntered = Integer.parseInt(JOptionPane.showInputDialog(frame,        // Ask for score
+                                    "Enter \"-1\" to get back to main menu" +
+                                            "\n\nEnter an exam score within 0-100 to add",
+                                    "ERM    =-_-=",
+                                    JOptionPane.PLAIN_MESSAGE));
+                        } catch (NumberFormatException e) {
+                            scoreEntered = -2;       // Set if error, wrong format, trying to close
+                        }
+                    } while (scoreEntered < -1 || scoreEntered > 100);      // Must be within scope
 
-                    // GoTo initial screen on -1
-                    if (choice == -1)
+                    if (scoreEntered == -1)       // GoTo initial screen on -1
                         break;
 
-                    // Search for space
-                    int index = 0;
+                    index = 0;      // Search for space
                     while (index < results.length) {
                         int tmpIndex = index;
                         if (results[index] != -1)
@@ -63,68 +74,157 @@ public class ExamResults {
                         if (tmpIndex == index)
                             break;
                     }
-                    // Extend if needed
-                    if (index == results.length) {
+
+                    if (index == results.length) {      // Extend if needed
                         int[] tmp = new int[results.length * 2];
-                        System.arraycopy(results,0 ,tmp ,0 ,results.length);
+                        System.arraycopy(results,0 ,tmp ,0 ,results.length);        // Copy old values
                         results = tmp;
+                        for (int i = results.length / 2 ; i < results.length; i++)
+                            results[i] = -1;        // Add -1 at the end
                     }
-                    // Write new result
-                    results[index] = choice;
+
+                    results[index] = scoreEntered;        // Write new result into array
                     break;
 
                 case 4:     // Edit score
-                    choice = -1;
+                case 3:     // Remove score
+                case 2:     // Print score
+                    idEntered = 0;
                     if (results[0] != -1) {
                         do {
                             do {
-                                if (choice < -1 || choice > (results.length -1))
+                                if (idEntered < -1 || idEntered > (results.length -1))        // Input out of scope
                                     JOptionPane.showMessageDialog(frame,
                                             "This value is not allowed !",
                                             "ERM    =-_-=",
                                             JOptionPane.PLAIN_MESSAGE);
-                                else if (results[choice] == -1)
+                                else if (results[idEntered] == -1)     // Input within scope but empty
                                     JOptionPane.showMessageDialog(frame,
-                                            "This value is not allowed !",
+                                            "There is no exam result stored in that field !",
                                             "ERM    =-_-=",
                                             JOptionPane.PLAIN_MESSAGE);
-                                choice = Integer.parseInt(JOptionPane.showInputDialog(frame,
-                                        "Enter \"-1\" to get back to main menu" +
-                                                "\n\nEnter an ID-number of an exam to edit",
-                                        "ERM    =-_-=",
-                                        JOptionPane.PLAIN_MESSAGE));
-                            } while (choice < -1 || choice > (results.length -1));
-                            if (choice == -1)
+                                try {
+                                    idEntered = Integer.parseInt(JOptionPane.showInputDialog(frame,        // Ask for location ID
+                                            "Enter \"-1\" to get back to main menu" +
+                                                    "\n\nEnter an ID-number of an exam to proceed",
+                                            "ERM    =-_-=",
+                                            JOptionPane.PLAIN_MESSAGE));
+                                } catch (NumberFormatException e) {
+                                    idEntered = results.length;
+                                }
+                            } while (idEntered < -1 || idEntered > (results.length -1));        // Must be within scope
+
+                            if (idEntered == -1)       // GoTo initial screen on -1
                                 break;
-                        } while (results[choice] == -1);
+
+                        } while (results[idEntered] == -1);        // Until input within scope and not empty
                     } else {
-                        JOptionPane.showMessageDialog(frame,
-                                "There are no exam results stored - you cannot edit !",
+                        JOptionPane.showMessageDialog(frame,        // No input yet
+                                "There are no exam results stored !",
                                 "ERM    =-_-=",
                                 JOptionPane.PLAIN_MESSAGE);
                         break;
                     }
 
-                    break;
+                    switch (optionChosen) {
+                        case 4:     // Edit score
+                            if (idEntered == -1)       // GoTo initial screen on -1
+                                break;
+                            scoreEntered = -1;
+                            do {
+                                if (scoreEntered < -1 || scoreEntered > 100)        // Input out of scope
+                                    JOptionPane.showMessageDialog(frame,
+                                            "This value is not allowed !",
+                                            "ERM    =-_-=",
+                                            JOptionPane.PLAIN_MESSAGE);
+                                try {
+                                    scoreEntered = Integer.parseInt(JOptionPane.showInputDialog(frame,        // Ask for correct score
+                                            "Enter \"-1\" to get back to main menu" +
+                                                    "\n\nEnter a correct exam score within 0-100 for ID " + idEntered,
+                                            "ERM    =-_-=",
+                                            JOptionPane.PLAIN_MESSAGE));
+                                } catch (NumberFormatException e) {
+                                    scoreEntered = -2;
+                                }
+                            } while (scoreEntered < -1 || scoreEntered > 100);      // Must be within scope
 
-                case 3:     // Remove score
+                            if (scoreEntered == -1)       // GoTo initial screen on -1
+                                break;
 
-                    break;
+                            results[idEntered] = scoreEntered;      // Correct old result in array
+                            break;
 
-                case 2:     // Print score
+                        case 3:     // Remove score
+                            if (idEntered == -1)       // GoTo initial screen on -1
+                                break;
+                            if (idEntered == (results.length -1))      // Remove last result from array
+                                results[idEntered] = -1;
+                            else {       // Remove middle element and move all
+                                while (idEntered < results.length - 1 && results[idEntered + 1] != -1) {
+                                    results[idEntered] = results[idEntered + 1];
+                                    idEntered++;
+                                }
+                                results[idEntered] = -1;
+                            }
+                            break;
 
+                        case 2:     // Print score
+                            if (idEntered == -1)       // GoTo initial screen on -1
+                                break;
+                            JOptionPane.showMessageDialog(frame,        // Print score
+                                    "ID " + idEntered + " - score " + results[idEntered],
+                                    "ERM    =-_-=",
+                                    JOptionPane.PLAIN_MESSAGE);
+                            break;
+                    }
                     break;
 
                 case 1:     // Print all scores
+                    if (results[0] == -1) {
+                        JOptionPane.showMessageDialog(frame,        // No input yet
+                                "There are no exam results stored !",
+                                "ERM    =-_-=",
+                                JOptionPane.PLAIN_MESSAGE);
+                        break;
+                    }
 
+                    lineToPrint = new StringBuilder();
+                    index = 0;
+                    while (index < results.length && results[index] != -1) {        // Add scores to string
+                        lineToPrint.append("\n").append(index);
+                        lineToPrint.append(" ".repeat(4 - String.valueOf(index).length()));
+                        lineToPrint.append("- ").append(results[index]);
+                        index++;
+                    }
+                    JOptionPane.showMessageDialog(frame,        // Print all scores
+                            "ID  - Score " + lineToPrint,
+                            "ERM    =-_-=",
+                            JOptionPane.PLAIN_MESSAGE);
                     break;
 
                 case 0:     // Print average
+                    if (results[0] == -1) {
+                        JOptionPane.showMessageDialog(frame,        // No input yet
+                                "There are no exam results stored !",
+                                "ERM    =-_-=",
+                                JOptionPane.PLAIN_MESSAGE);
+                        break;
+                    }
 
+                    index = 0;
+                    sum = 0;
+                    while (index < results.length && results[index] != -1) {      // Add scores to sum
+                        sum += results[index];
+                        index++;
+                    }
+                    JOptionPane.showMessageDialog(frame,        // Print average
+                            "Average: " + df.format((double)sum /index),
+                            "ERM    =-_-=",
+                            JOptionPane.PLAIN_MESSAGE);
                     break;
             }
-            // Reset choice to print initial screen
-            choice = -1;
+            // Reset to be able to print initial screen
+            optionChosen = -1;
         }
     }
 }

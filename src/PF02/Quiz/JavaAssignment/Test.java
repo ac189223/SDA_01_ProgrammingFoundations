@@ -9,11 +9,8 @@ public class Test {
         Customer customer2 = new Customer("2", "Eva");
 
         Account account1 = new Account("1", 500, customer1);
-    //    customer1.addAccount(account1);
         Account account2 = new Account("2", 1000, customer1);
-    //    customer1.addAccount(account2);
         Account account3 = new Account("3", 1500, customer2);
-    //    customer2.addAccount(account3);
 
         CustomerRegister customerRegister = new CustomerRegister();
 
