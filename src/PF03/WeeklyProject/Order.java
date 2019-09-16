@@ -10,6 +10,10 @@ public class Order {
 
     Order() { }
 
+    public Order(String orderNr, String date) {
+        this.setOrderNr(orderNr);
+        this.setDate(date);
+    }
     public Order(String orderNr, String date, ArrayList<OrderLine> orderLines) {
         this.setOrderNr(orderNr);
         this.setDate(date);

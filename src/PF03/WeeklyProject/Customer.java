@@ -61,11 +61,12 @@ public abstract class Customer {
     }
 
     public int amountOfOrders() { return getOrders().size(); }
-    public String listArticles() {
-        String list = "";
+    public ArrayList<Article> listArticles() {
+        ArrayList<Article> list = new ArrayList<>();
         for (Order order: getOrders())
             for (OrderLine orderLine : order.getOrderLines())
-                list += orderLine.getArticle().getName() + ", ";
+                if (!list.contains(orderLine.getArticle()))
+                    list.add(orderLine.getArticle());
         return list;
     }
 
