@@ -2,15 +2,15 @@ package PF03.WeeklyProject;
 
 import java.util.ArrayList;
 
-public class CustomerPrivat extends Customer {
+public class CustomerPrivate extends Customer {
     private String ssn;
     
-    public CustomerPrivat(String ssn, String name, String address, String phoneNr) {
+    public CustomerPrivate(String ssn, String name, String address, String phoneNr) {
         super(name, address, phoneNr);
         this.setSsn(ssn);
     }
 
-    public CustomerPrivat(String ssn, String name, String address, String phoneNr, ArrayList<Order> orders) {
+    public CustomerPrivate(String ssn, String name, String address, String phoneNr, ArrayList<Order> orders) {
         super(name, address, phoneNr, orders);
         this.setSsn(ssn);
     }

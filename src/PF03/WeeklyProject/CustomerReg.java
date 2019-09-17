@@ -17,13 +17,13 @@ public class CustomerReg {
 
     public Customer findCustomer(String id) {
         for (Customer customer : getCustomers())
-            if (customer.getClass() == CustomerPrivat.class)
-                checkSsn((CustomerPrivat) customer, id);
+            if (customer.getClass() == CustomerPrivate.class)
+                checkSsn((CustomerPrivate) customer, id);
             else
                 checkCorporateId((CustomerCompany)customer, id);
         return null;
     }
-    private Customer checkSsn(CustomerPrivat customer, String id) {
+    private Customer checkSsn(CustomerPrivate customer, String id) {
         if (customer.getSsn().equals(id))
             return customer;
         return null;
