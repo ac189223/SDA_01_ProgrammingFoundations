@@ -18,9 +18,9 @@ public class CustomerReg {
     public Customer findCustomer(String id) {
         for (Customer customer : getCustomers())
             if (customer.getClass() == CustomerPrivate.class)
-                checkSsn((CustomerPrivate) customer, id);
+                return checkSsn((CustomerPrivate) customer, id);
             else
-                checkCorporateId((CustomerCompany)customer, id);
+                return checkCorporateId((CustomerCompany)customer, id);
         return null;
     }
     private Customer checkSsn(CustomerPrivate customer, String id) {
@@ -41,4 +41,10 @@ public class CustomerReg {
     public ArrayList<Supplier> findSuppliersOfCustomer(Customer customer) { return null; }
 
 
+    public void updateCustomer(String custId, String name, String address, String phone) {
+        Customer tmpCustomer = findCustomer(custId);
+        tmpCustomer.setName(name);
+        tmpCustomer.setAddress(address);
+        tmpCustomer.setPhoneNr(phone);
+    }
 }
