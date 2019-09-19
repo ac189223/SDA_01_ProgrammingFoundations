@@ -1,4 +1,4 @@
-package PF03.WeeklyProject;
+package PF03.WeeklyProject01;
 
 public class Test {
     public static Test t = new Test();

@@ -1,4 +1,4 @@
-package PF03.WeeklyProject;
+package PF03.WeeklyProject03.Model;
 
 import java.util.ArrayList;
 
@@ -9,9 +9,9 @@ public class Article {
     private Supplier supplier;
     private ArrayList<OrderLine> orderedInLines = new ArrayList<>();
 
-    Article () { }
+    public Article () { }
 
-    Article(String id, String name, double price) {
+    public Article(String id, String name, double price) {
         this.setId(id);
         this.setName(name);
         this.setPrice(price);
@@ -19,7 +19,7 @@ public class Article {
         this.setOrderedInLines(new ArrayList<>());
     }
 
-    Article(String id, String name, double price, Supplier supplier) {
+    public Article(String id, String name, double price, Supplier supplier) {
         this.setId(id);
         this.setName(name);
         this.setPrice(price);

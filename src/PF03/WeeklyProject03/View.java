@@ -1,59 +1,77 @@
-package PF03.WeeklyProject02.Model;
+package PF03.WeeklyProject03;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import javax.swing.JRadioButton;
-import java.awt.Font;
-import javax.swing.ButtonGroup;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
-import PF03.WeeklyProject02.Controller;
-
-import javax.swing.JButton;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import javax.swing.JTabbedPane;
-import javax.swing.JPanel;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.*;
 import javax.swing.border.LineBorder;
-import java.awt.event.MouseMotionAdapter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.Random;
-import javax.swing.JLabel;
 
-public class OrderMaker {
+public class View {
 
 	private JFrame frameOrderMaker;
+	private JTabbedPane tabbedPane;
+	private JPanel panel01;
+	private JPanel panel02;
+	private JPanel panel03;
+
+	private JLabel lblCustomerAdmin;
+	private JLabel lblOrderAdmin;
+	private JLabel lblOrderCustId;
 	private JRadioButton rdbtnCustomerAlreadyAClient;
-	private JRadioButton rdbtnAdminArticles;
-	private JRadioButton rdbtnOrderCreate;
+	private JRadioButton rdbtnCustomerPrivate;
 	private JRadioButton rdbtnCustomerNotYet;
-	private JRadioButton rdbtnAdminSuppliers;
+	private JRadioButton rdbtnCustomerCorporate;
+	private JRadioButton rdbtnCustomerNotSure;
+	private JRadioButton rdbtnOrderDeleteArticle;
 	private JRadioButton rdbtnOrderAddLine;
-	private JTextField txtCustomerId;
-	private JTextField comboAdminArticleId;
-	private JTextField txtOrderCustId;
+	private JRadioButton rdbtnOrderCreate;
+	private JRadioButton rdbtnAdminArticles;
+	private JRadioButton rdbtnAdminSuppliers;
+	private JRadioButton rdbtnAdminClients;
+	private JTextField txtCustomerName;
+	private JTextField txtCustomerCheckId;
+	private JTextField txtCustomerConfirmation;
 	private JTextField txtCustomerAddress;
+	private JTextField txtCustomerIdIn;
+	private JTextField txtCustomerId;
+	private JTextField txtCustomerPhone;
+	private JTextField txtOrderCustId;
+	private JTextField txtOrderDate;
+	private JTextField txtOrderConfirmation;
+	private JTextField txtAdminConfirmation;
+	private JTextField txtAdminSupplierPhone;
 	private JTextField txtAdminSupplierName;
 	private JTextField comboOrderNumberAdd;
-	private JTextField txtCustomerPhone;
-	private JTextField txtAdminSupplierPhone;
+	private JTextField comboOrderNumberDelete;
+	private JTextField comboOrderArticleAdd;
+	private JTextField txtOrderNumberCreate;
+	private JTextField txtOrderQuantity;
+	private JTextField txtAdminArticleName;
+	private JTextField txtAdminArticlePrice;
+	private JTextField txtAdminClientAddress;
+	private JTextField txtAdminClientName;
+	private JTextField txtAdminClientPhone;
+	private JTextField comboAdminArticleSupplier;
+	private JTextField comboAdminSupplierArticle;
+	private JTextField comboAdminClientOrder;
+	private JTextField comboAdminClientId;
+	private JTextField comboAdminSupplierId;
+	private JTextField comboAdminArticleId;
 	private JButton btnCustomerEdit;
 	private JButton btnCustomerDelete;
+	private JButton btnCustomerCheck;
+	private JButton btnCustomerAdd;
+	private JButton btnCustomerCreateAnOrder;
 	private JButton btnOrderAddLine;
-	private JRadioButton rdbtnCustomerPrivate;
-	private JRadioButton rdbtnCustomerCorporate;
-	private JTextField txtCustomerIdIn;
-	private JTextField comboOrderNumberDelete;
+	private JButton btnOrderDelete;
+	private JButton btnOrderProceed;
+	private JButton btnOrderCreate;
+	private JButton btnAdminCreate;
+	private JButton btnAdminFind;
+	private JButton btnAdminAdd;
+	private JButton btnAdminDelete;
 	private final ButtonGroup buttonGroupIsCustomer = new ButtonGroup();
 	private final ButtonGroup buttonGroupPrivateCorporate = new ButtonGroup();
 	private final ButtonGroup buttonGroupOrderActivity = new ButtonGroup();
@@ -63,48 +81,8 @@ public class OrderMaker {
 
 	private Random random = new Random();
 
-	private JButton btnCustomerAdd;
-	private JButton btnAdminAdd;
-	private JRadioButton rdbtnCustomerNotSure;
-	private JRadioButton rdbtnAdminClients;
-	private JRadioButton rdbtnOrderDeleteArticle;
-	private JTextField txtCustomerCheckId;
-	private JButton btnCustomerCheck;
-	private JButton btnAdminDelete;
-	private JButton btnOrderDelete;
-	private JButton btnOrderProceed;
-	private JButton btnCustomerCreateAnOrder;
-	private JTabbedPane tabbedPane;
-	private JTextField txtCustomerName;
-	private JTextField comboAdminSupplierId;
-	private JTextField txtOrderDate;
-	private JTextField txtCustomerConfirmation;
-	private JTextField txtAdminConfirmation;
-	private JTextField txtOrderConfirmation;
-	private JPanel panel01;
-	private JPanel panel02;
-	private JPanel panel03;
-	
 	private String custId;
-	private JLabel lblCustomerAdmin;
-	private JLabel lblOrderAdmin;
-	private JLabel lblOrderCustId;
-	private JTextField txtOrderNumberCreate;
-	private JButton btnOrderCreate;
-	private JTextField comboOrderArticleAdd;
-	private JTextField txtOrderQuantity;
-	private JTextField txtAdminArticleName;
-	private JTextField txtAdminArticlePrice;
-	private JTextField comboAdminArticleSupplier;
-	private JTextField comboAdminSupplierArticle;
-	private JTextField comboAdminClientId;
-	private JTextField txtAdminClientAddress;
-	private JTextField txtAdminClientName;
-	private JTextField txtAdminClientPhone;
-	private JTextField comboAdminClientOrder;
-	private JButton btnAdminCreate;
-	private JButton btnAdminFind;
-	
+
 	/**
 	 * Launch the application.
 	 */
@@ -112,7 +90,7 @@ public class OrderMaker {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					OrderMaker window = new OrderMaker();
+					View window = new View();
 					window.frameOrderMaker.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -124,7 +102,7 @@ public class OrderMaker {
 	/**
 	 * Create the application.
 	 */
-	private OrderMaker() {
+	private View() {
 		initialize();
 	}
 
@@ -132,6 +110,7 @@ public class OrderMaker {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+
 		frameOrderMaker = new JFrame();
 		frameOrderMaker.getContentPane().setBackground(new Color(30, 144, 255));
 		frameOrderMaker.getContentPane().setLayout(null);
@@ -139,7 +118,9 @@ public class OrderMaker {
 		frameOrderMaker.setTitle("ORM                        =-_-=                        ORM");
 		frameOrderMaker.setBounds(100, 100, 480, 610);
 		frameOrderMaker.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
+		controller = new Controller(frameOrderMaker, this);
+
 		tabbedPane = new JTabbedPane(JTabbedPane.BOTTOM);
 		tabbedPane.setBackground(new Color(100, 149, 237));
 		tabbedPane.setBounds(6, 6, 468, 578);
@@ -149,7 +130,7 @@ public class OrderMaker {
 		panel01.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				setCustomerConfirmationBlank();
+				controller.setCustomerConfirmationBlank();
 			}
 		});
 		panel01.setBorder(new LineBorder(new Color(135, 206, 235), 0, true));
@@ -163,7 +144,7 @@ public class OrderMaker {
 		panel02.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				setOrderConfirmationBlank();
+				controller.setOrderConfirmationBlank();
 			}
 		});
 		panel02.setBorder(new LineBorder(new Color(135, 206, 235), 0, true));
@@ -178,7 +159,7 @@ public class OrderMaker {
 		panel03.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				setAdminConfirmationBlank();
+				controller.setAdminConfirmationBlank();
 			}
 		});
 		panel03.setBorder(new LineBorder(new Color(135, 206, 235), 0, true));
@@ -189,18 +170,12 @@ public class OrderMaker {
 		tabbedPane.setBackgroundAt(2, new Color(135, 206, 235));
 		panel03.setLayout(null);
 
-				
 // panel01 ==================    CUSTOMER    =========================== panel01
 
 	    rdbtnCustomerAlreadyAClient = new JRadioButton("Already a client ?");
 	    rdbtnCustomerAlreadyAClient.addChangeListener(new ChangeListener() {
 	    	public void stateChanged(ChangeEvent e) {
-	    		if (rdbtnCustomerAlreadyAClient.isSelected()) {
-	    			enableUpperPartOfCustomer();
-	    			disableMiddlePartOfCustomer();
-	    			disableLowerPartOfCustomer();
-	    			setCustomerConfirmationBlank();
-	    		}
+	    		controller.enableCustomerUpper();
 	    	}
 	    });
 	    buttonGroupIsCustomer.add(rdbtnCustomerAlreadyAClient);
@@ -225,30 +200,7 @@ public class OrderMaker {
 	    btnCustomerEdit = new JButton("");
 	    btnCustomerEdit.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-// EDIT CustomerData
-	    		if (txtCustomerId.getText().equals(""))
-	    			custId = txtCustomerIdIn.getText();
-	    		else
-	    			custId = txtCustomerId.getText();
-	    		Customer tmpCustomer = controller.findCustomer(custId);
-	    		if (tmpCustomer != null) {
-	    			disableUpperPartOfCustomer();
-	    			txtCustomerName.setText(tmpCustomer.getName());
-	    			txtCustomerName.setEnabled(true);
-	    			txtCustomerAddress.setText(tmpCustomer.getAddress());
-	    			txtCustomerAddress.setEnabled(true);
-	    			txtCustomerPhone.setText(tmpCustomer.getPhoneNr());
-	    			txtCustomerPhone.setEnabled(true);
-	    			if (tmpCustomer.getClass() == CustomerPrivate.class)
-	    				rdbtnCustomerPrivate.setSelected(true);
-	    			else if (tmpCustomer.getClass() == CustomerCompany.class)
-	    				rdbtnCustomerCorporate.setSelected(true);
-	    			txtCustomerIdIn.setText(custId);
-	    			btnCustomerAdd.setText("Update");
-	    			btnCustomerAdd.setEnabled(true);
-	    		} else {
-	    			setCustomerConfirmationNo();
-	    		}
+	    		controller.editCustomerData();
 	    	}
 	    });
 	    btnCustomerEdit.setBounds(251, 70, 80, 29);
@@ -258,18 +210,7 @@ public class OrderMaker {
 	    btnCustomerDelete = new JButton("");
 	    btnCustomerDelete.addActionListener(new ActionListener() {
 	    	public void actionPerformed(ActionEvent e) {
-// DELETE Customer
-	    		if (txtCustomerId.getText().equals(""))
-	    			custId = txtCustomerIdIn.getText();
-	    		else
-	    			custId = txtCustomerId.getText();
-	    		Customer tmpCustomer = controller.findCustomer(custId);
-	    		if (tmpCustomer != null) {
-	    			controller.deleteCustomer(custId);
-	    			setCustomerConfirmationYes();
-	    		} else {
-	    			setCustomerConfirmationNo();
-	    		}
+	    		controller.deleteCustomer();
 	    	}
 	    });
 	    btnCustomerDelete.setBounds(343, 70, 80, 29);
@@ -279,12 +220,7 @@ public class OrderMaker {
 		rdbtnCustomerNotYet = new JRadioButton("Not yet ? Create an account !");
 		rdbtnCustomerNotYet.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnCustomerNotYet.isSelected()) {
-					disableUpperPartOfCustomer();
-					enableMiddlePartOfCustomer();
-					disableLowerPartOfCustomer();
-					setCustomerConfirmationBlank();
-				}
+				controller.enableCustomerMiddle();
 			}
 		});
 		buttonGroupIsCustomer.add(rdbtnCustomerNotYet);
@@ -339,10 +275,7 @@ public class OrderMaker {
 		rdbtnCustomerPrivate = new JRadioButton("");
 		rdbtnCustomerPrivate.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnCustomerPrivate.isSelected()) {
-					txtCustomerIdIn.setText("Enter social security number");
-					txtCustomerIdIn.setEnabled(true);
-				}
+				controller.updateCustomerTypeSelection();
 			}
 		});
 		buttonGroupPrivateCorporate.add(rdbtnCustomerPrivate);
@@ -354,10 +287,7 @@ public class OrderMaker {
 		rdbtnCustomerCorporate = new JRadioButton("");
 		rdbtnCustomerCorporate.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnCustomerCorporate.isSelected()) {
-					txtCustomerIdIn.setText("Enter corporate Id");
-					txtCustomerIdIn.setEnabled(true);
-				}
+				controller.updateCustomerTypeSelection();
 			}
 		});
 		buttonGroupPrivateCorporate.add(rdbtnCustomerCorporate);
@@ -392,23 +322,7 @@ public class OrderMaker {
 		btnCustomerAdd = new JButton("");
 		btnCustomerAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-// ADD & UPDATE CustomerData
-				if (rdbtnCustomerPrivate.isSelected() || rdbtnCustomerCorporate.isSelected()) {
-					String custId = txtCustomerIdIn.getText();
-					String name = txtCustomerName.getText();
-					String address = txtCustomerAddress.getText();
-					String phone = txtCustomerPhone.getText();
-					if (btnCustomerAdd.getText().equals("Add")) {
-						if (rdbtnCustomerPrivate.isSelected())
-							controller.addCustomer("P", custId, name, address, phone);
-						else if (rdbtnCustomerCorporate.isSelected())
-							controller.addCustomer("C", custId, name, address, phone);
-						setCustomerConfirmationYes();
-					} else if (btnCustomerAdd.getText().equals("Update")) {
-						controller.updateCustomerData(custId, name, address, phone);
-						setCustomerConfirmationYes();
-					}
-				}
+				controller.addCustomerUpdateData();
 			}
 		});
 		btnCustomerAdd.setEnabled(false);
@@ -419,12 +333,7 @@ public class OrderMaker {
 		rdbtnCustomerNotSure = new JRadioButton("Not sure ? Check it !");
 		rdbtnCustomerNotSure.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnCustomerNotSure.isSelected()) {
-					disableUpperPartOfCustomer();
-					disableMiddlePartOfCustomer();
-					enableLowerPartOfCustomer();
-					setCustomerConfirmationBlank();
-				}
+				controller.enableCustomerLower();
 			}
 		});
 		buttonGroupIsCustomer.add(rdbtnCustomerNotSure);
@@ -450,59 +359,18 @@ public class OrderMaker {
 		btnCustomerCheck = new JButton("");
 		btnCustomerCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-// SEARCH for Customer
-				String custId = txtCustomerCheckId.getText();
-				Customer tmpCustomer = controller.findCustomer(custId);
-				if (tmpCustomer != null) {
-					txtCustomerName.setText(tmpCustomer.getName());
-					txtCustomerAddress.setText(tmpCustomer.getAddress());
-					txtCustomerPhone.setText(tmpCustomer.getPhoneNr());
-					if (tmpCustomer.getClass() == CustomerPrivate.class)
-						rdbtnCustomerPrivate.setSelected(true);
-					else if (tmpCustomer.getClass() == CustomerCompany.class)
-						rdbtnCustomerCorporate.setSelected(true);
-					txtCustomerId.setText(custId);
-					txtCustomerIdIn.setText(custId);
-					btnCustomerEdit.setText("Edit");
-					btnCustomerEdit.setEnabled(true);
-					btnCustomerDelete.setText("Delete");
-					btnCustomerDelete.setEnabled(true);
-					btnCustomerCreateAnOrder.setText("Create an order");
-					btnCustomerCreateAnOrder.setEnabled(true);
-					disableLowerPartOfCustomer();
-					setCustomerConfirmationYes();
-				} else {
-					setCustomerConfirmationNo();
-				}
+				controller.searchForCustomer();
 			}
 		});
 		btnCustomerCheck.setEnabled(false);
 		btnCustomerCheck.setBounds(295, 400, 80, 29);
 		btnCustomerCheck.setEnabled(false);
 		panel01.add(btnCustomerCheck);
-		
+
 		btnCustomerCreateAnOrder = new JButton("");
 		btnCustomerCreateAnOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-// GO TO ORDER PANEL as Customer
-				if (txtCustomerId.getText().equals(""))
-					custId = txtCustomerIdIn.getText();
-				else
-					custId = txtCustomerId.getText();
-				Customer tmpCustomer = controller.findCustomer(custId);
-				if (tmpCustomer != null) {
-					disableUpperPartOfCustomer();
-					disableMiddlePartOfCustomer();
-					disableLowerPartOfCustomer();
-					panel02.setEnabled(true);
-					tabbedPane.setSelectedIndex(1);
-					txtOrderCustId.setText(custId);
-					rdbtnOrderCreate.setEnabled(true);
-					rdbtnOrderAddLine.setEnabled(true);
-					rdbtnOrderDeleteArticle.setEnabled(true);
-				} else {
-					setCustomerConfirmationNo();
-				}
+				controller.goToOrderTabAsCustomer();
 			}
 		});
 		btnCustomerCreateAnOrder.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
@@ -514,12 +382,7 @@ public class OrderMaker {
 		lblCustomerAdmin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-// GO TO ADMIN PANEL as Admin
-				panel03.setEnabled(true);
-				rdbtnAdminArticles.setEnabled(true);
-				rdbtnAdminSuppliers.setEnabled(true);
-				rdbtnAdminClients.setEnabled(true);
-				tabbedPane.setSelectedIndex(2);
+				controller.goToAdminTab();
 			}
 		});
 		lblCustomerAdmin.setEnabled(false);
@@ -552,16 +415,11 @@ public class OrderMaker {
 		lblOrderCustId.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		lblOrderCustId.setBounds(236, 53, 80, 16);
 		panel02.add(lblOrderCustId);
-
+		
 		rdbtnOrderCreate = new JRadioButton("Create a new order ?");
 		rdbtnOrderCreate.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnOrderCreate.isSelected()) {
-					enableUpperPartOfOrder();
-					disableMiddlePartOfOrder();
-					disableLowerPartOfOrder();
-					setOrderConfirmationBlank();
-				}
+				controller.enableOrderUpper();
 			}
 		});
 		buttonGroupOrderActivity.add(rdbtnOrderCreate);
@@ -602,22 +460,7 @@ public class OrderMaker {
 		btnOrderCreate = new JButton("");
 		btnOrderCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-// ADD new Order as Client
-				String custId = txtOrderCustId.getText();
-				Customer tmpCustomer = controller.findCustomer(custId);
-				if (tmpCustomer != null) {
-					String orderNumber = txtOrderNumberCreate.getText();
-					String orderDate = txtOrderDate.getText();
-					controller.addOrder(custId, orderNumber, orderDate);
-					disableUpperPartOfOrder();
-					enableMiddlePartOfOrder();
-					rdbtnOrderAddLine.setSelected(true);
-					comboOrderNumberAdd.setText(orderNumber);
-					comboOrderNumberAdd.setEnabled(false);
-					setOrderConfirmationYes();
-				} else {
-					setOrderConfirmationNo();
-				}
+				controller.addNewOrderAsClient();
 			}
 		});
 		btnOrderCreate.setEnabled(false);
@@ -642,12 +485,7 @@ public class OrderMaker {
 		rdbtnOrderAddLine = new JRadioButton("Add a new line ?");
 		rdbtnOrderAddLine.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnOrderAddLine.isSelected()) {
-					disableUpperPartOfOrder();
-					enableMiddlePartOfOrder();
-					disableLowerPartOfOrder();
-					setOrderConfirmationBlank();
-				}
+				controller.enableOrderMiddle();
 			}
 		});
 		buttonGroupOrderActivity.add(rdbtnOrderAddLine);
@@ -699,25 +537,7 @@ public class OrderMaker {
 		btnOrderAddLine = new JButton("");
 		btnOrderAddLine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-// ADD new OrderLine to Order as Client
-				String custId = txtOrderCustId.getText();
-				Customer tmpCustomer = controller.findCustomer(custId);
-				if (tmpCustomer != null) {
-					String orderNumber = comboOrderNumberAdd.getText();
-					String quantity = txtOrderQuantity.getText();
-					String articleId = comboOrderArticleAdd.getText();
-					try {
-						controller.addOrderLine(custId, orderNumber, quantity, articleId);
-						enableMiddlePartOfOrder();
-						comboOrderNumberAdd.setText(orderNumber);
-						comboOrderNumberAdd.setEnabled(false);
-						setOrderConfirmationYes();
-					} catch (Exception err) {
-						setOrderConfirmationNo();
-					}	
-				} else {
-					setOrderConfirmationNo();
-				}
+				controller.addNewOrderLineAsClient();
 			}
 		});
 		btnOrderAddLine.setBounds(295, 294, 80, 29);
@@ -727,12 +547,7 @@ public class OrderMaker {
 		rdbtnOrderDeleteArticle = new JRadioButton("Delete an order ?");
 		rdbtnOrderDeleteArticle.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnOrderDeleteArticle.isSelected()) {
-					disableUpperPartOfOrder();
-					disableMiddlePartOfOrder();
-					enableLowerPartOfOrder();
-					setOrderConfirmationBlank();
-				}
+				controller.enableOrderLower();
 			}
 		});
 		buttonGroupOrderActivity.add(rdbtnOrderDeleteArticle);
@@ -757,17 +572,7 @@ public class OrderMaker {
 		btnOrderDelete = new JButton("");
 		btnOrderDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-// DELETE whole order or single article
-				String custId = txtOrderCustId.getText();
-				Customer tmpCustomer = controller.findCustomer(custId);
-				if (tmpCustomer != null) {
-					String orderNumber = comboOrderNumberDelete.getText();
-					controller.deleteOrder(custId, orderNumber);
-					enableLowerPartOfOrder();
-					setOrderConfirmationYes();
-				} else {
-					setOrderConfirmationNo();
-				}
+				controller.deleteOrderAsClient();
 			}
 		});
 		btnOrderDelete.setEnabled(false);
@@ -784,10 +589,8 @@ public class OrderMaker {
 		lblOrderAdmin = new JLabel("Admin");
 		lblOrderAdmin.addMouseListener(new MouseAdapter() {
 			@Override
-							public void mouseClicked(MouseEvent e) {
-// GO TO ADMIN
-				panel03.setEnabled(true);
-				tabbedPane.setSelectedIndex(2);
+			public void mouseClicked(MouseEvent e) {
+				controller.goToAdminTab();
 			}
 		});
 		lblOrderAdmin.setEnabled(false);
@@ -803,13 +606,7 @@ public class OrderMaker {
 		rdbtnAdminArticles = new JRadioButton("Items management ");
 		rdbtnAdminArticles.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnAdminArticles.isSelected()) {
-					enableUpperPartOfAdmin();
-					disableMiddlePartOfAdmin();
-					disableLowerPartOfAdmin();
-					enableButtonsOfAdmin();
-					setAdminConfirmationBlank();
-				}
+				controller.enableAdminUpper();
 			}
 		});
 		buttonGroupAdminActivity.add(rdbtnAdminArticles);
@@ -877,13 +674,7 @@ public class OrderMaker {
 		rdbtnAdminSuppliers = new JRadioButton("Suppliers management");
 		rdbtnAdminSuppliers.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnAdminSuppliers.isSelected()) {
-					disableUpperPartOfAdmin();
-					enableMiddlePartOfAdmin();
-					disableLowerPartOfAdmin();
-					enableButtonsOfAdmin();
-					setAdminConfirmationBlank();
-				}
+				controller.enableAdminMiddle();
 			}
 		});
 		buttonGroupAdminActivity.add(rdbtnAdminSuppliers);
@@ -950,13 +741,7 @@ public class OrderMaker {
 		rdbtnAdminClients = new JRadioButton("Clients management");
 		rdbtnAdminClients.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
-				if (rdbtnAdminClients.isSelected()) {
-					disableUpperPartOfAdmin();
-					disableMiddlePartOfAdmin();
-					enableLowerPartOfAdmin();
-					enableButtonsOfAdmin();
-					setAdminConfirmationBlank();
-				}
+				controller.enableAdminLower();
 			}
 		});
 		buttonGroupAdminActivity.add(rdbtnAdminClients);
@@ -1073,215 +858,203 @@ public class OrderMaker {
 		btnAdminFind.setEnabled(false);
 		btnAdminFind.setBounds(343, 456, 80, 29);
 		panel03.add(btnAdminFind);
-
-		controller = new Controller(frameOrderMaker);
-	}
-	
-	private void disableUpperPartOfCustomer() {
-		txtCustomerId.setText("");
-		txtCustomerId.setEnabled(false);
-		btnCustomerEdit.setText("");
-		btnCustomerEdit.setEnabled(false);
-		btnCustomerDelete.setText("");
-		btnCustomerDelete.setEnabled(false);
-		btnCustomerCreateAnOrder.setText("");
-		btnCustomerCreateAnOrder.setEnabled(false);
-	}
-	private void enableUpperPartOfCustomer() {
-		txtCustomerId.setText("Enter customer Id");
-		txtCustomerId.setEnabled(true);
-		btnCustomerEdit.setText("Edit");
-		btnCustomerEdit.setEnabled(true);
-		btnCustomerDelete.setText("Delete");
-		btnCustomerDelete.setEnabled(true);
-		btnCustomerCreateAnOrder.setText("Create an order");
-		btnCustomerCreateAnOrder.setEnabled(true);
-	}
-	private void disableMiddlePartOfCustomer() {
-		txtCustomerName.setText("");
-		txtCustomerName.setEnabled(false);
-		txtCustomerAddress.setText("");
-		txtCustomerAddress.setEnabled(false);
-		txtCustomerPhone.setText("");
-		txtCustomerPhone.setEnabled(false);
-		buttonGroupPrivateCorporate.clearSelection();
-		rdbtnCustomerPrivate.setEnabled(false);
-		rdbtnCustomerCorporate.setEnabled(false);
-		txtCustomerIdIn.setText("");
-		txtCustomerIdIn.setEnabled(false);
-		btnCustomerAdd.setText("");
-		btnCustomerAdd.setEnabled(false);
-	}
-	private void enableMiddlePartOfCustomer() {
-		txtCustomerName.setText("Enter name");
-		txtCustomerName.setEnabled(true);
-		txtCustomerAddress.setText("Enter address");
-		txtCustomerAddress.setEnabled(true);
-		txtCustomerPhone.setText("Enter phone number");
-		txtCustomerPhone.setEnabled(true);
-		rdbtnCustomerPrivate.setEnabled(true);
-		rdbtnCustomerCorporate.setEnabled(true);
-		btnCustomerAdd.setText("Add");
-		btnCustomerAdd.setEnabled(true);
-	}
-	
-	private void disableLowerPartOfCustomer() {
-		txtCustomerCheckId.setText("");
-		txtCustomerCheckId.setEnabled(false);
-		btnCustomerCheck.setText("");
-		btnCustomerCheck.setEnabled(false);
-	}
-	private void enableLowerPartOfCustomer() {
-		txtCustomerCheckId.setText("Enter personal/customer Id");
-		txtCustomerCheckId.setEnabled(true);
-		btnCustomerCheck.setText("Check");
-		btnCustomerCheck.setEnabled(true);
-	}
-	
-	private void setCustomerConfirmationYes() { txtCustomerConfirmation.setText("V"); }
-	private void setCustomerConfirmationNo() { txtCustomerConfirmation.setText("X"); }
-	private void setCustomerConfirmationBlank() { txtCustomerConfirmation.setText(""); }
-
-	private void enableUpperPartOfOrder() {
-		String orderIdInt = String.valueOf(random.nextInt(10000));
-		String orderId = "o" + "0".repeat(4 - orderIdInt.length()) + orderIdInt;
-		txtOrderNumberCreate.setText(orderId);
-		String timeStamp = new SimpleDateFormat("yyyyMMdd").format(new Date());
-		txtOrderDate.setText(timeStamp);
-		btnOrderCreate.setText("Create");
-		btnOrderCreate.setEnabled(true);
-	}
-	private void disableUpperPartOfOrder() {
-		txtOrderNumberCreate.setText("");
-		txtOrderDate.setText("");
-		btnOrderCreate.setText("");
-		btnOrderCreate.setEnabled(false);
-	}
-	private void enableMiddlePartOfOrder() {
-		comboOrderNumberAdd.setText("Enter order Id");
-		comboOrderNumberAdd.setEnabled(true);
-		txtOrderQuantity.setText("Enter quantity");
-		txtOrderQuantity.setEnabled(true);
-		comboOrderArticleAdd.setText("Enter item Id");
-		comboOrderArticleAdd.setEnabled(true);
-		btnOrderAddLine.setText("Append");
-		btnOrderAddLine.setEnabled(true);
-	}
-	private void disableMiddlePartOfOrder() {
-		comboOrderNumberAdd.setText("");
-		comboOrderNumberAdd.setEnabled(false);
-		txtOrderQuantity.setText("");
-		txtOrderQuantity.setEnabled(false);
-		comboOrderArticleAdd.setText("");
-		comboOrderArticleAdd.setEnabled(false);
-		btnOrderAddLine.setText("");
-		btnOrderAddLine.setEnabled(false);
-	}
-	private void enableLowerPartOfOrder() {
-		comboOrderNumberDelete.setText("Enter order Id");
-		comboOrderNumberDelete.setEnabled(true);
-		btnOrderDelete.setText("Delete");
-		btnOrderDelete.setEnabled(true);
-	}
-	private void disableLowerPartOfOrder() {
-		comboOrderNumberDelete.setText("");
-		comboOrderNumberDelete.setEnabled(false);
-		btnOrderDelete.setText("");
-		btnOrderDelete.setEnabled(false);
-	}
-	
-	private void setOrderConfirmationYes() { txtOrderConfirmation.setText("V"); }
-	private void setOrderConfirmationNo() { txtOrderConfirmation.setText("X"); }
-	private void setOrderConfirmationBlank() { txtOrderConfirmation.setText(""); }
-
-	private void enableUpperPartOfAdmin() {
-		comboAdminArticleId.setText("Enter item Id");
-		comboAdminArticleId.setEnabled(true);
-		txtAdminArticleName.setText("Enter name");
-		txtAdminArticleName.setEnabled(true);
-		txtAdminArticlePrice.setText("Enter price");
-		txtAdminArticlePrice.setEnabled(true);
-		comboAdminArticleSupplier.setText("Enter supplier Id");
-		comboAdminArticleSupplier.setEnabled(true);
-	}
-	private void disableUpperPartOfAdmin() {
-		comboAdminArticleId.setText("");
-		comboAdminArticleId.setEnabled(false);
-		txtAdminArticleName.setText("");
-		txtAdminArticleName.setEnabled(false);
-		txtAdminArticlePrice.setText("");
-		txtAdminArticlePrice.setEnabled(false);
-		comboAdminArticleSupplier.setText("");
-		comboAdminArticleSupplier.setEnabled(false);
-	}
-	private void enableMiddlePartOfAdmin() {
-		comboAdminSupplierId.setText("Enter supplier Id");
-		comboAdminSupplierId.setEnabled(true);
-		txtAdminSupplierName.setText("Enter name");
-		txtAdminSupplierName.setEnabled(true);
-		txtAdminSupplierPhone.setText("Enter price");
-		txtAdminSupplierPhone.setEnabled(true);
-		comboAdminSupplierArticle.setText("Enter item Id");
-		comboAdminSupplierArticle.setEnabled(true);
-	}
-	private void disableMiddlePartOfAdmin() {
-		comboAdminSupplierId.setText("");
-		comboAdminSupplierId.setEnabled(false);
-		txtAdminSupplierName.setText("");
-		txtAdminSupplierName.setEnabled(false);
-		txtAdminSupplierPhone.setText("");
-		txtAdminSupplierPhone.setEnabled(false);
-		comboAdminSupplierArticle.setText("");
-		comboAdminSupplierArticle.setEnabled(false);
-	}
-	private void enableLowerPartOfAdmin() {
-		comboAdminClientId.setText("Enter client Id");
-		comboAdminClientId.setEnabled(true);
-		txtAdminClientName.setText("Enter name");
-		txtAdminClientName.setEnabled(true);
-		txtAdminClientAddress.setText("Enter address");
-		txtAdminClientAddress.setEnabled(true);
-		txtAdminClientPhone.setText("Enter phone");
-		txtAdminClientPhone.setEnabled(true);
-		comboAdminClientOrder.setText("Enter order Id");
-		comboAdminClientOrder.setEnabled(true);
-	}
-	private void disableLowerPartOfAdmin() {
-		comboAdminClientId.setText("");
-		comboAdminClientId.setEnabled(false);
-		txtAdminClientName.setText("");
-		txtAdminClientName.setEnabled(false);
-		txtAdminClientAddress.setText("");
-		txtAdminClientAddress.setEnabled(false);
-		txtAdminClientPhone.setText("");
-		txtAdminClientPhone.setEnabled(false);
-		comboAdminClientOrder.setText("");
-		comboAdminClientOrder.setEnabled(false);
 	}
 
-	private void enableButtonsOfAdmin() {
-		btnAdminAdd.setText("Add");
-		btnAdminAdd.setEnabled(true);
-		btnAdminCreate.setText("Create");
-		btnAdminCreate.setEnabled(true);
-		btnAdminDelete.setText("Delete");
-		btnAdminDelete.setEnabled(true);
-		btnAdminFind.setText("Find");
-		btnAdminFind.setEnabled(true);
-	}
-	private void disableButtonsOfAdmin() {
-		btnAdminAdd.setText("");
-		btnAdminAdd.setEnabled(false);
-		btnAdminCreate.setText("");
-		btnAdminCreate.setEnabled(false);
-		btnAdminDelete.setText("");
-		btnAdminDelete.setEnabled(false);
-		btnAdminFind.setText("");
-		btnAdminFind.setEnabled(false);
-	}
+	public JFrame getFrameOrderMaker() { return frameOrderMaker; }
+	public void setFrameOrderMaker(JFrame frameOrderMaker) { this.frameOrderMaker = frameOrderMaker; }
 
-	private void setAdminConfirmationYes() { txtAdminConfirmation.setText("V"); }
-	private void setAdminConfirmationNo() { txtAdminConfirmation.setText("X"); }
-	private void setAdminConfirmationBlank() { txtAdminConfirmation.setText(""); }
+	public JTabbedPane getTabbedPane() { return tabbedPane; }
+	public void setTabbedPane(JTabbedPane tabbedPane) { this.tabbedPane = tabbedPane; }
 
+	public JPanel getPanel01() { return panel01; }
+	public void setPanel01(JPanel panel01) { this.panel01 = panel01; }
+
+	public JPanel getPanel02() { return panel02; }
+	public void setPanel02(JPanel panel02) { this.panel02 = panel02; }
+
+	public JPanel getPanel03() { return panel03; }
+	public void setPanel03(JPanel panel03) { this.panel03 = panel03; }
+
+	public JLabel getLblCustomerAdmin() { return lblCustomerAdmin; }
+	public void setLblCustomerAdmin(JLabel lblCustomerAdmin) { this.lblCustomerAdmin = lblCustomerAdmin; }
+
+	public JLabel getLblOrderAdmin() { return lblOrderAdmin; }
+	public void setLblOrderAdmin(JLabel lblOrderAdmin) { this.lblOrderAdmin = lblOrderAdmin; }
+
+	public JLabel getLblOrderCustId() { return lblOrderCustId; }
+	public void setLblOrderCustId(JLabel lblOrderCustId) { this.lblOrderCustId = lblOrderCustId; }
+
+	public JRadioButton getRdbtnCustomerAlreadyAClient() { return rdbtnCustomerAlreadyAClient; }
+	public void setRdbtnCustomerAlreadyAClient(JRadioButton rdbtnCustomerAlreadyAClient) { this.rdbtnCustomerAlreadyAClient = rdbtnCustomerAlreadyAClient; }
+
+	public JRadioButton getRdbtnCustomerPrivate() { return rdbtnCustomerPrivate; }
+	public void setRdbtnCustomerPrivate(JRadioButton rdbtnCustomerPrivate) { this.rdbtnCustomerPrivate = rdbtnCustomerPrivate; }
+
+	public JRadioButton getRdbtnCustomerNotYet() { return rdbtnCustomerNotYet; }
+	public void setRdbtnCustomerNotYet(JRadioButton rdbtnCustomerNotYet) { this.rdbtnCustomerNotYet = rdbtnCustomerNotYet; }
+
+	public JRadioButton getRdbtnCustomerCorporate() { return rdbtnCustomerCorporate; }
+	public void setRdbtnCustomerCorporate(JRadioButton rdbtnCustomerCorporate) { this.rdbtnCustomerCorporate = rdbtnCustomerCorporate; }
+
+	public JRadioButton getRdbtnCustomerNotSure() { return rdbtnCustomerNotSure; }
+	public void setRdbtnCustomerNotSure(JRadioButton rdbtnCustomerNotSure) { this.rdbtnCustomerNotSure = rdbtnCustomerNotSure; }
+
+	public JRadioButton getRdbtnOrderDeleteArticle() { return rdbtnOrderDeleteArticle; }
+	public void setRdbtnOrderDeleteArticle(JRadioButton rdbtnOrderDeleteArticle) { this.rdbtnOrderDeleteArticle = rdbtnOrderDeleteArticle; }
+
+	public JRadioButton getRdbtnOrderAddLine() { return rdbtnOrderAddLine; }
+	public void setRdbtnOrderAddLine(JRadioButton rdbtnOrderAddLine) { this.rdbtnOrderAddLine = rdbtnOrderAddLine; }
+
+	public JRadioButton getRdbtnOrderCreate() { return rdbtnOrderCreate; }
+	public void setRdbtnOrderCreate(JRadioButton rdbtnOrderCreate) { this.rdbtnOrderCreate = rdbtnOrderCreate; }
+
+	public JRadioButton getRdbtnAdminArticles() { return rdbtnAdminArticles; }
+	public void setRdbtnAdminArticles(JRadioButton rdbtnAdminArticles) { this.rdbtnAdminArticles = rdbtnAdminArticles; }
+
+	public JRadioButton getRdbtnAdminSuppliers() { return rdbtnAdminSuppliers; }
+	public void setRdbtnAdminSuppliers(JRadioButton rdbtnAdminSuppliers) { this.rdbtnAdminSuppliers = rdbtnAdminSuppliers; }
+
+	public JRadioButton getRdbtnAdminClients() { return rdbtnAdminClients; }
+	public void setRdbtnAdminClients(JRadioButton rdbtnAdminClients) { this.rdbtnAdminClients = rdbtnAdminClients; }
+
+	public JTextField getTxtCustomerName() { return txtCustomerName; }
+	public void setTxtCustomerName(JTextField txtCustomerName) { this.txtCustomerName = txtCustomerName; }
+
+	public JTextField getTxtCustomerCheckId() { return txtCustomerCheckId; }
+	public void setTxtCustomerCheckId(JTextField txtCustomerCheckId) { this.txtCustomerCheckId = txtCustomerCheckId; }
+
+	public JTextField getTxtCustomerConfirmation() { return txtCustomerConfirmation; }
+	public void setTxtCustomerConfirmation(JTextField txtCustomerConfirmation) { this.txtCustomerConfirmation = txtCustomerConfirmation; }
+
+	public JTextField getTxtCustomerAddress() { return txtCustomerAddress; }
+	public void setTxtCustomerAddress(JTextField txtCustomerAddress) { this.txtCustomerAddress = txtCustomerAddress; }
+
+	public JTextField getTxtCustomerIdIn() { return txtCustomerIdIn; }
+	public void setTxtCustomerIdIn(JTextField txtCustomerIdIn) { this.txtCustomerIdIn = txtCustomerIdIn; }
+
+	public JTextField getTxtCustomerId() { return txtCustomerId; }
+	public void setTxtCustomerId(JTextField txtCustomerId) { this.txtCustomerId = txtCustomerId; }
+
+	public JTextField getTxtCustomerPhone() { return txtCustomerPhone; }
+	public void setTxtCustomerPhone(JTextField txtCustomerPhone) { this.txtCustomerPhone = txtCustomerPhone; }
+
+	public JTextField getTxtOrderCustId() { return txtOrderCustId; }
+	public void setTxtOrderCustId(JTextField txtOrderCustId) { this.txtOrderCustId = txtOrderCustId; }
+
+	public JTextField getTxtOrderDate() { return txtOrderDate; }
+	public void setTxtOrderDate(JTextField txtOrderDate) { this.txtOrderDate = txtOrderDate; }
+
+	public JTextField getTxtOrderConfirmation() { return txtOrderConfirmation; }
+	public void setTxtOrderConfirmation(JTextField txtOrderConfirmation) { this.txtOrderConfirmation = txtOrderConfirmation; }
+
+	public JTextField getTxtAdminConfirmation() { return txtAdminConfirmation; }
+	public void setTxtAdminConfirmation(JTextField txtAdminConfirmation) { this.txtAdminConfirmation = txtAdminConfirmation; }
+
+	public JTextField getTxtAdminSupplierPhone() { return txtAdminSupplierPhone; }
+	public void setTxtAdminSupplierPhone(JTextField txtAdminSupplierPhone) { this.txtAdminSupplierPhone = txtAdminSupplierPhone; }
+
+	public JTextField getTxtAdminSupplierName() { return txtAdminSupplierName; }
+	public void setTxtAdminSupplierName(JTextField txtAdminSupplierName) { this.txtAdminSupplierName = txtAdminSupplierName; }
+
+	public JTextField getComboOrderNumberAdd() { return comboOrderNumberAdd; }
+	public void setComboOrderNumberAdd(JTextField comboOrderNumberAdd) { this.comboOrderNumberAdd = comboOrderNumberAdd; }
+
+	public JTextField getComboOrderNumberDelete() { return comboOrderNumberDelete; }
+	public void setComboOrderNumberDelete(JTextField comboOrderNumberDelete) { this.comboOrderNumberDelete = comboOrderNumberDelete; }
+
+	public JTextField getComboOrderArticleAdd() { return comboOrderArticleAdd; }
+	public void setComboOrderArticleAdd(JTextField comboOrderArticleAdd) { this.comboOrderArticleAdd = comboOrderArticleAdd; }
+
+	public JTextField getTxtOrderNumberCreate() { return txtOrderNumberCreate; }
+	public void setTxtOrderNumberCreate(JTextField txtOrderNumberCreate) { this.txtOrderNumberCreate = txtOrderNumberCreate; }
+
+	public JTextField getTxtOrderQuantity() { return txtOrderQuantity; }
+	public void setTxtOrderQuantity(JTextField txtOrderQuantity) { this.txtOrderQuantity = txtOrderQuantity; }
+
+	public JTextField getTxtAdminArticleName() { return txtAdminArticleName; }
+	public void setTxtAdminArticleName(JTextField txtAdminArticleName) { this.txtAdminArticleName = txtAdminArticleName; }
+
+	public JTextField getTxtAdminArticlePrice() { return txtAdminArticlePrice; }
+	public void setTxtAdminArticlePrice(JTextField txtAdminArticlePrice) { this.txtAdminArticlePrice = txtAdminArticlePrice; }
+
+	public JTextField getTxtAdminClientAddress() { return txtAdminClientAddress; }
+	public void setTxtAdminClientAddress(JTextField txtAdminClientAddress) { this.txtAdminClientAddress = txtAdminClientAddress; }
+
+	public JTextField getTxtAdminClientName() { return txtAdminClientName; }
+	public void setTxtAdminClientName(JTextField txtAdminClientName) { this.txtAdminClientName = txtAdminClientName; }
+
+	public JTextField getTxtAdminClientPhone() { return txtAdminClientPhone; }
+	public void setTxtAdminClientPhone(JTextField txtAdminClientPhone) { this.txtAdminClientPhone = txtAdminClientPhone; }
+
+	public JTextField getComboAdminArticleSupplier() { return comboAdminArticleSupplier; }
+	public void setComboAdminArticleSupplier(JTextField comboAdminArticleSupplier) { this.comboAdminArticleSupplier = comboAdminArticleSupplier; }
+
+	public JTextField getComboAdminSupplierArticle() { return comboAdminSupplierArticle; }
+	public void setComboAdminSupplierArticle(JTextField comboAdminSupplierArticle) { this.comboAdminSupplierArticle = comboAdminSupplierArticle; }
+
+	public JTextField getComboAdminClientOrder() { return comboAdminClientOrder; }
+	public void setComboAdminClientOrder(JTextField comboAdminClientOrder) { this.comboAdminClientOrder = comboAdminClientOrder; }
+
+	public JTextField getComboAdminClientId() { return comboAdminClientId; }
+	public void setComboAdminClientId(JTextField comboAdminClientId) { this.comboAdminClientId = comboAdminClientId; }
+
+	public JTextField getComboAdminSupplierId() { return comboAdminSupplierId; }
+	public void setComboAdminSupplierId(JTextField comboAdminSupplierId) { this.comboAdminSupplierId = comboAdminSupplierId; }
+
+	public JTextField getComboAdminArticleId() { return comboAdminArticleId; }
+	public void setComboAdminArticleId(JTextField comboAdminArticleId) { this.comboAdminArticleId = comboAdminArticleId; }
+
+	public JButton getBtnCustomerEdit() { return btnCustomerEdit; }
+	public void setBtnCustomerEdit(JButton btnCustomerEdit) { this.btnCustomerEdit = btnCustomerEdit; }
+
+	public JButton getBtnCustomerDelete() { return btnCustomerDelete; }
+	public void setBtnCustomerDelete(JButton btnCustomerDelete) { this.btnCustomerDelete = btnCustomerDelete; }
+
+	public JButton getBtnCustomerCheck() { return btnCustomerCheck; }
+	public void setBtnCustomerCheck(JButton btnCustomerCheck) { this.btnCustomerCheck = btnCustomerCheck; }
+
+	public JButton getBtnCustomerAdd() { return btnCustomerAdd; }
+	public void setBtnCustomerAdd(JButton btnCustomerAdd) { this.btnCustomerAdd = btnCustomerAdd; }
+
+	public JButton getBtnCustomerCreateAnOrder() { return btnCustomerCreateAnOrder; }
+	public void setBtnCustomerCreateAnOrder(JButton btnCustomerCreateAnOrder) { this.btnCustomerCreateAnOrder = btnCustomerCreateAnOrder; }
+
+	public JButton getBtnOrderAddLine() { return btnOrderAddLine; }
+	public void setBtnOrderAddLine(JButton btnOrderAddLine) { this.btnOrderAddLine = btnOrderAddLine; }
+
+	public JButton getBtnOrderDelete() { return btnOrderDelete; }
+	public void setBtnOrderDelete(JButton btnOrderDelete) { this.btnOrderDelete = btnOrderDelete; }
+
+	public JButton getBtnOrderProceed() { return btnOrderProceed; }
+	public void setBtnOrderProceed(JButton btnOrderProceed) { this.btnOrderProceed = btnOrderProceed; }
+
+	public JButton getBtnOrderCreate() { return btnOrderCreate; }
+	public void setBtnOrderCreate(JButton btnOrderCreate) { this.btnOrderCreate = btnOrderCreate; }
+
+	public JButton getBtnAdminCreate() { return btnAdminCreate; }
+	public void setBtnAdminCreate(JButton btnAdminCreate) { this.btnAdminCreate = btnAdminCreate; }
+
+	public JButton getBtnAdminFind() { return btnAdminFind; }
+	public void setBtnAdminFind(JButton btnAdminFind) { this.btnAdminFind = btnAdminFind; }
+
+	public JButton getBtnAdminAdd() { return btnAdminAdd; }
+	public void setBtnAdminAdd(JButton btnAdminAdd) { this.btnAdminAdd = btnAdminAdd; }
+
+	public JButton getBtnAdminDelete() { return btnAdminDelete; }
+	public void setBtnAdminDelete(JButton btnAdminDelete) { this.btnAdminDelete = btnAdminDelete; }
+
+	public ButtonGroup getButtonGroupIsCustomer() { return buttonGroupIsCustomer; }
+	public ButtonGroup getButtonGroupPrivateCorporate() { return buttonGroupPrivateCorporate; }
+
+	public ButtonGroup getButtonGroupOrderActivity() { return buttonGroupOrderActivity; }
+	public ButtonGroup getButtonGroupAdminActivity() { return buttonGroupAdminActivity; }
+
+	public Controller getController() { return controller; }
+	public void setController(Controller controller) { this.controller = controller; }
+
+	public Random getRandom() { return random; }
+	public void setRandom(Random random) { this.random = random; }
+
+	public String getCustId() { return custId; }
+	public void setCustId(String custId) { this.custId = custId; }
 }

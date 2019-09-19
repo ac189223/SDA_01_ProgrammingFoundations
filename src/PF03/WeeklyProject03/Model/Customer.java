@@ -1,4 +1,4 @@
-package PF03.WeeklyProject;
+package PF03.WeeklyProject03.Model;
 
 import java.util.ArrayList;
 
@@ -8,16 +8,16 @@ public abstract class Customer {
     private String phoneNr;
     private ArrayList<Order> orders;
 
-    Customer() {}
+    public Customer() {}
 
-    Customer(String name, String address, String phoneNr) {
+    public Customer(String name, String address, String phoneNr) {
         this.setName(name);
         this.setAddress(address);
         this.setPhoneNr(phoneNr);
         this.setOrders(new ArrayList<>());
     }
 
-    Customer(String name, String address, String phoneNr, ArrayList<Order> orders) {
+    public Customer(String name, String address, String phoneNr, ArrayList<Order> orders) {
         this.setName(name);
         this.setAddress(address);
         this.setPhoneNr(phoneNr);

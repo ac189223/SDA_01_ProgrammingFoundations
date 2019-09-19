@@ -1,4 +1,4 @@
-package PF03.WeeklyProject;
+package PF03.WeeklyProject01;
 
 import java.util.ArrayList;
 

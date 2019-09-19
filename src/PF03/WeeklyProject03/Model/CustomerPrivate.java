@@ -1,4 +1,4 @@
-package PF03.WeeklyProject;
+package PF03.WeeklyProject03.Model;
 
 import java.util.ArrayList;
 
