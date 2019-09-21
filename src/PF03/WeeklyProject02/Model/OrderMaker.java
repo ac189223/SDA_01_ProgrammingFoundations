@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 
 public class OrderMaker {
 
@@ -798,6 +799,10 @@ public class OrderMaker {
 		lblOrderAdmin.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
 		lblOrderAdmin.setBounds(406, 512, 35, 14);
 		panel02.add(lblOrderAdmin);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(272, 285, 80, 16);
+		panel02.add(textArea);
 
 // panel03 ============================================= panel03
 
@@ -1284,5 +1289,4 @@ public class OrderMaker {
 	private void setAdminConfirmationYes() { txtAdminConfirmation.setText("V"); }
 	private void setAdminConfirmationNo() { txtAdminConfirmation.setText("X"); }
 	private void setAdminConfirmationBlank() { txtAdminConfirmation.setText(""); }
-
 }

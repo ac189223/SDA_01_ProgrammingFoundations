@@ -39,16 +39,18 @@ public class Order {
     public void setOrderLines(ArrayList<OrderLine> orderLines) { this.orderLines = orderLines; }
     public void addOrderLine(OrderLine orderLine) {
         if (!getOrderLines().contains(orderLine)) {
-            getOrderLines().add(orderLine);
-            try { orderLine.setOrder(this); } catch (NullPointerException e) { }
+            if (!listArticles().contains(orderLine.getArticle())) {
+                getOrderLines().add(orderLine);
+                try { orderLine.setOrder(this); } catch (NullPointerException e) { }
+            } else {
+                OrderLine tmpOrderLine = findOrderLine(orderLine.getArticle());
+                tmpOrderLine.setQuantity(tmpOrderLine.getQuantity() + orderLine.getQuantity());
+            }
         }
     }
     public void addOrderLine(int quantity, Article article) {
     	OrderLine orderLine = new OrderLine(quantity, article);
-    	if (!getOrderLines().contains(orderLine)) {
-            getOrderLines().add(orderLine);
-            try { orderLine.setOrder(this); } catch (NullPointerException e) { }
-        }
+    	addOrderLine(orderLine);
     }
     public void removeOrderLine(OrderLine orderLine) {
         if (getOrderLines().contains(orderLine)) {
@@ -56,6 +58,14 @@ public class Order {
             try { orderLine.setOrder(null); } catch (NullPointerException e) { }
         }
     }
+    public OrderLine findOrderLine(Article article) {
+        for (OrderLine orderLine: getOrderLines()) {
+            if (orderLine.getArticle() == article)
+                return orderLine;
+        }
+        return null;
+    }
+
 
     public Customer getOrderedBy() { return orderedBy; }
     public void setOrderedBy(Customer orderedBy) {

@@ -39,7 +39,7 @@ public class Controller {
     public void editCustomerData() {
         // Go To EDIT CustomerData as Customer itself
         String custId;
-        if (view.getTxtCustomerId().getSelectedIndex() == 0 || view.getTxtCustomerId().getSelectedIndex() == 1)
+        if (view.getTxtCustomerId().getSelectedIndex() == 0)
             custId = view.getTxtCustomerIdIn().getText();
         else
             custId = (String) view.getTxtCustomerId().getSelectedItem();
@@ -71,7 +71,7 @@ public class Controller {
     public void deleteCustomer() {
         // DELETE Customer by customer itself
         String custId;
-        if (view.getTxtCustomerId().getSelectedIndex() == 0 || view.getTxtCustomerId().getSelectedIndex() == 1)
+        if (view.getTxtCustomerId().getSelectedIndex() == 0)
             custId = view.getTxtCustomerIdIn().getText();
         else
             custId = (String) view.getTxtCustomerId().getSelectedItem();
@@ -178,7 +178,7 @@ public class Controller {
         // GO TO ORDER Tab as Customer with proper Id
         String custId;
         int custIdIndex = 0;
-        if (view.getTxtCustomerId().getSelectedIndex() != 0 && view.getTxtCustomerId().getSelectedIndex() != 1) {
+        if (view.getTxtCustomerId().getSelectedIndex() != 0) {
             custId = (String) view.getTxtCustomerId().getSelectedItem();
             custIdIndex = view.getTxtCustomerId().getSelectedIndex();
             Customer tmpCustomer = getCustomerReg().findCustomer(custId);
@@ -194,6 +194,7 @@ public class Controller {
                 view.getRdbtnOrderDeleteArticle().setEnabled(true);
                 createOrderForCustomerToComboBoxesList(tmpCustomer);
                 view.getTxtOrderCustId().setText(custId);
+                view.getTxtOrderCustIdDuplicate().setText(custId);
             }
         }
          else {
@@ -201,26 +202,87 @@ public class Controller {
         }
     }
 
+    public void adminLinkPressed() {
+        if (view.getTabbedPane().getSelectedIndex() == 0) {
+            view.getTxtCustomerAdminPassword().setVisible(true);
+            view.getTxtCustomerAdminPassword().setEnabled(true);
+            view.getTxtCustomerAdminPassword().setEchoChar((char)0);
+            view.getTxtCustomerAdminPassword().setText("Enter password");
+            view.getBtnCustomerPasswordCheck().setVisible(true);
+            view.getBtnCustomerPasswordCheck().setEnabled(true);
+            view.getBtnCustomerPasswordCheck().setText("Go");
+        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+            view.getTxtOrderAdminPassword().setVisible(true);
+            view.getTxtOrderAdminPassword().setEnabled(true);
+            view.getTxtOrderAdminPassword().setEchoChar((char)0);
+            view.getTxtOrderAdminPassword().setText("Enter password");
+            view.getBtnOrderPasswordCheck().setVisible(true);
+            view.getBtnOrderPasswordCheck().setEnabled(true);
+            view.getBtnOrderPasswordCheck().setText("Go");
+        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+            view.getTxtPreviewAdminPassword().setVisible(true);
+            view.getTxtPreviewAdminPassword().setEnabled(true);
+            view.getTxtPreviewAdminPassword().setEchoChar((char)0);
+            view.getTxtPreviewAdminPassword().setText("Enter password");
+            view.getBtnPrevievPasswordCheck().setVisible(true);
+            view.getBtnPrevievPasswordCheck().setEnabled(true);
+            view.getBtnPrevievPasswordCheck().setText("Go");
+        }
+    }
+
     public void goToAdminTab() {
         // GO TO ADMIN Tab as Admin
-        disableUpperPartOfCustomer();
-        disableMiddlePartOfCustomer();
-        disableLowerPartOfCustomer();
-        view.getButtonGroupIsCustomer().clearSelection();
-        disableUpperPartOfOrder();
-        disableMiddlePartOfOrder();
-        disableLowerPartOfOrder();
-        view.getButtonGroupOrderActivity().clearSelection();
-        view.getPanel04().setEnabled(true);
-        view.getRdbtnAdminArticles().setEnabled(true);
-        view.getRdbtnAdminSuppliers().setEnabled(true);
-        view.getRdbtnAdminClients().setEnabled(true);
-        view.getTabbedPane().setSelectedIndex(3);
+        char[] enteredPassword = null;
+        if (view.getTabbedPane().getSelectedIndex() == 0) {
+            enteredPassword = view.getTxtCustomerAdminPassword().getPassword();
+            view.getTxtCustomerAdminPassword().setText("");
+            view.getTxtCustomerAdminPassword().setEnabled(false);
+            view.getTxtCustomerAdminPassword().setVisible(false);
+            view.getBtnCustomerPasswordCheck().setText("");
+            view.getBtnCustomerPasswordCheck().setEnabled(false);
+            view.getBtnCustomerPasswordCheck().setVisible(false);
+        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+            enteredPassword = view.getTxtOrderAdminPassword().getPassword();
+            view.getTxtOrderAdminPassword().setText("");
+            view.getTxtOrderAdminPassword().setEnabled(false);
+            view.getTxtOrderAdminPassword().setVisible(false);
+            view.getBtnOrderPasswordCheck().setText("");
+            view.getBtnOrderPasswordCheck().setEnabled(false);
+            view.getBtnOrderPasswordCheck().setVisible(false);
+        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+            enteredPassword = view.getTxtPreviewAdminPassword().getPassword();
+            view.getTxtPreviewAdminPassword().setText("");
+            view.getTxtPreviewAdminPassword().setEnabled(false);
+            view.getTxtPreviewAdminPassword().setVisible(false);
+            view.getBtnPrevievPasswordCheck().setText("");
+            view.getBtnPrevievPasswordCheck().setEnabled(false);
+            view.getBtnPrevievPasswordCheck().setVisible(false);
+        }
+        if (String.copyValueOf(enteredPassword).equals("AdminPass")) {
+            disableUpperPartOfCustomer();
+            disableMiddlePartOfCustomer();
+            disableLowerPartOfCustomer();
+            view.getButtonGroupIsCustomer().clearSelection();
+            disableUpperPartOfOrder();
+            disableMiddlePartOfOrder();
+            disableLowerPartOfOrder();
+            view.getButtonGroupOrderActivity().clearSelection();
+            view.getPanel04().setEnabled(true);
+            view.getRdbtnAdminArticles().setEnabled(true);
+            view.getRdbtnAdminSuppliers().setEnabled(true);
+            view.getRdbtnAdminClients().setEnabled(true);
+            view.getButtonGroupAdminActivity().clearSelection();
+            view.getTabbedPane().setSelectedIndex(3);
+        }
     }
 
     public void addNewOrderAsClient() {
         // ADD new Order as Client
-        String custId = view.getTxtOrderCustId().getText();
+        String custId;
+        if (!view.getTxtOrderCustId().getText().equals(""))
+            custId = view.getTxtOrderCustId().getText();
+        else
+            custId = view.getTxtOrderCustIdDuplicate().getText();
         Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         if (tmpCustomer != null) {
             String orderNumber = view.getTxtOrderNumberCreate().getText();
@@ -244,12 +306,16 @@ public class Controller {
 
     public void addNewOrderLineAsClient() {
         // ADD new OrderLine to Order as Client
-        String custId = view.getTxtOrderCustId().getText();
+        String custId;
+        if (!view.getTxtOrderCustId().getText().equals(""))
+            custId = view.getTxtOrderCustId().getText();
+        else
+            custId = view.getTxtOrderCustIdDuplicate().getText();
         Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         String orderNumber = (String) view.getComboOrderNumberAdd().getSelectedItem();
         int orderNumberIndex = view.getComboOrderNumberAdd().getSelectedIndex();
         Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
-        String quantity = (String) view.getTxtOrderQuantity().getSelectedItem();
+        String quantity = (String) view.getTxtOrderQuantityAdd().getSelectedItem();
         String articleId = (String) view.getComboOrderArticleAdd().getSelectedItem();
         Article tmpArticle = getArticleReg().findArticle(articleId);
         if (tmpCustomer != null && tmpOrder != null && ifInt(quantity) && tmpArticle != null) {
@@ -279,58 +345,88 @@ public class Controller {
 
     public void deleteOrderAsClient() {
         // DELETE order as Customer
-        String custId = view.getTxtOrderCustId().getText();
+        String custId;
+        if (!view.getTxtOrderCustId().getText().equals(""))
+            custId = view.getTxtOrderCustId().getText();
+        else
+            custId = view.getTxtOrderCustIdDuplicate().getText();
         Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         String orderNumber = (String) view.getComboOrderNumberDelete().getSelectedItem();
         Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
         if (tmpCustomer != null && tmpOrder != null) {
-            if (view.getComboArticleDelete().getSelectedIndex() == 1 || view.getComboArticleDelete().getSelectedIndex() == 0) {
+            if (view.getComboOrderArticleDelete().getSelectedIndex() == 0 && view.getTxtOrderQuantityDelete().getSelectedIndex() == 0) {
                 deleteOrder(custId, orderNumber);
                 deleteOrderForCustomerFromComboBoxesList(orderNumber);
+                view.getButtonGroupOrderActivity().clearSelection();
                 enableLowerPartOfOrder();
                 setOrderConfirmationYes();
-            } else {
-                for (OrderLine orderLine: tmpOrder.getOrderLines())
-                    if (orderLine.getArticle().getId().equals((String) view.getComboArticleDelete().getSelectedItem()))
-                        tmpOrder.removeOrderLine(orderLine);
+            } else if (view.getComboOrderArticleDelete().getSelectedIndex() != 0) {
+                Article tmpArticle = getArticleReg().findArticle((String) view.getComboOrderArticleDelete().getSelectedItem());
+                if (tmpCustomer.listArticles().contains(tmpArticle)) {
+                    if (view.getTxtOrderQuantityDelete().getSelectedItem().equals("all")) {
+                        for (OrderLine orderLine: tmpOrder.getOrderLines())
+                            if (orderLine.getArticle() == tmpArticle) {
+                                tmpOrder.removeOrderLine(orderLine);
+                                break;
+                            }
+                        setOrderConfirmationYes();
+                    } else if (!view.getTxtOrderQuantityDelete().getSelectedItem().equals("")) {
+                        int tmpQuantity = Integer.parseInt((String)view.getTxtOrderQuantityDelete().getSelectedItem());
+                        for (OrderLine orderLine: tmpOrder.getOrderLines())
+                            if (orderLine.getArticle() == tmpArticle) {
+                                if (orderLine.getQuantity() > tmpQuantity) {
+                                    orderLine.setQuantity(orderLine.getQuantity() - tmpQuantity);
+                                    setOrderConfirmationYes();
+                                    break;
+                                } else if (orderLine.getQuantity() == tmpQuantity) {
+                                    tmpOrder.removeOrderLine(orderLine);
+                                    setOrderConfirmationYes();
+                                    break;
+                                } else {
+                                    setOrderConfirmationNo();
+                                }
+                            }
+                    } else {
+                        setOrderConfirmationNo();
+                    }
+                } else {
+                    setOrderConfirmationNo();
+                }
             }
         } else {
             setOrderConfirmationNo();
         }
     }
 
+
     public void deleteOrder(String custId, String orderNr) {
         getCustomerReg().findCustomer(custId).removeOrder(orderNr);
     }
 
     public void goToPreview() {
-        String custId = view.getTxtOrderCustId().getText();
+        String custId;
+        if (!view.getTxtOrderCustId().getText().equals(""))
+            custId = view.getTxtOrderCustId().getText();
+        else
+            custId = view.getTxtOrderCustIdDuplicate().getText();
         String orderNumber = "";
-        if (view.getComboOrderNumberAdd().getSelectedIndex() != 0 && view.getComboOrderNumberAdd().getSelectedIndex() != 1)
+        if (view.getComboOrderNumberAdd().getSelectedIndex() != 0)
             orderNumber = (String) view.getComboOrderNumberAdd().getSelectedItem();
-        else if (view.getComboOrderNumberDelete().getSelectedIndex() != 0 && view.getComboOrderNumberDelete().getSelectedIndex() != 1)
+        else if (view.getComboOrderNumberDelete().getSelectedIndex() != 0)
             orderNumber = (String) view.getComboOrderNumberDelete().getSelectedItem();
         if (orderNumber != "") {
             view.getTabbedPane().setSelectedIndex(2);
             Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
             view.getLblPreviewOrderNumer().setText("Order nr " + orderNumber);
-            HashMap<String, Integer> orderedItems = new HashMap<>();
-            for (OrderLine orderLine: getCustomerReg().findCustomer(custId).findOrder(orderNumber).getOrderLines()) {
-                String tmpArticleId = orderLine.getArticle().getId();
-                if (orderedItems.keySet().contains(tmpArticleId))
-                    orderedItems.replace(tmpArticleId, orderedItems.get(tmpArticleId) + orderLine.getQuantity());
-                else
-                    orderedItems.put(tmpArticleId, orderLine.getQuantity());
-            }
             String textLines1 = "ITEM";
             String textLines2 = "NAME";
             String textLines3 =  "QUANTITY";
             String textLines4 = "VALUE";
-            for (String article: orderedItems.keySet()) {
-                textLines1 += "\n" + article;
-                textLines2 += "\n" + getArticleReg().findArticle(article).getName();
-                textLines3 += "\n" + orderedItems.get(article);
-                textLines4 += "\n" + (getArticleReg().findArticle(article).getPrice() * orderedItems.get(article));
+            for (OrderLine orderLine: tmpOrder.getOrderLines()) {
+                textLines1 += "\n" + orderLine.getArticle().getId();
+                textLines2 += "\n" + orderLine.getArticle().getName();
+                textLines3 += "\n" + orderLine.getQuantity();
+                textLines4 += "\n" + (orderLine.getArticle().getPrice() * orderLine.getQuantity());
             }
             view.getLblPreviewOrderDetails1().setText(textLines1);
             view.getLblPreviewOrderDetails2().setText(textLines2);
@@ -356,10 +452,12 @@ public class Controller {
 
     private void addCustomerToComboBoxesList(String custId) {
         view.getTxtCustomerId().addItem(custId);
+        view.getComboAdminClientId().addItem(custId);
     }
 
     private void deleteCustomerFromComboBoxesList(String custId) {
         view.getTxtCustomerId().removeItem(custId);
+        view.getComboAdminClientId().removeItem(custId);
     }
 
     private void addOrderToComboBoxesList(String orderId) {
@@ -373,8 +471,6 @@ public class Controller {
         view.getComboOrderNumberDelete().removeAllItems();
         view.getComboOrderNumberAdd().addItem("");
         view.getComboOrderNumberDelete().addItem("");
-        view.getComboOrderNumberAdd().addItem("Choose order Id");
-        view.getComboOrderNumberDelete().addItem("Choose order Id");
         for (Order order: customer.getOrders()) {
             view.getComboOrderNumberAdd().addItem(order.getOrderNr());
             view.getComboOrderNumberDelete().addItem(order.getOrderNr());
@@ -393,18 +489,45 @@ public class Controller {
 
     private void addArticleToComboBoxesList(String articleId) {
         view.getComboOrderArticleAdd().addItem(articleId);
-        view.getComboArticleDelete().addItem(articleId);
+        view.getComboOrderArticleDelete().addItem(articleId);
+        view.getComboAdminSupplierId().addItem(articleId);
+        view.getComboAdminArticleSupplier().addItem(articleId);
     }
 
     private void deleteArticleFromComboBoxesList(String articleId) {
         view.getComboOrderArticleAdd().removeItem(articleId);
-        view.getComboArticleDelete().removeItem(articleId);
+        view.getComboOrderArticleDelete().removeItem(articleId);
+        view.getComboAdminSupplierId().removeItem(articleId);
+        view.getComboAdminArticleSupplier().removeItem(articleId);
+    }
+
+
+    public void customizeArticleToComboBoxesList() {
+        try {
+            String custId;
+            if (!view.getTxtOrderCustId().getText().equals(""))
+                custId = view.getTxtOrderCustId().getText();
+            else
+                custId = view.getTxtOrderCustIdDuplicate().getText();
+            Customer tmpCustomer = getCustomerReg().findCustomer(custId);
+            view.getComboOrderArticleDelete().removeAllItems();
+            view.getComboOrderArticleDelete().addItem("");
+            if (view.getComboOrderNumberDelete().getSelectedIndex() != 0) {
+                Order tmpOrder = tmpCustomer.findOrder((String) view.getComboOrderNumberDelete().getSelectedItem());
+                for (Article article: tmpOrder.listArticles())
+                    view.getComboOrderArticleDelete().addItem(article.getId());
+            }
+        } catch (NullPointerException err) { }
     }
 
     private void addSupplierToComboBoxesList(String supplierId) {
+        view.getComboAdminArticleId().addItem(supplierId);
+        view.getComboAdminSupplierArticle().addItem(supplierId);
     }
 
     private void deleteSupplierFromComboBoxesList(String supplierId) {
+        view.getComboAdminArticleId().removeItem(supplierId);
+        view.getComboAdminSupplierArticle().removeItem(supplierId);
     }
 
     public void enableCustomerUpper() {
@@ -435,7 +558,7 @@ public class Controller {
     }
 
     public void enableUpperPartOfCustomer() {
-        view.getTxtCustomerId().setSelectedIndex(1);
+        view.getTxtCustomerId().setSelectedIndex(0);
         view.getTxtCustomerId().setEnabled(true);
         view.getBtnCustomerEdit().setText("Edit");
         view.getBtnCustomerEdit().setEnabled(true);
@@ -457,11 +580,11 @@ public class Controller {
     }
 
     public void enableMiddlePartOfCustomer() {
-        view.getTxtCustomerName().setText("Enter name");
+        view.getTxtCustomerName().setText("");
         view.getTxtCustomerName().setEnabled(true);
-        view.getTxtCustomerAddress().setText("Enter address");
+        view.getTxtCustomerAddress().setText("");
         view.getTxtCustomerAddress().setEnabled(true);
-        view.getTxtCustomerPhone().setText("Enter phone number");
+        view.getTxtCustomerPhone().setText("");
         view.getTxtCustomerPhone().setEnabled(true);
         view.getRdbtnCustomerPrivate().setEnabled(true);
         view.getRdbtnCustomerCorporate().setEnabled(true);
@@ -486,7 +609,7 @@ public class Controller {
     }
 
     public void enableLowerPartOfCustomer() {
-        view.getTxtCustomerCheckId().setText("Enter personal/customer Id");
+        view.getTxtCustomerCheckId().setText("");
         view.getTxtCustomerCheckId().setEnabled(true);
         view.getBtnCustomerCheck().setText("Check");
         view.getBtnCustomerCheck().setEnabled(true);
@@ -550,38 +673,42 @@ public class Controller {
         view.getBtnOrderCreate().setEnabled(false);
     }
     public void enableMiddlePartOfOrder() {
-        view.getComboOrderNumberAdd().setSelectedIndex(1);
+        view.getComboOrderNumberAdd().setSelectedIndex(0);
         view.getComboOrderNumberAdd().setEnabled(true);
-        view.getTxtOrderQuantity().setSelectedIndex(1);
-        view.getTxtOrderQuantity().setEnabled(true);
-        view.getComboOrderArticleAdd().setSelectedIndex(1);
+        view.getTxtOrderQuantityAdd().setSelectedIndex(0);
+        view.getTxtOrderQuantityAdd().setEnabled(true);
+        view.getComboOrderArticleAdd().setSelectedIndex(0);
         view.getComboOrderArticleAdd().setEnabled(true);
-        view.getBtnOrderAddLine().setText("Append");
+        view.getBtnOrderAddLine().setText("Add");
         view.getBtnOrderAddLine().setEnabled(true);
     }
     public void disableMiddlePartOfOrder() {
         view.getComboOrderNumberAdd().setSelectedIndex(0);
         view.getComboOrderNumberAdd().setEnabled(false);
-        view.getTxtOrderQuantity().setSelectedIndex(0);
-        view.getTxtOrderQuantity().setEnabled(false);
+        view.getTxtOrderQuantityAdd().setSelectedIndex(0);
+        view.getTxtOrderQuantityAdd().setEnabled(false);
         view.getComboOrderArticleAdd().setSelectedIndex(0);
         view.getComboOrderArticleAdd().setEnabled(false);
         view.getBtnOrderAddLine().setText("");
         view.getBtnOrderAddLine().setEnabled(false);
     }
     public void enableLowerPartOfOrder() {
-        view.getComboOrderNumberDelete().setSelectedIndex(1);
+        view.getComboOrderNumberDelete().setSelectedIndex(0);
         view.getComboOrderNumberDelete().setEnabled(true);
-        view.getComboArticleDelete().setSelectedIndex(1);
-        view.getComboArticleDelete().setEnabled(true);
+        view.getTxtOrderQuantityDelete().setSelectedIndex(0);
+        view.getTxtOrderQuantityDelete().setEnabled(true);
+        view.getComboOrderArticleDelete().setSelectedIndex(0);
+        view.getComboOrderArticleDelete().setEnabled(true);
         view.getBtnOrderDelete().setText("Delete");
         view.getBtnOrderDelete().setEnabled(true);
     }
     public void disableLowerPartOfOrder() {
         view.getComboOrderNumberDelete().setSelectedIndex(0);
         view.getComboOrderNumberDelete().setEnabled(false);
-        view.getComboArticleDelete().setSelectedIndex(0);
-        view.getComboArticleDelete().setEnabled(false);
+        view.getTxtOrderQuantityDelete().setSelectedIndex(0);
+        view.getTxtOrderQuantityDelete().setEnabled(false);
+        view.getComboOrderArticleDelete().setSelectedIndex(0);
+        view.getComboOrderArticleDelete().setEnabled(false);
         view.getBtnOrderDelete().setText("");
         view.getBtnOrderDelete().setEnabled(false);
     }
@@ -631,59 +758,57 @@ public class Controller {
     }
 
     public void enableUpperPartOfAdmin() {
-        view.getComboAdminArticleId().setText("Enter item Id");
+        view.getComboAdminArticleId().setSelectedIndex(0);
         view.getComboAdminArticleId().setEnabled(true);
-        view.getTxtAdminArticleName().setText("Enter name");
+        view.getTxtAdminArticleName().setText("");
         view.getTxtAdminArticleName().setEnabled(true);
-        view.getTxtAdminArticlePrice().setText("Enter price");
+        view.getTxtAdminArticlePrice().setText("");
         view.getTxtAdminArticlePrice().setEnabled(true);
-        view.getComboAdminArticleSupplier().setText("Enter supplier");
+        view.getComboAdminArticleSupplier().setSelectedIndex(0);
         view.getComboAdminArticleSupplier().setEnabled(true);
     }
     public void disableUpperPartOfAdmin() {
-        view.getComboAdminArticleId().setText("");
+        view.getComboAdminArticleId().setSelectedIndex(0);
         view.getComboAdminArticleId().setEnabled(false);
         view.getTxtAdminArticleName().setText("");
         view.getTxtAdminArticleName().setEnabled(false);
         view.getTxtAdminArticlePrice().setText("");
         view.getTxtAdminArticlePrice().setEnabled(false);
-        view.getComboAdminArticleSupplier().setText("");
+        view.getComboAdminArticleSupplier().setSelectedIndex(0);
         view.getComboAdminArticleSupplier().setEnabled(false);
     }
     public void enableMiddlePartOfAdmin() {
-        view.getComboAdminSupplierId().setText("Enter supplier Id");
+        view.getComboAdminSupplierId().setSelectedIndex(0);
         view.getComboAdminSupplierId().setEnabled(true);
-        view.getTxtAdminSupplierName().setText("Enter name");
+        view.getTxtAdminSupplierName().setText("");
         view.getTxtAdminSupplierName().setEnabled(true);
-        view.getTxtAdminSupplierPhone().setText("Enter price");
+        view.getTxtAdminSupplierPhone().setText("");
         view.getTxtAdminSupplierPhone().setEnabled(true);
-        view.getComboAdminSupplierArticle().setText("Enter item Id");
+        view.getComboAdminSupplierArticle().setSelectedIndex(0);
         view.getComboAdminSupplierArticle().setEnabled(true);
     }
     public void disableMiddlePartOfAdmin() {
-        view.getComboAdminSupplierId().setText("");
+        view.getComboAdminSupplierId().setSelectedIndex(0);
         view.getComboAdminSupplierId().setEnabled(false);
         view.getTxtAdminSupplierName().setText("");
         view.getTxtAdminSupplierName().setEnabled(false);
         view.getTxtAdminSupplierPhone().setText("");
         view.getTxtAdminSupplierPhone().setEnabled(false);
-        view.getComboAdminSupplierArticle().setText("");
+        view.getComboAdminSupplierArticle().setSelectedIndex(0);
         view.getComboAdminSupplierArticle().setEnabled(false);
     }
     public void enableLowerPartOfAdmin() {
-        view.getComboAdminClientId().setText("Enter client Id");
+        view.getComboAdminClientId().setSelectedIndex(0);
         view.getComboAdminClientId().setEnabled(true);
-        view.getTxtAdminClientName().setText("Enter name");
+        view.getTxtAdminClientName().setText("");
         view.getTxtAdminClientName().setEnabled(true);
-        view.getTxtAdminClientAddress().setText("Enter address");
+        view.getTxtAdminClientAddress().setText("");
         view.getTxtAdminClientAddress().setEnabled(true);
-        view.getTxtAdminClientPhone().setText("Enter phone");
+        view.getTxtAdminClientPhone().setText("");
         view.getTxtAdminClientPhone().setEnabled(true);
-        view.getComboAdminClientOrder().setText("Enter order Id");
-        view.getComboAdminClientOrder().setEnabled(true);
     }
     public void disableLowerPartOfAdmin() {
-        view.getComboAdminClientId().setText("");
+        view.getComboAdminClientId().setSelectedIndex(0);
         view.getComboAdminClientId().setEnabled(false);
         view.getTxtAdminClientName().setText("");
         view.getTxtAdminClientName().setEnabled(false);
@@ -691,8 +816,6 @@ public class Controller {
         view.getTxtAdminClientAddress().setEnabled(false);
         view.getTxtAdminClientPhone().setText("");
         view.getTxtAdminClientPhone().setEnabled(false);
-        view.getComboAdminClientOrder().setText("");
-        view.getComboAdminClientOrder().setEnabled(false);
     }
 
     public void enableButtonsOfAdmin() {
@@ -829,5 +952,6 @@ public class Controller {
         tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
         tmpOrder.addOrderLine(new OrderLine(2, articleReg.getArticles().get(4)));
         tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+
     }
 }

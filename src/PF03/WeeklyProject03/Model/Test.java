@@ -10,7 +10,7 @@ public class Test {
         t.createData();
         t.connectData();
         t.printData();
-        t.testData();
+        //t.testData();
     }
 
     private void createData() {
@@ -50,7 +50,8 @@ public class Test {
                 tmpOrder.setOrderedBy(customers.getCustomers().get(customer));
                 for (int line = 0; line < 3; line++) {
                     counter++;
-                    tmpOrder.addOrderLine(new OrderLine(customer + order + line + 1, articles.findArticle(String.valueOf(counter % articlesAmount))));
+                //    tmpOrder.addOrderLine(new OrderLine(customer + order + line + 1, articles.findArticle(String.valueOf(counter % articlesAmount))));
+                    tmpOrder.addOrderLine(new OrderLine(customer + order + line + 1, articles.getArticles().get(1)));
                     tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
                 }
             }
