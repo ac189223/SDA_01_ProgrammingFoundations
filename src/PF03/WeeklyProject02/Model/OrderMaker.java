@@ -170,6 +170,7 @@ public class OrderMaker {
 		panel02.setBackground(new Color(135, 206, 235));
 		panel02.setEnabled(false);
 		tabbedPane.addTab("Order", null, panel02, null);
+		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setForegroundAt(1, new Color(0, 0, 128));
 		tabbedPane.setBackgroundAt(1, new Color(135, 206, 235));
 		panel02.setLayout(null);

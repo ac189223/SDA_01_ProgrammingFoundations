@@ -6,7 +6,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Random;
 
 public class View {
 
@@ -15,10 +14,18 @@ public class View {
 	private JPanel panel01;
 	private JPanel panel02;
 	private JPanel panel03;
+	private JPanel panel04;
 
 	private JLabel lblCustomerAdmin;
 	private JLabel lblOrderAdmin;
 	private JLabel lblOrderCustId;
+	private JLabel lblPreviewOrderNumer;
+	private JLabel lblPreviewOrderTotal;
+	private JLabel lblPreviewAdmin;
+	private JTextArea lblPreviewOrderDetails1;
+	private JTextArea lblPreviewOrderDetails2;
+	private JTextArea lblPreviewOrderDetails3;
+	private JTextArea lblPreviewOrderDetails4;
 	private JRadioButton rdbtnCustomerAlreadyAClient;
 	private JRadioButton rdbtnCustomerPrivate;
 	private JRadioButton rdbtnCustomerNotYet;
@@ -30,24 +37,26 @@ public class View {
 	private JRadioButton rdbtnAdminArticles;
 	private JRadioButton rdbtnAdminSuppliers;
 	private JRadioButton rdbtnAdminClients;
+	private JComboBox txtCustomerId;
+	private JComboBox comboOrderNumberAdd;
+	private JComboBox comboOrderNumberDelete;
+	private JComboBox comboArticleDelete;
+	private JComboBox comboOrderArticleAdd;
+	private JComboBox txtOrderQuantity;
+	private JTextField txtOrderCustId;
 	private JTextField txtCustomerName;
 	private JTextField txtCustomerCheckId;
 	private JTextField txtCustomerConfirmation;
 	private JTextField txtCustomerAddress;
 	private JTextField txtCustomerIdIn;
-	private JTextField txtCustomerId;
+	private JTextField txtCustomerIdOld;
 	private JTextField txtCustomerPhone;
-	private JTextField txtOrderCustId;
 	private JTextField txtOrderDate;
 	private JTextField txtOrderConfirmation;
 	private JTextField txtAdminConfirmation;
 	private JTextField txtAdminSupplierPhone;
 	private JTextField txtAdminSupplierName;
-	private JTextField comboOrderNumberAdd;
-	private JTextField comboOrderNumberDelete;
-	private JTextField comboOrderArticleAdd;
 	private JTextField txtOrderNumberCreate;
-	private JTextField txtOrderQuantity;
 	private JTextField txtAdminArticleName;
 	private JTextField txtAdminArticlePrice;
 	private JTextField txtAdminClientAddress;
@@ -72,6 +81,7 @@ public class View {
 	private JButton btnAdminFind;
 	private JButton btnAdminAdd;
 	private JButton btnAdminDelete;
+	private JButton btnPreviewBackToOrder;
 	private final ButtonGroup buttonGroupIsCustomer = new ButtonGroup();
 	private final ButtonGroup buttonGroupPrivateCorporate = new ButtonGroup();
 	private final ButtonGroup buttonGroupOrderActivity = new ButtonGroup();
@@ -79,9 +89,12 @@ public class View {
 
 	private Controller controller;
 
-	private Random random = new Random();
-
-	private String custId;
+	private String[] listCustomersForCombo = {"", "Choose customer Id"};
+	private String[] listArticlesForCombo = {"", "Choose item Id"};
+	private String[] listSuppliersForCombo = {"", "Choose supplier Id"};
+	private String[] listOrdersForCombo = {"", "Choose order Id"};
+	private String[] listOrdersForCustomerForCombo = {"", "Choose order Id"};
+	private String[] listQuantityForCombo = {"", "Choose quantity", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
 	/**
 	 * Launch the application.
@@ -102,7 +115,7 @@ public class View {
 	/**
 	 * Create the application.
 	 */
-	private View() {
+	View() {
 		initialize();
 	}
 
@@ -134,6 +147,12 @@ public class View {
 			}
 		});
 		panel01.setBorder(new LineBorder(new Color(135, 206, 235), 0, true));
+		panel01.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				controller.clearTabCustomer();
+			}
+		});
 		panel01.setBackground(new Color(135, 206, 235));
 		tabbedPane.addTab("Customer", null, panel01, null);
 		tabbedPane.setForegroundAt(0, new Color(0, 0, 128));
@@ -141,6 +160,12 @@ public class View {
 		panel01.setLayout(null);
 		
 		panel02 = new JPanel();
+		panel02.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				controller.clearTabOrder();
+			}
+		});
 		panel02.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
@@ -151,11 +176,18 @@ public class View {
 		panel02.setBackground(new Color(135, 206, 235));
 		panel02.setEnabled(false);
 		tabbedPane.addTab("Order", null, panel02, null);
+		tabbedPane.setEnabledAt(1, false);
 		tabbedPane.setForegroundAt(1, new Color(0, 0, 128));
 		tabbedPane.setBackgroundAt(1, new Color(135, 206, 235));
 		panel02.setLayout(null);
-		
+
 		panel03 = new JPanel();
+		panel03.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				controller.clearTabPreview();
+			}
+		});
 		panel03.addMouseMotionListener(new MouseMotionAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
@@ -165,10 +197,33 @@ public class View {
 		panel03.setBorder(new LineBorder(new Color(135, 206, 235), 0, true));
 		panel03.setBackground(new Color(135, 206, 235));
 		panel03.setEnabled(false);
-	    tabbedPane.addTab("Admin", null, panel03, null);
+		tabbedPane.addTab("Preview", null, panel03, null);
+		tabbedPane.setEnabledAt(2, false);
 		tabbedPane.setForegroundAt(2, new Color(0, 0, 128));
 		tabbedPane.setBackgroundAt(2, new Color(135, 206, 235));
 		panel03.setLayout(null);
+
+		panel04 = new JPanel();
+		panel04.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				controller.clearTabAdmin();
+			}
+		});
+		panel04.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				controller.setAdminConfirmationBlank();
+			}
+		});
+		panel04.setBorder(new LineBorder(new Color(135, 206, 235), 0, true));
+		panel04.setBackground(new Color(135, 206, 235));
+		panel04.setEnabled(false);
+	    tabbedPane.addTab("Admin", null, panel04, null);
+		tabbedPane.setEnabledAt(3, false);
+		tabbedPane.setForegroundAt(3, new Color(0, 0, 128));
+		tabbedPane.setBackgroundAt(3, new Color(135, 206, 235));
+		panel04.setLayout(null);
 
 // panel01 ==================    CUSTOMER    =========================== panel01
 
@@ -182,17 +237,15 @@ public class View {
 	    rdbtnCustomerAlreadyAClient.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
 	    rdbtnCustomerAlreadyAClient.setBounds(21, 35, 263, 23);
 	    panel01.add(rdbtnCustomerAlreadyAClient);
-	    
-	    txtCustomerId = new JTextField();
+
+		txtCustomerId = new JComboBox(listCustomersForCombo);
 	    txtCustomerId.addMouseListener(new MouseAdapter() {
 	    	@Override
 	    	public void mouseClicked(MouseEvent e) {
-	    		txtCustomerId.setText("");
+	    		txtCustomerId.setSelectedIndex(0);
 	    	}
 	    });
 	    txtCustomerId.setForeground(new Color(169, 169, 169));
-	    txtCustomerId.setHorizontalAlignment(SwingConstants.TRAILING);
-	    txtCustomerId.setColumns(10);
 	    txtCustomerId.setBounds(49, 70, 190, 26);
 	    txtCustomerId.setEnabled(false);
 	    panel01.add(txtCustomerId);
@@ -309,7 +362,16 @@ public class View {
 		txtCustomerIdIn.setBounds(49, 327, 190, 26);
 		txtCustomerIdIn.setEnabled(false);
 		panel01.add(txtCustomerIdIn);
-	    				
+
+		txtCustomerIdOld = new JTextField();
+		txtCustomerIdOld.setHorizontalAlignment(SwingConstants.TRAILING);
+		txtCustomerIdOld.setForeground(new Color(169, 169, 169));
+		txtCustomerIdOld.setColumns(10);
+		txtCustomerIdOld.setBounds(49, 327, 190, 26);
+		txtCustomerIdOld.setVisible(false);
+		txtCustomerIdOld.setEnabled(false);
+		panel01.add(txtCustomerIdOld);
+
 		txtCustomerConfirmation = new JTextField();
 		txtCustomerConfirmation.setHorizontalAlignment(SwingConstants.CENTER);
 		txtCustomerConfirmation.setFont(new Font("Comic Sans MS", Font.BOLD | Font.ITALIC, 99));
@@ -402,9 +464,9 @@ public class View {
 				txtOrderCustId.setText("");
 			}
 		});
-		txtOrderCustId.setForeground(new Color(169, 169, 169));
 		txtOrderCustId.setHorizontalAlignment(SwingConstants.TRAILING);
 		txtOrderCustId.setColumns(10);
+		txtOrderCustId.setForeground(new Color(169, 169, 169));
 		txtOrderCustId.setBounds(49, 39, 190, 26);
 		txtOrderCustId.setEnabled(false);
 		panel02.add(txtOrderCustId);
@@ -494,41 +556,37 @@ public class View {
 		rdbtnOrderAddLine.setEnabled(false);
 		panel02.add(rdbtnOrderAddLine);
 
-		comboOrderNumberAdd = new JTextField();
+		comboOrderNumberAdd = new JComboBox(listOrdersForCustomerForCombo);
 		comboOrderNumberAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				comboOrderNumberAdd.setText("");
+				comboOrderNumberAdd.setSelectedIndex(0);
 			}
 		});
-		comboOrderNumberAdd.setHorizontalAlignment(SwingConstants.TRAILING);
 		comboOrderNumberAdd.setForeground(new Color(169, 169, 169));
 		comboOrderNumberAdd.setBounds(49, 223, 190, 26);
 		comboOrderNumberAdd.setEnabled(false);
 		panel02.add(comboOrderNumberAdd);
 
-		txtOrderQuantity = new JTextField();
+		txtOrderQuantity = new JComboBox(listQuantityForCombo);
 		txtOrderQuantity.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				txtOrderQuantity.setText("");
+				txtOrderQuantity.setSelectedIndex(0);
 			}
 		});
-		txtOrderQuantity.setHorizontalAlignment(SwingConstants.TRAILING);
 		txtOrderQuantity.setForeground(new Color(169, 169, 169));
 		txtOrderQuantity.setEnabled(false);
-		txtOrderQuantity.setColumns(10);
 		txtOrderQuantity.setBounds(49, 258, 190, 26);
 		panel02.add(txtOrderQuantity);
 
-		comboOrderArticleAdd = new JTextField();
+		comboOrderArticleAdd = new JComboBox(listArticlesForCombo);
 		comboOrderArticleAdd.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				comboOrderArticleAdd.setText("");
+				comboOrderArticleAdd.setSelectedIndex(0);
 			}
 		});
-		comboOrderArticleAdd.setHorizontalAlignment(SwingConstants.TRAILING);
 		comboOrderArticleAdd.setForeground(new Color(169, 169, 169));
 		comboOrderArticleAdd.setBounds(49, 296, 190, 27);
 		comboOrderArticleAdd.setEnabled(false);
@@ -544,7 +602,7 @@ public class View {
 		btnOrderAddLine.setEnabled(false);
 		panel02.add(btnOrderAddLine);
 
-		rdbtnOrderDeleteArticle = new JRadioButton("Delete an order ?");
+		rdbtnOrderDeleteArticle = new JRadioButton("Delete an order or article ?");
 		rdbtnOrderDeleteArticle.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				controller.enableOrderLower();
@@ -556,18 +614,29 @@ public class View {
 		rdbtnOrderDeleteArticle.setEnabled(false);
 		panel02.add(rdbtnOrderDeleteArticle);
 
-		comboOrderNumberDelete = new JTextField();
+		comboOrderNumberDelete = new JComboBox(listOrdersForCustomerForCombo);
 		comboOrderNumberDelete.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				comboOrderNumberDelete.setText("");
+				comboOrderNumberDelete.setSelectedIndex(0);
 			}
 		});
-		comboOrderNumberDelete.setHorizontalAlignment(SwingConstants.TRAILING);
 		comboOrderNumberDelete.setForeground(new Color(169, 169, 169));
 		comboOrderNumberDelete.setBounds(49, 373, 190, 26);
 		comboOrderNumberDelete.setEnabled(false);
 		panel02.add(comboOrderNumberDelete);
+
+		comboArticleDelete = new JComboBox(listArticlesForCombo);
+		comboArticleDelete.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				comboArticleDelete.setSelectedIndex(0);
+			}
+		});
+		comboArticleDelete.setForeground(new Color(169, 169, 169));
+		comboArticleDelete.setBounds(49, 408, 190, 26);
+		comboArticleDelete.setEnabled(false);
+		panel02.add(comboArticleDelete);
 
 		btnOrderDelete = new JButton("");
 		btnOrderDelete.addActionListener(new ActionListener() {
@@ -581,6 +650,11 @@ public class View {
 		panel02.add(btnOrderDelete);
 
 		btnOrderProceed = new JButton("");
+		btnOrderProceed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.goToPreview();
+			}
+		});
 		btnOrderProceed.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
 		btnOrderProceed.setBounds(21, 447, 402, 47);
 		btnOrderProceed.setEnabled(false);
@@ -601,7 +675,82 @@ public class View {
 		lblOrderAdmin.setBounds(406, 512, 35, 14);
 		panel02.add(lblOrderAdmin);
 
-// panel03 ============================================= panel03
+// panel03 ==================    PREVIEW    =========================== panel03
+
+
+		lblPreviewOrderNumer = new JLabel("");
+		lblPreviewOrderNumer.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPreviewOrderNumer.setEnabled(false);
+		lblPreviewOrderNumer.setForeground(new Color(0, 0, 128));
+		lblPreviewOrderNumer.setFont(new Font("Lucida Grande", Font.BOLD, 22));
+		lblPreviewOrderNumer.setBounds(21, 40, 402, 23);
+		panel03.add(lblPreviewOrderNumer);
+
+		lblPreviewOrderDetails1 = new JTextArea("");
+		lblPreviewOrderDetails1.setEnabled(false);
+		lblPreviewOrderDetails1.setForeground(new Color(0, 0, 128));
+		lblPreviewOrderDetails1.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblPreviewOrderDetails1.setBounds(21, 90, 85, 290);
+		panel03.add(lblPreviewOrderDetails1);
+
+		lblPreviewOrderDetails2 = new JTextArea("");
+		lblPreviewOrderDetails2.setEnabled(false);
+		lblPreviewOrderDetails2.setForeground(new Color(0, 0, 128));
+		lblPreviewOrderDetails2.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblPreviewOrderDetails2.setBounds(126, 90, 85, 290);
+		panel03.add(lblPreviewOrderDetails2);
+
+		lblPreviewOrderDetails3 = new JTextArea("");
+		lblPreviewOrderDetails3.setEnabled(false);
+		lblPreviewOrderDetails3.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		lblPreviewOrderDetails3.setForeground(new Color(0, 0, 128));
+		lblPreviewOrderDetails3.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblPreviewOrderDetails3.setBounds(231, 90, 85, 290);
+		panel03.add(lblPreviewOrderDetails3);
+
+		lblPreviewOrderDetails4 = new JTextArea("");
+		lblPreviewOrderDetails4.setEnabled(false);
+		lblPreviewOrderDetails4.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		lblPreviewOrderDetails4.setForeground(new Color(0, 0, 128));
+		lblPreviewOrderDetails4.setFont(new Font("Lucida Grande", Font.BOLD, 13));
+		lblPreviewOrderDetails4.setBounds(336, 90, 85, 290);
+		panel03.add(lblPreviewOrderDetails4);
+
+		lblPreviewOrderTotal = new JLabel("");
+		lblPreviewOrderTotal.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPreviewOrderTotal.setEnabled(false);
+		lblPreviewOrderTotal.setForeground(new Color(0, 0, 128));
+		lblPreviewOrderTotal.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+		lblPreviewOrderTotal.setBounds(21, 400, 402, 40);
+		panel03.add(lblPreviewOrderTotal);
+
+		btnPreviewBackToOrder = new JButton("");
+		btnPreviewBackToOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.goToOrderFromPreview();
+			}
+		});
+		btnPreviewBackToOrder.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
+		btnPreviewBackToOrder.setBounds(21, 447, 402, 47);
+		btnPreviewBackToOrder.setEnabled(false);
+		panel03.add(btnPreviewBackToOrder);
+
+		lblPreviewAdmin = new JLabel("Admin");
+		lblPreviewAdmin.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				controller.goToAdminTab();
+			}
+		});
+		lblPreviewAdmin.setEnabled(false);
+		lblPreviewAdmin.setHorizontalAlignment(SwingConstants.RIGHT);
+		lblPreviewAdmin.setBackground(new Color(135, 206, 235));
+		lblPreviewAdmin.setForeground(new Color(0, 0, 0));
+		lblPreviewAdmin.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+		lblPreviewAdmin.setBounds(406, 512, 35, 14);
+		panel03.add(lblPreviewAdmin);
+
+// panel04 ========================        ADMIN        ===================== panel04
 
 		rdbtnAdminArticles = new JRadioButton("Items management ");
 		rdbtnAdminArticles.addChangeListener(new ChangeListener() {
@@ -613,7 +762,7 @@ public class View {
 		rdbtnAdminArticles.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
 		rdbtnAdminArticles.setBounds(21, 6, 263, 23);
 		rdbtnAdminArticles.setEnabled(false);
-		panel03.add(rdbtnAdminArticles);
+		panel04.add(rdbtnAdminArticles);
 
 		comboAdminArticleId = new JTextField();
 		comboAdminArticleId.addMouseListener(new MouseAdapter() {
@@ -626,7 +775,7 @@ public class View {
 		comboAdminArticleId.setForeground(new Color(169, 169, 169));
 		comboAdminArticleId.setBounds(21, 41, 190, 26);
 		comboAdminArticleId.setEnabled(false);
-		panel03.add(comboAdminArticleId);
+		panel04.add(comboAdminArticleId);
 
 		txtAdminArticleName = new JTextField();
 		txtAdminArticleName.addMouseListener(new MouseAdapter() {
@@ -641,7 +790,7 @@ public class View {
 		txtAdminArticleName.setColumns(10);
 		txtAdminArticleName.setBounds(21, 79, 190, 26);
 		txtAdminArticleName.setEnabled(false);
-		panel03.add(txtAdminArticleName);
+		panel04.add(txtAdminArticleName);
 
 		txtAdminArticlePrice = new JTextField();
 		txtAdminArticlePrice.addMouseListener(new MouseAdapter() {
@@ -656,7 +805,7 @@ public class View {
 		txtAdminArticlePrice.setColumns(10);
 		txtAdminArticlePrice.setBounds(233, 41, 190, 26);
 		txtAdminArticlePrice.setEnabled(false);
-		panel03.add(txtAdminArticlePrice);
+		panel04.add(txtAdminArticlePrice);
 
 		comboAdminArticleSupplier = new JTextField();
 		comboAdminArticleSupplier.addMouseListener(new MouseAdapter() {
@@ -669,7 +818,7 @@ public class View {
 		comboAdminArticleSupplier.setForeground(new Color(169, 169, 169));
 		comboAdminArticleSupplier.setBounds(232, 80, 191, 27);
 		comboAdminArticleSupplier.setEnabled(false);
-		panel03.add(comboAdminArticleSupplier);
+		panel04.add(comboAdminArticleSupplier);
 
 		rdbtnAdminSuppliers = new JRadioButton("Suppliers management");
 		rdbtnAdminSuppliers.addChangeListener(new ChangeListener() {
@@ -681,7 +830,7 @@ public class View {
 		rdbtnAdminSuppliers.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
 		rdbtnAdminSuppliers.setBounds(21, 119, 263, 23);
 		rdbtnAdminSuppliers.setEnabled(false);
-		panel03.add(rdbtnAdminSuppliers);
+		panel04.add(rdbtnAdminSuppliers);
 
 		comboAdminSupplierId = new JTextField();
 		comboAdminSupplierId.addMouseListener(new MouseAdapter() {
@@ -695,7 +844,7 @@ public class View {
 		comboAdminSupplierId.setEnabled(false);
 		comboAdminSupplierId.setBounds(21, 154, 190, 26);
 		comboAdminSupplierId.setEnabled(false);
-		panel03.add(comboAdminSupplierId);
+		panel04.add(comboAdminSupplierId);
 
 		txtAdminSupplierName = new JTextField();
 		txtAdminSupplierName.addMouseListener(new MouseAdapter() {
@@ -709,7 +858,7 @@ public class View {
 		txtAdminSupplierName.setColumns(10);
 		txtAdminSupplierName.setBounds(21, 192, 190, 26);
 		txtAdminSupplierName.setEnabled(false);
-		panel03.add(txtAdminSupplierName);
+		panel04.add(txtAdminSupplierName);
 
 		txtAdminSupplierPhone = new JTextField();
 		txtAdminSupplierPhone.addMouseListener(new MouseAdapter() {
@@ -723,7 +872,7 @@ public class View {
 		txtAdminSupplierPhone.setColumns(10);
 		txtAdminSupplierPhone.setBounds(233, 154, 190, 26);
 		txtAdminSupplierPhone.setEnabled(false);
-		panel03.add(txtAdminSupplierPhone);
+		panel04.add(txtAdminSupplierPhone);
 
 		comboAdminSupplierArticle = new JTextField();
 		comboAdminSupplierArticle.addMouseListener(new MouseAdapter() {
@@ -736,7 +885,7 @@ public class View {
 		comboAdminSupplierArticle.setForeground(new Color(169, 169, 169));
 		comboAdminSupplierArticle.setBounds(232, 193, 191, 27);
 		comboAdminSupplierArticle.setEnabled(false);
-		panel03.add(comboAdminSupplierArticle);
+		panel04.add(comboAdminSupplierArticle);
 
 		rdbtnAdminClients = new JRadioButton("Clients management");
 		rdbtnAdminClients.addChangeListener(new ChangeListener() {
@@ -748,7 +897,7 @@ public class View {
 		rdbtnAdminClients.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
 		rdbtnAdminClients.setBounds(21, 230, 263, 23);
 		rdbtnAdminClients.setEnabled(false);
-		panel03.add(rdbtnAdminClients);
+		panel04.add(rdbtnAdminClients);
 
 		comboAdminClientId = new JTextField();
 		comboAdminClientId.addMouseListener(new MouseAdapter() {
@@ -762,7 +911,7 @@ public class View {
 		comboAdminClientId.setEnabled(false);
 		comboAdminClientId.setBounds(21, 265, 190, 26);
 		comboAdminClientId.setEnabled(false);
-		panel03.add(comboAdminClientId);
+		panel04.add(comboAdminClientId);
 
 		txtAdminClientAddress = new JTextField();
 		txtAdminClientAddress.addMouseListener(new MouseAdapter() {
@@ -777,7 +926,7 @@ public class View {
 		txtAdminClientAddress.setColumns(10);
 		txtAdminClientAddress.setBounds(233, 265, 190, 26);
 		txtAdminClientAddress.setEnabled(false);
-		panel03.add(txtAdminClientAddress);
+		panel04.add(txtAdminClientAddress);
 
 		txtAdminClientName = new JTextField();
 		txtAdminClientName.addMouseListener(new MouseAdapter() {
@@ -792,7 +941,7 @@ public class View {
 		txtAdminClientName.setColumns(10);
 		txtAdminClientName.setBounds(21, 303, 190, 26);
 		txtAdminClientName.setEnabled(false);
-		panel03.add(txtAdminClientName);
+		panel04.add(txtAdminClientName);
 
 		txtAdminClientPhone = new JTextField();
 		txtAdminClientPhone.addMouseListener(new MouseAdapter() {
@@ -807,7 +956,7 @@ public class View {
 		txtAdminClientPhone.setColumns(10);
 		txtAdminClientPhone.setBounds(233, 303, 190, 26);
 		txtAdminClientPhone.setEnabled(false);
-		panel03.add(txtAdminClientPhone);
+		panel04.add(txtAdminClientPhone);
 
 		comboAdminClientOrder = new JTextField();
 		comboAdminClientOrder.addMouseListener(new MouseAdapter() {
@@ -820,7 +969,7 @@ public class View {
 		comboAdminClientOrder.setForeground(new Color(169, 169, 169));
 		comboAdminClientOrder.setBounds(21, 341, 191, 27);
 		comboAdminClientOrder.setEnabled(false);
-		panel03.add(comboAdminClientOrder);
+		panel04.add(comboAdminClientOrder);
 
 		txtAdminConfirmation = new JTextField();
 		txtAdminConfirmation.addMouseListener(new MouseAdapter() {
@@ -835,29 +984,31 @@ public class View {
 		txtAdminConfirmation.setBounds(48, 376, 130, 137);
 		txtAdminConfirmation.setColumns(10);
 		txtAdminConfirmation.setEnabled(false);
-		panel03.add(txtAdminConfirmation);
+		panel04.add(txtAdminConfirmation);
 
 		btnAdminAdd = new JButton("");
 		btnAdminAdd.setEnabled(false);
 		btnAdminAdd.setBounds(233, 400, 80, 29);
 		btnAdminAdd.setEnabled(false);
-		panel03.add(btnAdminAdd);
+		panel04.add(btnAdminAdd);
 
 		btnAdminDelete = new JButton("");
 		btnAdminDelete.setEnabled(false);
 		btnAdminDelete.setBounds(343, 400, 80, 29);
 		btnAdminDelete.setEnabled(false);
-		panel03.add(btnAdminDelete);
+		panel04.add(btnAdminDelete);
 		
 		btnAdminCreate = new JButton("");
 		btnAdminCreate.setEnabled(false);
 		btnAdminCreate.setBounds(233, 456, 80, 29);
-		panel03.add(btnAdminCreate);
+		panel04.add(btnAdminCreate);
 		
 		btnAdminFind = new JButton("");
 		btnAdminFind.setEnabled(false);
 		btnAdminFind.setBounds(343, 456, 80, 29);
-		panel03.add(btnAdminFind);
+		panel04.add(btnAdminFind);
+
+		controller.initializeData();
 	}
 
 	public JFrame getFrameOrderMaker() { return frameOrderMaker; }
@@ -874,6 +1025,9 @@ public class View {
 
 	public JPanel getPanel03() { return panel03; }
 	public void setPanel03(JPanel panel03) { this.panel03 = panel03; }
+
+	public JPanel getPanel04() { return panel04; }
+	public void setPanel04(JPanel panel04) { this.panel04 = panel04; }
 
 	public JLabel getLblCustomerAdmin() { return lblCustomerAdmin; }
 	public void setLblCustomerAdmin(JLabel lblCustomerAdmin) { this.lblCustomerAdmin = lblCustomerAdmin; }
@@ -932,8 +1086,11 @@ public class View {
 	public JTextField getTxtCustomerIdIn() { return txtCustomerIdIn; }
 	public void setTxtCustomerIdIn(JTextField txtCustomerIdIn) { this.txtCustomerIdIn = txtCustomerIdIn; }
 
-	public JTextField getTxtCustomerId() { return txtCustomerId; }
-	public void setTxtCustomerId(JTextField txtCustomerId) { this.txtCustomerId = txtCustomerId; }
+	public JTextField getTxtCustomerIdOld() { return txtCustomerIdOld; }
+	public void setTxtCustomerIdOld(JTextField txtCustomerIdOld) { this.txtCustomerIdOld = txtCustomerIdOld; }
+
+	public JComboBox getTxtCustomerId() { return txtCustomerId; }
+	public void setTxtCustomerId(JComboBox txtCustomerId) { this.txtCustomerId = txtCustomerId; }
 
 	public JTextField getTxtCustomerPhone() { return txtCustomerPhone; }
 	public void setTxtCustomerPhone(JTextField txtCustomerPhone) { this.txtCustomerPhone = txtCustomerPhone; }
@@ -956,20 +1113,23 @@ public class View {
 	public JTextField getTxtAdminSupplierName() { return txtAdminSupplierName; }
 	public void setTxtAdminSupplierName(JTextField txtAdminSupplierName) { this.txtAdminSupplierName = txtAdminSupplierName; }
 
-	public JTextField getComboOrderNumberAdd() { return comboOrderNumberAdd; }
-	public void setComboOrderNumberAdd(JTextField comboOrderNumberAdd) { this.comboOrderNumberAdd = comboOrderNumberAdd; }
+	public JComboBox getComboOrderNumberAdd() { return comboOrderNumberAdd; }
+	public void setComboOrderNumberAdd(JComboBox comboOrderNumberAdd) { this.comboOrderNumberAdd = comboOrderNumberAdd; }
 
-	public JTextField getComboOrderNumberDelete() { return comboOrderNumberDelete; }
-	public void setComboOrderNumberDelete(JTextField comboOrderNumberDelete) { this.comboOrderNumberDelete = comboOrderNumberDelete; }
+	public JComboBox getComboOrderNumberDelete() { return comboOrderNumberDelete; }
+	public void setComboOrderNumberDelete(JComboBox comboOrderNumberDelete) { this.comboOrderNumberDelete = comboOrderNumberDelete; }
 
-	public JTextField getComboOrderArticleAdd() { return comboOrderArticleAdd; }
-	public void setComboOrderArticleAdd(JTextField comboOrderArticleAdd) { this.comboOrderArticleAdd = comboOrderArticleAdd; }
+	public JComboBox getComboArticleDelete() { return comboArticleDelete; }
+	public void setComboArticleDelete(JComboBox comboArticleDelete) { this.comboArticleDelete = comboArticleDelete; }
+
+	public JComboBox getComboOrderArticleAdd() { return comboOrderArticleAdd; }
+	public void setComboOrderArticleAdd(JComboBox comboOrderArticleAdd) { this.comboOrderArticleAdd = comboOrderArticleAdd; }
 
 	public JTextField getTxtOrderNumberCreate() { return txtOrderNumberCreate; }
 	public void setTxtOrderNumberCreate(JTextField txtOrderNumberCreate) { this.txtOrderNumberCreate = txtOrderNumberCreate; }
 
-	public JTextField getTxtOrderQuantity() { return txtOrderQuantity; }
-	public void setTxtOrderQuantity(JTextField txtOrderQuantity) { this.txtOrderQuantity = txtOrderQuantity; }
+	public JComboBox getTxtOrderQuantity() { return txtOrderQuantity; }
+	public void setTxtOrderQuantity(JComboBox txtOrderQuantity) { this.txtOrderQuantity = txtOrderQuantity; }
 
 	public JTextField getTxtAdminArticleName() { return txtAdminArticleName; }
 	public void setTxtAdminArticleName(JTextField txtAdminArticleName) { this.txtAdminArticleName = txtAdminArticleName; }
@@ -1052,9 +1212,30 @@ public class View {
 	public Controller getController() { return controller; }
 	public void setController(Controller controller) { this.controller = controller; }
 
-	public Random getRandom() { return random; }
-	public void setRandom(Random random) { this.random = random; }
+	public JLabel getLblPreviewOrderNumer() { return lblPreviewOrderNumer; }
+	public void setLblPreviewOrderNumer(JLabel lblPreviewOrderNumer) { this.lblPreviewOrderNumer = lblPreviewOrderNumer; }
 
-	public String getCustId() { return custId; }
-	public void setCustId(String custId) { this.custId = custId; }
+	public JLabel getLblPreviewAdmin() { return lblPreviewAdmin; }
+	public void setLblPreviewAdmin(JLabel lblPreviewAdmin) { this.lblPreviewAdmin = lblPreviewAdmin; }
+
+	public JTextArea getLblPreviewOrderDetails() { return lblPreviewOrderDetails1; }
+	public void setLblPreviewOrderDetails(JTextArea lblPreviewOrderDetails) { this.lblPreviewOrderDetails1 = lblPreviewOrderDetails; }
+
+	public JButton getBtnPreviewBackToOrder() { return btnPreviewBackToOrder; }
+	public void setBtnPreviewBackToOrder(JButton btnPreviewBackToOrder) { this.btnPreviewBackToOrder = btnPreviewBackToOrder; }
+
+	public JLabel getLblPreviewOrderTotal() { return lblPreviewOrderTotal; }
+	public void setLblPreviewOrderTotal(JLabel lblPreviewOrderTotal) { this.lblPreviewOrderTotal = lblPreviewOrderTotal; }
+
+	public JTextArea getLblPreviewOrderDetails1() { return lblPreviewOrderDetails1; }
+	public void setLblPreviewOrderDetails1(JTextArea lblPreviewOrderDetails1) { this.lblPreviewOrderDetails1 = lblPreviewOrderDetails1; }
+
+	public JTextArea getLblPreviewOrderDetails2() { return lblPreviewOrderDetails2; }
+	public void setLblPreviewOrderDetails2(JTextArea lblPreviewOrderDetails2) { this.lblPreviewOrderDetails2 = lblPreviewOrderDetails2; }
+
+	public JTextArea getLblPreviewOrderDetails3() { return lblPreviewOrderDetails3; }
+	public void setLblPreviewOrderDetails3(JTextArea lblPreviewOrderDetails3) { this.lblPreviewOrderDetails3 = lblPreviewOrderDetails3; }
+
+	public JTextArea getLblPreviewOrderDetails4() { return lblPreviewOrderDetails4; }
+	public void setLblPreviewOrderDetails4(JTextArea lblPreviewOrderDetails4) { this.lblPreviewOrderDetails4 = lblPreviewOrderDetails4; }
 }

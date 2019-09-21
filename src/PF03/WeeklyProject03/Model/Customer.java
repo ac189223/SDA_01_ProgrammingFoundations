@@ -54,19 +54,22 @@ public abstract class Customer {
         }
     }
     public Order findOrder(String orderNr) {
-        for(Order order : getOrders())
+        for(Order order : getOrders()) {
             if (order.getOrderNr().equals(orderNr))
                 return order;
+        }
         return null;
     }
 
     public int amountOfOrders() { return getOrders().size(); }
     public ArrayList<Article> listArticles() {
         ArrayList<Article> list = new ArrayList<>();
-        for (Order order: getOrders())
-            for (OrderLine orderLine : order.getOrderLines())
+        for (Order order: getOrders()) {
+            for (OrderLine orderLine : order.getOrderLines()) {
                 if (!list.contains(orderLine.getArticle()))
                     list.add(orderLine.getArticle());
+            }
+        }
         return list;
     }
 

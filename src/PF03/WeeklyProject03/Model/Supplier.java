@@ -54,9 +54,10 @@ public class Supplier {
         }
     }
     public Article findArticle(String id) {
-        for(Article article : getSuppliesArticles())
+        for(Article article : getSuppliesArticles()) {
             if (article.getId().equals(id))
                 return article;
+        }
         return null;
     }
 

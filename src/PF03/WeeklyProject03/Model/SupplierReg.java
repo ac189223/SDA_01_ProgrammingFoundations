@@ -15,9 +15,10 @@ public class SupplierReg {
     public void removeSupplier(Supplier supplier) { getSuppliers().remove(supplier); }
     public void removeSupplier(String supplierId) { getSuppliers().remove(findSupplier(supplierId)); }
     public Supplier findSupplier(String id) {
-        for (Supplier supplier : getSuppliers())
+        for (Supplier supplier : getSuppliers()) {
             if (supplier.getId().equals(id))
                 return supplier;
+        }
         return null;
     }
 
@@ -25,17 +26,21 @@ public class SupplierReg {
     public void printArticlesOfCustomer(Supplier supplier) { supplier.listArticles(); }
 
     public Supplier findSupplierOf(Article article) {
-        for (Supplier supplier:getSuppliers())
-            for (Article tempArticle: supplier.getSuppliesArticles())
+        for (Supplier supplier:getSuppliers()) {
+            for (Article tempArticle : supplier.getSuppliesArticles()) {
                 if (tempArticle == article)
                     return supplier;
+            }
+        }
         return null;
     }
     public Supplier findSupplierOf(String articleId) {
-        for (Supplier supplier:getSuppliers())
-            for (Article article: supplier.getSuppliesArticles())
+        for (Supplier supplier:getSuppliers()) {
+            for (Article article : supplier.getSuppliesArticles()) {
                 if (article.getId() == articleId)
                     return supplier;
+            }
+        }
         return null;
     }
 }

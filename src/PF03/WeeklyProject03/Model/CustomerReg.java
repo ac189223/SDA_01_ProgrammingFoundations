@@ -16,11 +16,12 @@ public class CustomerReg {
     public void removeCustomer(String id) { getCustomers().remove(findCustomer(id)); }
 
     public Customer findCustomer(String id) {
-        for (Customer customer : getCustomers())
-            if (customer.getClass() == CustomerPrivate.class)
+        for (Customer customer : getCustomers()) {
+            if (customer.getClass() == CustomerPrivate.class && checkSsn((CustomerPrivate) customer, id) != null)
                 return checkSsn((CustomerPrivate) customer, id);
-            else
-                return checkCorporateId((CustomerCompany)customer, id);
+            else if (customer.getClass() == CustomerCompany.class && checkCorporateId((CustomerCompany) customer, id) != null)
+                return checkCorporateId((CustomerCompany) customer, id);
+        }
         return null;
     }
     private Customer checkSsn(CustomerPrivate customer, String id) {

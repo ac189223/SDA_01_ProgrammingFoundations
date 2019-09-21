@@ -5,28 +5,19 @@ import PF03.WeeklyProject03.Model.*;
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Random;
 
 public class Controller {
-	private CustomerReg customerReg;
-	private ArticleReg articleReg;
-	private SupplierReg supplierReg;
+	private CustomerReg customerReg = new CustomerReg();
+	private ArticleReg articleReg = new ArticleReg();
+	private SupplierReg supplierReg = new SupplierReg();
 	private Random random;
     private JFrame frame;
 	private View view;
 
     public Controller(JFrame frame, View view) {
-    	this.setCustomerReg(new CustomerReg());
-    	this.setArticleReg(new ArticleReg());
-    	this.setSupplierReg(new SupplierReg());
-        this.setFrame(frame);
-        this.setView(view);
-    }
-    public Controller(CustomerReg customerReg, ArticleReg articleReg, SupplierReg supplierReg, JFrame frame, View view) {
-        this.setCustomerReg(customerReg);
-        this.setArticleReg(articleReg);
-        this.setSupplierReg(supplierReg);
-        this.setFrame(frame);
+    	this.setFrame(frame);
         this.setView(view);
     }
 
@@ -46,15 +37,16 @@ public class Controller {
     public void setView(View view) { this.view = view; }
 
     public void editCustomerData() {
-        // EDIT CustomerData as Customer itself
+        // Go To EDIT CustomerData as Customer itself
         String custId;
-        if (view.getTxtCustomerId().getText().equals(""))
+        if (view.getTxtCustomerId().getSelectedIndex() == 0 || view.getTxtCustomerId().getSelectedIndex() == 1)
             custId = view.getTxtCustomerIdIn().getText();
         else
-            custId = view.getTxtCustomerId().getText();
-        Customer tmpCustomer = findCustomer(custId);
+            custId = (String) view.getTxtCustomerId().getSelectedItem();
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         if (tmpCustomer != null) {
             disableUpperPartOfCustomer();
+            view.getTxtCustomerIdOld().setText(custId);
             view.getTxtCustomerName().setText(tmpCustomer.getName());
             view.getTxtCustomerName().setEnabled(true);
             view.getTxtCustomerAddress().setText(tmpCustomer.getAddress());
@@ -65,9 +57,12 @@ public class Controller {
                 view.getRdbtnCustomerPrivate().setSelected(true);
             else if (tmpCustomer.getClass() == CustomerCompany.class)
                 view.getRdbtnCustomerCorporate().setSelected(true);
+            view.getRdbtnCustomerPrivate().setEnabled(true);
+            view.getRdbtnCustomerCorporate().setEnabled(true);
             view.getTxtCustomerIdIn().setText(custId);
             view.getBtnCustomerAdd().setText("Update");
             view.getBtnCustomerAdd().setEnabled(true);
+            view.getButtonGroupIsCustomer().clearSelection();
         } else {
             setCustomerConfirmationNo();
         }
@@ -76,13 +71,14 @@ public class Controller {
     public void deleteCustomer() {
         // DELETE Customer by customer itself
         String custId;
-        if (view.getTxtCustomerId().getText().equals(""))
+        if (view.getTxtCustomerId().getSelectedIndex() == 0 || view.getTxtCustomerId().getSelectedIndex() == 1)
             custId = view.getTxtCustomerIdIn().getText();
         else
-            custId = view.getTxtCustomerId().getText();
-        Customer tmpCustomer = findCustomer(custId);
+            custId = (String) view.getTxtCustomerId().getSelectedItem();
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         if (tmpCustomer != null) {
             getCustomerReg().removeCustomer(custId);
+            deleteCustomerFromComboBoxesList(custId);
             setCustomerConfirmationYes();
         } else {
             setCustomerConfirmationNo();
@@ -115,14 +111,25 @@ public class Controller {
                     addCustomer("P", custId, name, address, phone);
                 else if (view.getRdbtnCustomerCorporate().isSelected())
                     addCustomer("C", custId, name, address, phone);
+                addCustomerToComboBoxesList(custId);
             } else if (view.getBtnCustomerAdd().getText().equals("Update")) {
-                String oldCustId = view.getTxtCustomerId().getText();
-                if (!oldCustId.equals(custId)) {
+                String oldCustId = view.getTxtCustomerIdOld().getText();
+                boolean classChange = false;
+                if (view.getRdbtnCustomerPrivate().isSelected()) {
+                    if (CustomerPrivate.class != getCustomerReg().findCustomer(oldCustId).getClass())
+                        classChange = true;
+                } else if (view.getRdbtnCustomerCorporate().isSelected()) {
+                    if (CustomerCompany.class != getCustomerReg().findCustomer(oldCustId).getClass())
+                        classChange = true;
+                }
+                if (!oldCustId.equals(custId) || (oldCustId.equals(custId) && classChange)) {
                     getCustomerReg().removeCustomer(oldCustId);
+                    view.getTxtCustomerId().removeItem(oldCustId);
                     if (view.getRdbtnCustomerPrivate().isSelected())
                         addCustomer("P", custId, name, address, phone);
                     else if (view.getRdbtnCustomerCorporate().isSelected())
                         addCustomer("C", custId, name, address, phone);
+                    addCustomerToComboBoxesList(custId);
                 } else {
                     updateCustomerData(custId, name, address, phone);
                 }
@@ -138,10 +145,6 @@ public class Controller {
             getCustomerReg().addCustomers(new CustomerCompany(custId, name, address, phone));
     }
 
-    public Customer findCustomer(String id) {
-        return getCustomerReg().findCustomer(id);
-    }
-
     public void updateCustomerData(String custId, String name, String address, String phone) {
         getCustomerReg().updateCustomer(custId, name, address, phone);
     }
@@ -149,7 +152,7 @@ public class Controller {
     public void searchForCustomer() {
         // SEARCH for Customer by customer itself
         String custId = view.getTxtCustomerCheckId().getText();
-        Customer tmpCustomer = findCustomer(custId);
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         if (tmpCustomer != null) {
             view.getTxtCustomerName().setText(tmpCustomer.getName());
             view.getTxtCustomerAddress().setText(tmpCustomer.getAddress());
@@ -158,14 +161,12 @@ public class Controller {
                 view.getRdbtnCustomerPrivate().setSelected(true);
             else if (tmpCustomer.getClass() == CustomerCompany.class)
                 view.getRdbtnCustomerCorporate().setSelected(true);
-            view.getTxtCustomerId().setText(custId);
+            view.getButtonGroupIsCustomer().clearSelection();
             view.getTxtCustomerIdIn().setText(custId);
             view.getBtnCustomerEdit().setText("Edit");
             view.getBtnCustomerEdit().setEnabled(true);
             view.getBtnCustomerDelete().setText("Delete");
             view.getBtnCustomerDelete().setEnabled(true);
-            view.getBtnCustomerCreateAnOrder().setText("Create an order");
-            view.getBtnCustomerCreateAnOrder().setEnabled(true);
             disableLowerPartOfCustomer();
             setCustomerConfirmationYes();
         } else {
@@ -176,39 +177,51 @@ public class Controller {
     public void goToOrderTabAsCustomer() {
         // GO TO ORDER Tab as Customer with proper Id
         String custId;
-        if (view.getTxtCustomerId().getText().equals(""))
-            custId = view.getTxtCustomerIdIn().getText();
-        else
-            custId = view.getTxtCustomerId().getText();
-        Customer tmpCustomer = findCustomer(custId);
-        if (tmpCustomer != null) {
-            disableUpperPartOfCustomer();
-            disableMiddlePartOfCustomer();
-            disableLowerPartOfCustomer();
-            view.getPanel02().setEnabled(true);
-            view.getTabbedPane().setSelectedIndex(1);
-            view.getTxtOrderCustId().setText(custId);
-            view.getRdbtnOrderCreate().setEnabled(true);
-            view.getRdbtnOrderAddLine().setEnabled(true);
-            view.getRdbtnOrderDeleteArticle().setEnabled(true);
-        } else {
+        int custIdIndex = 0;
+        if (view.getTxtCustomerId().getSelectedIndex() != 0 && view.getTxtCustomerId().getSelectedIndex() != 1) {
+            custId = (String) view.getTxtCustomerId().getSelectedItem();
+            custIdIndex = view.getTxtCustomerId().getSelectedIndex();
+            Customer tmpCustomer = getCustomerReg().findCustomer(custId);
+            if (tmpCustomer != null) {
+                disableUpperPartOfCustomer();
+                disableMiddlePartOfCustomer();
+                disableLowerPartOfCustomer();
+                view.getButtonGroupIsCustomer().clearSelection();
+                view.getPanel02().setEnabled(true);
+                view.getTabbedPane().setSelectedIndex(1);
+                view.getRdbtnOrderCreate().setEnabled(true);
+                view.getRdbtnOrderAddLine().setEnabled(true);
+                view.getRdbtnOrderDeleteArticle().setEnabled(true);
+                createOrderForCustomerToComboBoxesList(tmpCustomer);
+                view.getTxtOrderCustId().setText(custId);
+            }
+        }
+         else {
             setCustomerConfirmationNo();
         }
     }
 
     public void goToAdminTab() {
         // GO TO ADMIN Tab as Admin
-        view.getPanel03().setEnabled(true);
+        disableUpperPartOfCustomer();
+        disableMiddlePartOfCustomer();
+        disableLowerPartOfCustomer();
+        view.getButtonGroupIsCustomer().clearSelection();
+        disableUpperPartOfOrder();
+        disableMiddlePartOfOrder();
+        disableLowerPartOfOrder();
+        view.getButtonGroupOrderActivity().clearSelection();
+        view.getPanel04().setEnabled(true);
         view.getRdbtnAdminArticles().setEnabled(true);
         view.getRdbtnAdminSuppliers().setEnabled(true);
         view.getRdbtnAdminClients().setEnabled(true);
-        view.getTabbedPane().setSelectedIndex(2);
+        view.getTabbedPane().setSelectedIndex(3);
     }
 
     public void addNewOrderAsClient() {
         // ADD new Order as Client
         String custId = view.getTxtOrderCustId().getText();
-        Customer tmpCustomer = findCustomer(custId);
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
         if (tmpCustomer != null) {
             String orderNumber = view.getTxtOrderNumberCreate().getText();
             String orderDate = view.getTxtOrderDate().getText();
@@ -216,8 +229,9 @@ public class Controller {
             disableUpperPartOfOrder();
             enableMiddlePartOfOrder();
             view.getRdbtnOrderAddLine().setSelected(true);
-            view.getComboOrderNumberAdd().setText(orderNumber);
-            view.getComboOrderNumberAdd().setEnabled(false);
+            addOrderForCustomerToComboBoxesList(orderNumber);
+            view.getComboOrderNumberAdd().setSelectedItem(orderNumber);
+            view.getComboOrderNumberAdd().setEnabled(true);
             setOrderConfirmationYes();
         } else {
             setOrderConfirmationNo();
@@ -225,22 +239,23 @@ public class Controller {
     }
 
     public void addOrder(String custId, String orderNr, String orderDate) {
-        getCustomerReg().findCustomer(custId).addOrder(new Order(orderNr, orderDate, findCustomer(custId)));
+        getCustomerReg().findCustomer(custId).addOrder(new Order(orderNr, orderDate, getCustomerReg().findCustomer(custId)));
     }
 
     public void addNewOrderLineAsClient() {
         // ADD new OrderLine to Order as Client
         String custId = view.getTxtOrderCustId().getText();
-        Customer tmpCustomer = findCustomer(custId);
-        String orderNumber = view.getComboOrderNumberAdd().getText();
-        Order tmpOrder = findCustomer(custId).findOrder(orderNumber);
-        String quantity = view.getTxtOrderQuantity().getText();
-        String articleId = view.getComboOrderArticleAdd().getText();
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
+        String orderNumber = (String) view.getComboOrderNumberAdd().getSelectedItem();
+        int orderNumberIndex = view.getComboOrderNumberAdd().getSelectedIndex();
+        Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
+        String quantity = (String) view.getTxtOrderQuantity().getSelectedItem();
+        String articleId = (String) view.getComboOrderArticleAdd().getSelectedItem();
         Article tmpArticle = getArticleReg().findArticle(articleId);
         if (tmpCustomer != null && tmpOrder != null && ifInt(quantity) && tmpArticle != null) {
             addOrderLine(custId, orderNumber, quantity, articleId);
             enableMiddlePartOfOrder();
-            view.getComboOrderNumberAdd().setText(orderNumber);
+            view.getComboOrderNumberAdd().setSelectedIndex(orderNumberIndex);
             view.getComboOrderNumberAdd().setEnabled(false);
             setOrderConfirmationYes();
         } else {
@@ -250,7 +265,7 @@ public class Controller {
 
     public void addOrderLine(String custId, String orderNr, String quantity, String articleId) {
         Article tmpArticle = getArticleReg().findArticle(articleId);
-        findCustomer(custId).findOrder(orderNr).addOrderLine(Integer.valueOf(quantity), tmpArticle );;
+        getCustomerReg().findCustomer(custId).findOrder(orderNr).addOrderLine(Integer.valueOf(quantity), tmpArticle );;
     }
 
     private boolean ifInt(String string) {
@@ -265,13 +280,20 @@ public class Controller {
     public void deleteOrderAsClient() {
         // DELETE order as Customer
         String custId = view.getTxtOrderCustId().getText();
-        Customer tmpCustomer = findCustomer(custId);
-        String orderNumber = view.getComboOrderNumberDelete().getText();
-        Order tmpOrder = findCustomer(custId).findOrder(orderNumber);
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
+        String orderNumber = (String) view.getComboOrderNumberDelete().getSelectedItem();
+        Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
         if (tmpCustomer != null && tmpOrder != null) {
-            deleteOrder(custId, orderNumber);
-            enableLowerPartOfOrder();
-            setOrderConfirmationYes();
+            if (view.getComboArticleDelete().getSelectedIndex() == 1 || view.getComboArticleDelete().getSelectedIndex() == 0) {
+                deleteOrder(custId, orderNumber);
+                deleteOrderForCustomerFromComboBoxesList(orderNumber);
+                enableLowerPartOfOrder();
+                setOrderConfirmationYes();
+            } else {
+                for (OrderLine orderLine: tmpOrder.getOrderLines())
+                    if (orderLine.getArticle().getId().equals((String) view.getComboArticleDelete().getSelectedItem()))
+                        tmpOrder.removeOrderLine(orderLine);
+            }
         } else {
             setOrderConfirmationNo();
         }
@@ -281,17 +303,109 @@ public class Controller {
         getCustomerReg().findCustomer(custId).removeOrder(orderNr);
     }
 
+    public void goToPreview() {
+        String custId = view.getTxtOrderCustId().getText();
+        String orderNumber = "";
+        if (view.getComboOrderNumberAdd().getSelectedIndex() != 0 && view.getComboOrderNumberAdd().getSelectedIndex() != 1)
+            orderNumber = (String) view.getComboOrderNumberAdd().getSelectedItem();
+        else if (view.getComboOrderNumberDelete().getSelectedIndex() != 0 && view.getComboOrderNumberDelete().getSelectedIndex() != 1)
+            orderNumber = (String) view.getComboOrderNumberDelete().getSelectedItem();
+        if (orderNumber != "") {
+            view.getTabbedPane().setSelectedIndex(2);
+            Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
+            view.getLblPreviewOrderNumer().setText("Order nr " + orderNumber);
+            HashMap<String, Integer> orderedItems = new HashMap<>();
+            for (OrderLine orderLine: getCustomerReg().findCustomer(custId).findOrder(orderNumber).getOrderLines()) {
+                String tmpArticleId = orderLine.getArticle().getId();
+                if (orderedItems.keySet().contains(tmpArticleId))
+                    orderedItems.replace(tmpArticleId, orderedItems.get(tmpArticleId) + orderLine.getQuantity());
+                else
+                    orderedItems.put(tmpArticleId, orderLine.getQuantity());
+            }
+            String textLines1 = "ITEM";
+            String textLines2 = "NAME";
+            String textLines3 =  "QUANTITY";
+            String textLines4 = "VALUE";
+            for (String article: orderedItems.keySet()) {
+                textLines1 += "\n" + article;
+                textLines2 += "\n" + getArticleReg().findArticle(article).getName();
+                textLines3 += "\n" + orderedItems.get(article);
+                textLines4 += "\n" + (getArticleReg().findArticle(article).getPrice() * orderedItems.get(article));
+            }
+            view.getLblPreviewOrderDetails1().setText(textLines1);
+            view.getLblPreviewOrderDetails2().setText(textLines2);
+            view.getLblPreviewOrderDetails3().setText(textLines3);
+            view.getLblPreviewOrderDetails4().setText(textLines4);
+            double totalAmount = tmpOrder.valueOfOrder();
+            view.getLblPreviewOrderTotal().setText("Total " + totalAmount + " SEK");
+            view.getBtnPreviewBackToOrder().setText("Back");
+            view.getBtnPreviewBackToOrder().setEnabled(true);
+        } else {
+            setOrderConfirmationNo();
+        }
 
+    }
 
+    public void goToOrderFromPreview() {
+        view.getLblPreviewOrderNumer().setText("");
+        view.getLblPreviewOrderDetails().setText("");
+        view.getBtnPreviewBackToOrder().setText("");
+        view.getBtnPreviewBackToOrder().setEnabled(false);
+        view.getTabbedPane().setSelectedIndex(1);
+    }
 
+    private void addCustomerToComboBoxesList(String custId) {
+        view.getTxtCustomerId().addItem(custId);
+    }
 
+    private void deleteCustomerFromComboBoxesList(String custId) {
+        view.getTxtCustomerId().removeItem(custId);
+    }
 
+    private void addOrderToComboBoxesList(String orderId) {
+    }
 
+    private void deleteOrderFromComboBoxesList(String orderId) {
+    }
 
+    private void createOrderForCustomerToComboBoxesList(Customer customer) {
+        view.getComboOrderNumberAdd().removeAllItems();
+        view.getComboOrderNumberDelete().removeAllItems();
+        view.getComboOrderNumberAdd().addItem("");
+        view.getComboOrderNumberDelete().addItem("");
+        view.getComboOrderNumberAdd().addItem("Choose order Id");
+        view.getComboOrderNumberDelete().addItem("Choose order Id");
+        for (Order order: customer.getOrders()) {
+            view.getComboOrderNumberAdd().addItem(order.getOrderNr());
+            view.getComboOrderNumberDelete().addItem(order.getOrderNr());
+        }
+    }
 
+    private void addOrderForCustomerToComboBoxesList(String orderId) {
+        view.getComboOrderNumberAdd().addItem(orderId);
+        view.getComboOrderNumberDelete().addItem(orderId);
+    }
 
+    private void deleteOrderForCustomerFromComboBoxesList(String orderId) {
+        view.getComboOrderNumberAdd().removeItem(orderId);
+        view.getComboOrderNumberDelete().removeItem(orderId);
+    }
 
+    private void addArticleToComboBoxesList(String articleId) {
+        view.getComboOrderArticleAdd().addItem(articleId);
+        view.getComboArticleDelete().addItem(articleId);
+    }
 
+    private void deleteArticleFromComboBoxesList(String articleId) {
+        view.getComboOrderArticleAdd().removeItem(articleId);
+        view.getComboArticleDelete().removeItem(articleId);
+    }
+
+    private void addSupplierToComboBoxesList(String supplierId) {
+    }
+
+    private void deleteSupplierFromComboBoxesList(String supplierId) {
+    }
 
     public void enableCustomerUpper() {
         if (view.getRdbtnCustomerAlreadyAClient().isSelected()) {
@@ -321,7 +435,7 @@ public class Controller {
     }
 
     public void enableUpperPartOfCustomer() {
-        view.getTxtCustomerId().setText("Enter customer Id");
+        view.getTxtCustomerId().setSelectedIndex(1);
         view.getTxtCustomerId().setEnabled(true);
         view.getBtnCustomerEdit().setText("Edit");
         view.getBtnCustomerEdit().setEnabled(true);
@@ -332,7 +446,7 @@ public class Controller {
     }
 
     public void disableUpperPartOfCustomer() {
-        view.getTxtCustomerId().setText("");
+        view.getTxtCustomerId().setSelectedIndex(0);
         view.getTxtCustomerId().setEnabled(false);
         view.getBtnCustomerEdit().setText("");
         view.getBtnCustomerEdit().setEnabled(false);
@@ -394,6 +508,7 @@ public class Controller {
             enableUpperPartOfOrder();
             disableMiddlePartOfOrder();
             disableLowerPartOfOrder();
+            disableBtnOrderProceed();
             setOrderConfirmationBlank();
         }
     }
@@ -403,6 +518,7 @@ public class Controller {
             disableUpperPartOfOrder();
             enableMiddlePartOfOrder();
             disableLowerPartOfOrder();
+            enableBtnOrderProceed();
             setOrderConfirmationBlank();
         }
     }
@@ -412,6 +528,7 @@ public class Controller {
             disableUpperPartOfOrder();
             disableMiddlePartOfOrder();
             enableLowerPartOfOrder();
+            enableBtnOrderProceed();
             setOrderConfirmationBlank();
         }
     }
@@ -433,36 +550,50 @@ public class Controller {
         view.getBtnOrderCreate().setEnabled(false);
     }
     public void enableMiddlePartOfOrder() {
-        view.getComboOrderNumberAdd().setText("Enter order Id");
+        view.getComboOrderNumberAdd().setSelectedIndex(1);
         view.getComboOrderNumberAdd().setEnabled(true);
-        view.getTxtOrderQuantity().setText("Enter quantity");
+        view.getTxtOrderQuantity().setSelectedIndex(1);
         view.getTxtOrderQuantity().setEnabled(true);
-        view.getComboOrderArticleAdd().setText("Enter item Id");
+        view.getComboOrderArticleAdd().setSelectedIndex(1);
         view.getComboOrderArticleAdd().setEnabled(true);
         view.getBtnOrderAddLine().setText("Append");
         view.getBtnOrderAddLine().setEnabled(true);
     }
     public void disableMiddlePartOfOrder() {
-        view.getComboOrderNumberAdd().setText("");
+        view.getComboOrderNumberAdd().setSelectedIndex(0);
         view.getComboOrderNumberAdd().setEnabled(false);
-        view.getTxtOrderQuantity().setText("");
+        view.getTxtOrderQuantity().setSelectedIndex(0);
         view.getTxtOrderQuantity().setEnabled(false);
-        view.getComboOrderArticleAdd().setText("");
+        view.getComboOrderArticleAdd().setSelectedIndex(0);
         view.getComboOrderArticleAdd().setEnabled(false);
         view.getBtnOrderAddLine().setText("");
         view.getBtnOrderAddLine().setEnabled(false);
     }
     public void enableLowerPartOfOrder() {
-        view.getComboOrderNumberDelete().setText("Enter order Id");
+        view.getComboOrderNumberDelete().setSelectedIndex(1);
         view.getComboOrderNumberDelete().setEnabled(true);
+        view.getComboArticleDelete().setSelectedIndex(1);
+        view.getComboArticleDelete().setEnabled(true);
         view.getBtnOrderDelete().setText("Delete");
         view.getBtnOrderDelete().setEnabled(true);
     }
     public void disableLowerPartOfOrder() {
-        view.getComboOrderNumberDelete().setText("");
+        view.getComboOrderNumberDelete().setSelectedIndex(0);
         view.getComboOrderNumberDelete().setEnabled(false);
+        view.getComboArticleDelete().setSelectedIndex(0);
+        view.getComboArticleDelete().setEnabled(false);
         view.getBtnOrderDelete().setText("");
         view.getBtnOrderDelete().setEnabled(false);
+    }
+
+    public void enableBtnOrderProceed() {
+        view.getBtnOrderProceed().setText("Preview");
+        view.getBtnOrderProceed().setEnabled(true);
+    }
+
+    public void disableBtnOrderProceed() {
+        view.getBtnOrderProceed().setText("");
+        view.getBtnOrderProceed().setEnabled(false);
     }
 
     public void setOrderConfirmationYes() { view.getTxtOrderConfirmation().setText("V"); }
@@ -588,4 +719,115 @@ public class Controller {
     public void setAdminConfirmationYes() { view.getTxtAdminConfirmation().setText("V"); }
     public void setAdminConfirmationNo() { view.getTxtAdminConfirmation().setText("X"); }
     public void setAdminConfirmationBlank() { view.getTxtAdminConfirmation().setText(""); }
+
+    public void clearTabCustomer() {
+        disableUpperPartOfCustomer();
+        disableMiddlePartOfCustomer();
+        disableLowerPartOfCustomer();
+        setCustomerConfirmationBlank();
+        view.getButtonGroupIsCustomer().clearSelection();
+        view.getButtonGroupPrivateCorporate().clearSelection();
+    }
+
+    public void clearTabOrder() {
+        disableUpperPartOfOrder();
+        disableMiddlePartOfOrder();
+        disableLowerPartOfOrder();
+        disableBtnOrderProceed();
+        setOrderConfirmationBlank();
+        view.getButtonGroupOrderActivity().clearSelection();
+        view.getTxtOrderCustId().setText("");
+    }
+
+    public void clearTabPreview() {
+
+    }
+
+    public void clearTabAdmin() {
+        disableUpperPartOfAdmin();
+        disableMiddlePartOfAdmin();
+        disableLowerPartOfAdmin();
+        disableButtonsOfAdmin();
+        setAdminConfirmationBlank();
+        view.getButtonGroupAdminActivity().clearSelection();
+    }
+
+    public void initializeData() {
+        // create Customers Private
+        customerReg.addCustomers(new CustomerPrivate("860528-5634", "Anna", "Miami, USA", "75-47635644"));
+        addCustomerToComboBoxesList("860528-5634");
+        // create Customers Corporate
+        customerReg.addCustomers(new CustomerCompany("54-986-23", "Monodrake", "Helsinki, FIN", "87-4367572"));
+        addCustomerToComboBoxesList("54-986-23");
+
+        // create Suppliers
+        supplierReg.addSupplier(new Supplier("s034", "Kreatonix", "745-0983247"));
+        addSupplierToComboBoxesList("s034");
+        supplierReg.addSupplier(new Supplier("s739", "AmtaRe", "243-8576604"));
+        addSupplierToComboBoxesList("s739");
+
+        // create Articles
+        articleReg.addArticle(new Article("a124","clock", 210, supplierReg.getSuppliers().get(1)));
+        addArticleToComboBoxesList("a124");
+        articleReg.addArticle(new Article("a118","lamp", 90, supplierReg.getSuppliers().get(1)));
+        addArticleToComboBoxesList("a118");
+        articleReg.addArticle(new Article("a492","blanket", 72, supplierReg.getSuppliers().get(0)));
+        addArticleToComboBoxesList("a492");
+        articleReg.addArticle(new Article("a404","carpet", 276, supplierReg.getSuppliers().get(0)));
+        addArticleToComboBoxesList("a404");
+        articleReg.addArticle(new Article("a109","sofa", 620, supplierReg.getSuppliers().get(0)));
+        addArticleToComboBoxesList("a109");
+
+        // create Orders With Order Lines
+        Order tmpOrder;
+
+        customerReg.getCustomers().get(0).getOrders().add(new Order("o738", "20190902"));
+        addOrderToComboBoxesList("o738");
+        tmpOrder = customerReg.getCustomers().get(0).getOrders().get(0);
+        tmpOrder.setOrderedBy(customerReg.getCustomers().get(0));
+        tmpOrder.addOrderLine(new OrderLine(10, articleReg.getArticles().get(1)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(5, articleReg.getArticles().get(0)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(6, articleReg.getArticles().get(2)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(21, articleReg.getArticles().get(4)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+
+        customerReg.getCustomers().get(0).getOrders().add(new Order("o256", "20171128"));
+        addOrderToComboBoxesList("o256");
+        tmpOrder = customerReg.getCustomers().get(0).getOrders().get(1);
+        tmpOrder.setOrderedBy(customerReg.getCustomers().get(0));
+        tmpOrder.addOrderLine(new OrderLine(4, articleReg.getArticles().get(3)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(12, articleReg.getArticles().get(0)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+
+        customerReg.getCustomers().get(1).getOrders().add(new Order("o771", "20190221"));
+        addOrderToComboBoxesList("o771");
+        tmpOrder = customerReg.getCustomers().get(1).getOrders().get(0);
+        tmpOrder.setOrderedBy(customerReg.getCustomers().get(1));
+        tmpOrder.addOrderLine(new OrderLine(4, articleReg.getArticles().get(1)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(11, articleReg.getArticles().get(3)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(7, articleReg.getArticles().get(2)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+
+        customerReg.getCustomers().get(1).getOrders().add(new Order("o356", "20180906"));
+        addOrderToComboBoxesList("o356");
+        tmpOrder = customerReg.getCustomers().get(1).getOrders().get(1);
+        tmpOrder.setOrderedBy(customerReg.getCustomers().get(1));
+        tmpOrder.addOrderLine(new OrderLine(2, articleReg.getArticles().get(1)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+
+        customerReg.getCustomers().get(1).getOrders().add(new Order("o924", "20180415"));
+        addOrderToComboBoxesList("o924");
+        tmpOrder = customerReg.getCustomers().get(1).getOrders().get(2);
+        tmpOrder.setOrderedBy(customerReg.getCustomers().get(1));
+        tmpOrder.addOrderLine(new OrderLine(3, articleReg.getArticles().get(2)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+        tmpOrder.addOrderLine(new OrderLine(2, articleReg.getArticles().get(4)));
+        tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
+    }
 }

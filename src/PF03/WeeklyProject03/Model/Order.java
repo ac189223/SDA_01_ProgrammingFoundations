@@ -81,23 +81,26 @@ public class Order {
     }
     public ArrayList<Article> listArticles() {
         ArrayList<Article> articles = new ArrayList<>();
-        for (OrderLine orderLine : getOrderLines())
+        for (OrderLine orderLine : getOrderLines()) {
             if (!articles.contains(orderLine.getArticle()))
                 articles.add(orderLine.getArticle());
+        }
         return articles;
     }
     public double valueOfOrder() {
         double sum = 0;
-        for (OrderLine orderLine: getOrderLines())
+        for (OrderLine orderLine: getOrderLines()) {
             sum += orderLine.getValue();
+        }
         return sum;
     }
 
     public ArrayList<Supplier> listSuppliers() {
         ArrayList<Supplier> suppliers = new ArrayList<>();
-        for (OrderLine orderLine: getOrderLines())
+        for (OrderLine orderLine: getOrderLines()) {
             if (!suppliers.contains(orderLine.getArticle().getSupplier()))
                 suppliers.add(orderLine.getArticle().getSupplier());
+        }
         return suppliers;
     }
 
