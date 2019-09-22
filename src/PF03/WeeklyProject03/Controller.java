@@ -5,7 +5,6 @@ import PF03.WeeklyProject03.Model.*;
 import javax.swing.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Random;
 
 public class Controller {
@@ -65,6 +64,8 @@ public class Controller {
             view.getButtonGroupIsCustomer().clearSelection();
         } else {
             setCustomerConfirmationNo();
+            view.getTxtCustomerIdIn().setText("");
+            view.getTxtCustomerId().setSelectedIndex(0);
         }
     }
 
@@ -82,17 +83,19 @@ public class Controller {
             setCustomerConfirmationYes();
         } else {
             setCustomerConfirmationNo();
+            view.getTxtCustomerIdIn().setText("");
+            view.getTxtCustomerId().setSelectedIndex(0);
         }
     }
 
     public void updateCustomerTypeSelection() {
         try {
             if (view.getRdbtnCustomerCorporate().isSelected()) {
-                view.getTxtCustomerIdIn().setText("Enter corporate Id");
+                view.getTxtCustomerIdIn().setText("");
                 view.getTxtCustomerIdIn().setEnabled(true);
             }
             else if (view.getRdbtnCustomerPrivate().isSelected()) {
-                view.getTxtCustomerIdIn().setText("Enter social security number");
+                view.getTxtCustomerIdIn().setText("");
                 view.getTxtCustomerIdIn().setEnabled(true);
             }
         } catch (NullPointerException e) {
@@ -106,35 +109,77 @@ public class Controller {
             String name = view.getTxtCustomerName().getText();
             String address = view.getTxtCustomerAddress().getText();
             String phone = view.getTxtCustomerPhone().getText();
-            if (view.getBtnCustomerAdd().getText().equals("Add")) {
-                if (view.getRdbtnCustomerPrivate().isSelected())
-                    addCustomer("P", custId, name, address, phone);
-                else if (view.getRdbtnCustomerCorporate().isSelected())
-                    addCustomer("C", custId, name, address, phone);
-                addCustomerToComboBoxesList(custId);
-            } else if (view.getBtnCustomerAdd().getText().equals("Update")) {
-                String oldCustId = view.getTxtCustomerIdOld().getText();
-                boolean classChange = false;
-                if (view.getRdbtnCustomerPrivate().isSelected()) {
-                    if (CustomerPrivate.class != getCustomerReg().findCustomer(oldCustId).getClass())
-                        classChange = true;
-                } else if (view.getRdbtnCustomerCorporate().isSelected()) {
-                    if (CustomerCompany.class != getCustomerReg().findCustomer(oldCustId).getClass())
-                        classChange = true;
-                }
-                if (!oldCustId.equals(custId) || (oldCustId.equals(custId) && classChange)) {
-                    getCustomerReg().removeCustomer(oldCustId);
-                    view.getTxtCustomerId().removeItem(oldCustId);
-                    if (view.getRdbtnCustomerPrivate().isSelected())
-                        addCustomer("P", custId, name, address, phone);
-                    else if (view.getRdbtnCustomerCorporate().isSelected())
-                        addCustomer("C", custId, name, address, phone);
-                    addCustomerToComboBoxesList(custId);
+            boolean fieldsFielledIn = !name.equals("") && !address.equals("") && !phone.equals("");
+            if (!custId.equals("")) {
+                if (view.getBtnCustomerAdd().getText().equals("Add")) {
+                    if (getCustomerReg().findCustomer(custId) == null) {
+                        if (fieldsFielledIn) {
+                            if (view.getRdbtnCustomerPrivate().isSelected())
+                                addCustomer("P", custId, name, address, phone);
+                            else if (view.getRdbtnCustomerCorporate().isSelected())
+                                addCustomer("C", custId, name, address, phone);
+                            addCustomerToComboBoxesList(custId);
+                            setCustomerConfirmationYes();
+                        } else {
+                            setCustomerConfirmationNo();
+                        }
+                    } else {
+                        setCustomerConfirmationNo();
+                        view.getTxtCustomerIdIn().setText("");
+                    }
+                } else if (view.getBtnCustomerAdd().getText().equals("Update")) {
+                    String oldCustId = view.getTxtCustomerIdOld().getText();
+                    boolean classChange = false;
+                    if (view.getRdbtnCustomerPrivate().isSelected()) {
+                        if (CustomerPrivate.class != getCustomerReg().findCustomer(oldCustId).getClass())
+                            classChange = true;
+                    } else if (view.getRdbtnCustomerCorporate().isSelected()) {
+                        if (CustomerCompany.class != getCustomerReg().findCustomer(oldCustId).getClass())
+                            classChange = true;
+                    }
+                    if (!oldCustId.equals(custId)) {
+                        if (getCustomerReg().findCustomer(custId) == null) {
+                            if (fieldsFielledIn) {
+                                getCustomerReg().removeCustomer(oldCustId);
+                                view.getTxtCustomerId().removeItem(oldCustId);
+                                if (view.getRdbtnCustomerPrivate().isSelected())
+                                    addCustomer("P", custId, name, address, phone);
+                                else if (view.getRdbtnCustomerCorporate().isSelected())
+                                    addCustomer("C", custId, name, address, phone);
+                                addCustomerToComboBoxesList(custId);
+                                setCustomerConfirmationYes();
+                            } else {
+                                setCustomerConfirmationNo();
+                            }
+                        } else {
+                            setCustomerConfirmationNo();
+                            view.getTxtCustomerIdIn().setText("");
+                        }
+                    } else if (oldCustId.equals(custId) && classChange) {
+                        if (fieldsFielledIn) {
+                            getCustomerReg().removeCustomer(oldCustId);
+                            view.getTxtCustomerId().removeItem(oldCustId);
+                            if (view.getRdbtnCustomerPrivate().isSelected())
+                                addCustomer("P", custId, name, address, phone);
+                            else if (view.getRdbtnCustomerCorporate().isSelected())
+                                addCustomer("C", custId, name, address, phone);
+                            addCustomerToComboBoxesList(custId);
+                            setCustomerConfirmationYes();
+                        } else {
+                            setCustomerConfirmationNo();
+                        }
+                    } else {
+                        updateCustomerData(custId, name, address, phone);
+                        setCustomerConfirmationYes();
+                    }
                 } else {
-                    updateCustomerData(custId, name, address, phone);
+                    setCustomerConfirmationNo();
                 }
+            } else {
+                setCustomerConfirmationNo();
             }
-            setCustomerConfirmationYes();
+        } else {
+            setCustomerConfirmationNo();
         }
     }
 
@@ -171,6 +216,7 @@ public class Controller {
             setCustomerConfirmationYes();
         } else {
             setCustomerConfirmationNo();
+            view.getTxtCustomerCheckId().setText("");
         }
     }
 
@@ -192,12 +238,15 @@ public class Controller {
                 view.getRdbtnOrderCreate().setEnabled(true);
                 view.getRdbtnOrderAddLine().setEnabled(true);
                 view.getRdbtnOrderDeleteArticle().setEnabled(true);
+                enableBtnOrderProceed();
                 createOrderForCustomerToComboBoxesList(tmpCustomer);
                 view.getTxtOrderCustId().setText(custId);
                 view.getTxtOrderCustIdDuplicate().setText(custId);
+            } else {
+                setCustomerConfirmationNo();
+                view.getTxtCustomerId().setSelectedIndex(0);
             }
-        }
-         else {
+        } else {
             setCustomerConfirmationNo();
         }
     }
@@ -417,31 +466,63 @@ public class Controller {
         else if (view.getComboOrderNumberDelete().getSelectedIndex() != 0)
             orderNumber = (String) view.getComboOrderNumberDelete().getSelectedItem();
         if (orderNumber != "") {
-            view.getTabbedPane().setSelectedIndex(2);
-            Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
-            view.getLblPreviewOrderNumer().setText("Order nr " + orderNumber);
-            String textLines1 = "ITEM";
-            String textLines2 = "NAME";
-            String textLines3 =  "QUANTITY";
-            String textLines4 = "VALUE";
-            for (OrderLine orderLine: tmpOrder.getOrderLines()) {
-                textLines1 += "\n" + orderLine.getArticle().getId();
-                textLines2 += "\n" + orderLine.getArticle().getName();
-                textLines3 += "\n" + orderLine.getQuantity();
-                textLines4 += "\n" + (orderLine.getArticle().getPrice() * orderLine.getQuantity());
-            }
-            view.getLblPreviewOrderDetails1().setText(textLines1);
-            view.getLblPreviewOrderDetails2().setText(textLines2);
-            view.getLblPreviewOrderDetails3().setText(textLines3);
-            view.getLblPreviewOrderDetails4().setText(textLines4);
-            double totalAmount = tmpOrder.valueOfOrder();
-            view.getLblPreviewOrderTotal().setText("Total " + totalAmount + " SEK");
-            view.getBtnPreviewBackToOrder().setText("Back");
-            view.getBtnPreviewBackToOrder().setEnabled(true);
+            prepareOrderPreviev(custId, orderNumber);
+        } else if (orderNumber == ""){
+            prepareCustomerPreviev(custId);
         } else {
             setOrderConfirmationNo();
         }
 
+    }
+
+    private void prepareOrderPreviev(String custId, String orderNumber) {
+        view.getTabbedPane().setSelectedIndex(2);
+        view.getLblPreviewAdmin().setEnabled(true);
+        Order tmpOrder = getCustomerReg().findCustomer(custId).findOrder(orderNumber);
+        view.getLblPreviewOrderNumer().setText("Order nr " + orderNumber);
+        String textLines1 = "ITEM";
+        String textLines2 = "NAME";
+        String textLines3 =  "QUANTITY";
+        String textLines4 = "VALUE";
+        for (OrderLine orderLine: tmpOrder.getOrderLines()) {
+            textLines1 += "\n" + orderLine.getArticle().getId();
+            textLines2 += "\n" + orderLine.getArticle().getName();
+            textLines3 += "\n" + orderLine.getQuantity();
+            textLines4 += "\n" + (orderLine.getArticle().getPrice() * orderLine.getQuantity());
+        }
+        view.getLblPreviewOrderDetails1().setText(textLines1);
+        view.getLblPreviewOrderDetails2().setText(textLines2);
+        view.getLblPreviewOrderDetails3().setText(textLines3);
+        view.getLblPreviewOrderDetails4().setText(textLines4);
+        double totalAmount = tmpOrder.valueOfOrder();
+        view.getLblPreviewOrderTotal().setText("Total " + totalAmount + " SEK");
+        view.getBtnPreviewBackToOrder().setText("Back");
+        view.getBtnPreviewBackToOrder().setEnabled(true);
+    }
+
+    private void prepareCustomerPreviev(String custId) {
+        view.getTabbedPane().setSelectedIndex(2);
+        view.getLblPreviewAdmin().setEnabled(true);
+        Customer tmpCustomer = getCustomerReg().findCustomer(custId);
+        view.getLblPreviewOrderNumer().setText("Customer nr " + custId);
+        String textLines1 = "ORDER";
+        String textLines2 = "DATE";
+        String textLines3 =  "ITEMS";
+        String textLines4 = "VALUE";
+        for (Order order: tmpCustomer.getOrders()) {
+            textLines1 += "\n" + order.getOrderNr();
+            textLines2 += "\n" + order.getDate();
+            textLines3 += "\n" + order.amountOfArticles();
+            textLines4 += "\n" + order.valueOfOrder();
+        }
+        view.getLblPreviewOrderDetails1().setText(textLines1);
+        view.getLblPreviewOrderDetails2().setText(textLines2);
+        view.getLblPreviewOrderDetails3().setText(textLines3);
+        view.getLblPreviewOrderDetails4().setText(textLines4);
+        int totalAmount = tmpCustomer.amountOfOrders();
+        view.getLblPreviewOrderTotal().setText("Total " + totalAmount + " orders");
+        view.getBtnPreviewBackToOrder().setText("Back");
+        view.getBtnPreviewBackToOrder().setEnabled(true);
     }
 
     public void goToOrderFromPreview() {
@@ -492,15 +573,15 @@ public class Controller {
     private void addArticleToComboBoxesList(String articleId) {
         view.getComboOrderArticleAdd().addItem(articleId);
         view.getComboOrderArticleDelete().addItem(articleId);
-        view.getComboAdminSupplierId().addItem(articleId);
-        view.getComboAdminArticleSupplier().addItem(articleId);
+        view.getComboAdminArticleId().addItem(articleId);
+        view.getComboAdminSupplierArticle().addItem(articleId);
     }
 
     private void deleteArticleFromComboBoxesList(String articleId) {
         view.getComboOrderArticleAdd().removeItem(articleId);
         view.getComboOrderArticleDelete().removeItem(articleId);
-        view.getComboAdminSupplierId().removeItem(articleId);
-        view.getComboAdminArticleSupplier().removeItem(articleId);
+        view.getComboAdminArticleId().removeItem(articleId);
+        view.getComboAdminSupplierArticle().removeItem(articleId);
     }
 
     public void customizeArticleToComboBoxesList() {
@@ -522,13 +603,13 @@ public class Controller {
     }
 
     private void addSupplierToComboBoxesList(String supplierId) {
-        view.getComboAdminArticleId().addItem(supplierId);
-        view.getComboAdminSupplierArticle().addItem(supplierId);
+        view.getComboAdminSupplierId().addItem(supplierId);
+        view.getComboAdminArticleSupplier().addItem(supplierId);
     }
 
     private void deleteSupplierFromComboBoxesList(String supplierId) {
-        view.getComboAdminArticleId().removeItem(supplierId);
-        view.getComboAdminSupplierArticle().removeItem(supplierId);
+        view.getComboAdminSupplierId().removeItem(supplierId);
+        view.getComboAdminArticleSupplier().removeItem(supplierId);
     }
 
     public void enableCustomerUpper() {
@@ -587,6 +668,7 @@ public class Controller {
         view.getTxtCustomerAddress().setEnabled(true);
         view.getTxtCustomerPhone().setText("");
         view.getTxtCustomerPhone().setEnabled(true);
+        view.getButtonGroupPrivateCorporate().clearSelection();
         view.getRdbtnCustomerPrivate().setEnabled(true);
         view.getRdbtnCustomerCorporate().setEnabled(true);
         view.getBtnCustomerAdd().setText("Add");
@@ -632,7 +714,7 @@ public class Controller {
             enableUpperPartOfOrder();
             disableMiddlePartOfOrder();
             disableLowerPartOfOrder();
-            disableBtnOrderProceed();
+            enableBtnOrderProceed();
             setOrderConfirmationBlank();
         }
     }
@@ -717,11 +799,15 @@ public class Controller {
     public void enableBtnOrderProceed() {
         view.getBtnOrderProceed().setText("Preview");
         view.getBtnOrderProceed().setEnabled(true);
+        view.getBtnOrderProceedDuplicate().setText("Preview");
+        view.getBtnOrderProceedDuplicate().setEnabled(true);
     }
 
     public void disableBtnOrderProceed() {
         view.getBtnOrderProceed().setText("");
         view.getBtnOrderProceed().setEnabled(false);
+        view.getBtnOrderProceedDuplicate().setText("");
+        view.getBtnOrderProceedDuplicate().setEnabled(false);
     }
 
     public void setOrderConfirmationYes() { view.getTxtOrderConfirmation().setText("V"); }
@@ -807,6 +893,8 @@ public class Controller {
         view.getTxtAdminClientAddress().setEnabled(true);
         view.getTxtAdminClientPhone().setText("");
         view.getTxtAdminClientPhone().setEnabled(true);
+        view.getComboAdminClientType().setSelectedIndex(0);
+        view.getComboAdminClientType().setEnabled(true);
     }
     public void disableLowerPartOfAdmin() {
         view.getComboAdminClientId().setSelectedIndex(0);
@@ -817,13 +905,15 @@ public class Controller {
         view.getTxtAdminClientAddress().setEnabled(false);
         view.getTxtAdminClientPhone().setText("");
         view.getTxtAdminClientPhone().setEnabled(false);
+        view.getComboAdminClientType().setSelectedIndex(0);
+        view.getComboAdminClientType().setEnabled(false);
     }
 
     public void enableButtonsOfAdmin() {
         view.getBtnAdminAdd().setText("Add");
         view.getBtnAdminAdd().setEnabled(true);
-        view.getBtnAdminCreate().setText("Create");
-        view.getBtnAdminCreate().setEnabled(true);
+        view.getBtnAdminUpdate().setText("Update");
+        view.getBtnAdminUpdate().setEnabled(true);
         view.getBtnAdminDelete().setText("Delete");
         view.getBtnAdminDelete().setEnabled(true);
         view.getBtnAdminFind().setText("Find");
@@ -832,8 +922,8 @@ public class Controller {
     public void disableButtonsOfAdmin() {
         view.getBtnAdminAdd().setText("");
         view.getBtnAdminAdd().setEnabled(false);
-        view.getBtnAdminCreate().setText("");
-        view.getBtnAdminCreate().setEnabled(false);
+        view.getBtnAdminUpdate().setText("");
+        view.getBtnAdminUpdate().setEnabled(false);
         view.getBtnAdminDelete().setText("");
         view.getBtnAdminDelete().setEnabled(false);
         view.getBtnAdminFind().setText("");
@@ -857,7 +947,6 @@ public class Controller {
         disableUpperPartOfOrder();
         disableMiddlePartOfOrder();
         disableLowerPartOfOrder();
-        disableBtnOrderProceed();
         setOrderConfirmationBlank();
         view.getButtonGroupOrderActivity().clearSelection();
         view.getTxtOrderCustId().setText("");
@@ -954,5 +1043,415 @@ public class Controller {
         tmpOrder.addOrderLine(new OrderLine(2, articleReg.getArticles().get(4)));
         tmpOrder.getOrderLines().get(tmpOrder.getOrderLines().size() - 1).setOrder(tmpOrder);
 
+    }
+
+    public void addAsAdmin() {
+        if (view.getRdbtnAdminArticles().isSelected()) {
+            addArticleAsAdmin();
+        } else if (view.getRdbtnAdminSuppliers().isSelected()) {
+            addSupplierAsAdmin();
+        } else if (view.getRdbtnAdminClients().isSelected()) {
+            addClientAsAdmin();
+        } else {
+            setAdminConfirmationNo();
+        }
+    }
+
+    private void addArticleAsAdmin() {
+        String tmpArticleId = (String) view.getComboAdminArticleId().getSelectedItem();
+        String tmpArticleName = view.getTxtAdminArticleName().getText();
+        String tmpArticlePrice = view.getTxtAdminArticlePrice().getText();
+        String tmpArticleSupplierId = (String) view.getComboAdminArticleSupplier().getSelectedItem();
+        if (getArticleReg().findArticle(tmpArticleId) == null) {
+            if (!tmpArticleName.equals("") && !tmpArticlePrice.equals("")) {
+                if (canDouble(tmpArticlePrice)) {
+                    if (!tmpArticleSupplierId.equals("")) {
+                        if (getSupplierReg().findSupplier(tmpArticleSupplierId) != null) {
+                            getArticleReg().addArticle(new Article(tmpArticleId, tmpArticleName, Double.parseDouble(tmpArticlePrice), getSupplierReg().findSupplier(tmpArticleSupplierId)));
+                            addArticleToComboBoxesList(tmpArticleId);
+                            setAdminConfirmationYes();
+                        } else {
+                            setAdminConfirmationNo();
+                            view.getComboAdminArticleSupplier().setSelectedIndex(0);
+                        }
+                    } else {
+                        getArticleReg().addArticle(new Article(tmpArticleId, tmpArticleName, Double.parseDouble(tmpArticlePrice)));
+                        addArticleToComboBoxesList(tmpArticleId);
+                        setAdminConfirmationYes();
+                    }
+                } else {
+                    setAdminConfirmationNo();
+                    view.getTxtAdminArticlePrice().setText("");
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        } else {
+            setAdminConfirmationNo();
+            view.getComboAdminArticleId().setSelectedIndex(0);
+        }
+    }
+
+    private void addSupplierAsAdmin() {
+        String tmpSupplierId = (String) view.getComboAdminSupplierId().getSelectedItem();
+        String tmpSupplierName = view.getTxtAdminSupplierName().getText();
+        String tmpSupplierPhone = view.getTxtAdminSupplierPhone().getText();
+        String tmpSupplierArticleId = (String) view.getComboAdminSupplierArticle().getSelectedItem();
+        if (getSupplierReg().findSupplier(tmpSupplierId) == null) {
+            if (!tmpSupplierName.equals("") && !tmpSupplierPhone.equals("")) {
+                if (!tmpSupplierArticleId.equals("")) {
+                    if (getArticleReg().findArticle(tmpSupplierArticleId) != null) {
+                        Article tmpArticle = getArticleReg().findArticle(tmpSupplierArticleId);
+                        if (tmpArticle.getSupplier() == null) {
+                            getSupplierReg().addSupplier(new Supplier(tmpSupplierId, tmpSupplierName, tmpSupplierPhone));
+                            getSupplierReg().findSupplier(tmpSupplierId).addArticle(tmpArticle);
+                            tmpArticle.setSupplier(getSupplierReg().findSupplier(tmpSupplierId));
+                            addSupplierToComboBoxesList(tmpSupplierId);
+                            setAdminConfirmationYes();
+                        } else {
+                            setAdminConfirmationNo();
+                            view.getComboAdminSupplierArticle().setSelectedIndex(0);
+                        }
+                    } else {
+                        setAdminConfirmationNo();
+                        view.getComboAdminSupplierArticle().setSelectedIndex(0);
+                    }
+                } else {
+                    getSupplierReg().addSupplier(new Supplier(tmpSupplierId, tmpSupplierName, tmpSupplierPhone));
+                    addSupplierToComboBoxesList(tmpSupplierId);
+                    setAdminConfirmationYes();
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        } else {
+            setAdminConfirmationNo();
+            view.getComboAdminSupplierId().setSelectedIndex(0);
+        }
+    }
+
+    private void addClientAsAdmin() {
+        String tmpCustomerId = (String) view.getComboAdminClientId().getSelectedItem();
+        String tmpCustomerName = view.getTxtAdminClientName().getText();
+        String tmpCustomerAddress = view.getTxtAdminClientAddress().getText();
+        String tmpCustomerPhone = view.getTxtAdminClientPhone().getText();
+        int tmpCustomerType = view.getComboAdminClientType().getSelectedIndex();
+        if (getCustomerReg().findCustomer(tmpCustomerId) == null) {
+            if (!tmpCustomerName.equals("") && !tmpCustomerAddress.equals("") && !tmpCustomerPhone.equals("")) {
+                if (tmpCustomerType != 0) {
+                    if (tmpCustomerType == 1)
+                        getCustomerReg().addCustomers(new CustomerPrivate(tmpCustomerId, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhone));
+                    else
+                        getCustomerReg().addCustomers(new CustomerCompany(tmpCustomerId, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhone));
+                    addCustomerToComboBoxesList(tmpCustomerId);
+                    setAdminConfirmationYes();
+                } else {
+                    setAdminConfirmationNo();
+                    view.getComboAdminClientType().setSelectedIndex(0);
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        } else {
+            setAdminConfirmationNo();
+            view.getComboAdminClientId().setSelectedIndex(0);
+        }
+    }
+
+    private boolean canDouble(String tmpArticlePrice) {
+        try {
+            Double.parseDouble(tmpArticlePrice);
+            return true;
+        } catch (NumberFormatException err) {
+            return false;
+        }
+    }
+
+    public void deleteAsAdmin() {
+        if (view.getRdbtnAdminArticles().isSelected()) {
+            deleteArticleAsAdmin();
+        } else if (view.getRdbtnAdminSuppliers().isSelected()) {
+            deleteSupplierAsAdmin();
+        } else if (view.getRdbtnAdminClients().isSelected()) {
+            deleteClientAsAdmin();
+        } else {
+            setAdminConfirmationNo();
+        }
+    }
+
+    private void deleteArticleAsAdmin() {
+        String tmpArticleId = (String) view.getComboAdminArticleId().getSelectedItem();
+        if (getArticleReg().findArticle(tmpArticleId) != null) {
+            getArticleReg().removeArticle(tmpArticleId);
+            deleteArticleFromComboBoxesList(tmpArticleId);
+            enableUpperPartOfAdmin();
+            setAdminConfirmationYes();
+        } else {
+            setAdminConfirmationNo();
+            enableUpperPartOfAdmin();
+        }
+    }
+
+    private void deleteSupplierAsAdmin() {
+        String tmpSupplierId = (String) view.getComboAdminSupplierId().getSelectedItem();
+        if (getSupplierReg().findSupplier(tmpSupplierId) != null) {
+            getSupplierReg().removeSupplier(tmpSupplierId);
+            deleteSupplierFromComboBoxesList(tmpSupplierId);
+            enableMiddlePartOfAdmin();
+            setAdminConfirmationYes();
+        } else {
+            setAdminConfirmationNo();
+            enableMiddlePartOfAdmin();
+        }
+    }
+
+    private void deleteClientAsAdmin() {
+        String tmpClientId = (String) view.getComboAdminClientId().getSelectedItem();
+        if (getCustomerReg().findCustomer(tmpClientId) != null) {
+            getCustomerReg().removeCustomer(tmpClientId);
+            deleteCustomerFromComboBoxesList(tmpClientId);
+            enableLowerPartOfAdmin();
+            setAdminConfirmationYes();
+        } else {
+            setAdminConfirmationNo();
+            enableLowerPartOfOrder();
+        }
+    }
+
+    public void updateAsAdmin() {
+        if (view.getRdbtnAdminArticles().isSelected()) {
+            updateArticleAsAdmin();
+        } else if (view.getRdbtnAdminSuppliers().isSelected()) {
+            updateSupplierAsAdmin();
+        } else if (view.getRdbtnAdminClients().isSelected()) {
+            updateClientAsAdmin();
+        } else {
+            setAdminConfirmationNo();
+        }
+    }
+
+    private void updateArticleAsAdmin() {
+        String tmpArticleId = (String) view.getComboAdminArticleId().getSelectedItem();
+        String tmpArticleName = view.getTxtAdminArticleName().getText();
+        String tmpArticlePrice = view.getTxtAdminArticlePrice().getText();
+        String tmpArticleSupplierId = (String) view.getComboAdminArticleSupplier().getSelectedItem();
+        if (getArticleReg().findArticle(tmpArticleId) == null) {
+            if (!tmpArticleName.equals("") && !tmpArticlePrice.equals("")) {
+                if (canDouble(tmpArticlePrice)) {
+                    if (!tmpArticleSupplierId.equals("")) {
+                        if (getSupplierReg().findSupplier(tmpArticleSupplierId) != null) {
+                            getArticleReg().addArticle(new Article(tmpArticleId, tmpArticleName, Double.parseDouble(tmpArticlePrice), getSupplierReg().findSupplier(tmpArticleSupplierId)));
+                            addArticleToComboBoxesList(tmpArticleId);
+                            setAdminConfirmationYes();
+                        } else {
+                            setAdminConfirmationNo();
+                            view.getComboAdminArticleSupplier().setSelectedIndex(0);
+                        }
+                    } else {
+                        getArticleReg().addArticle(new Article(tmpArticleId, tmpArticleName, Double.parseDouble(tmpArticlePrice)));
+                        addArticleToComboBoxesList(tmpArticleId);
+                        setAdminConfirmationYes();
+                    }
+                } else {
+                    setAdminConfirmationNo();
+                    view.getTxtAdminArticlePrice().setText("");
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        } else {
+            if (!tmpArticleName.equals("") && !tmpArticlePrice.equals("")) {
+                if (canDouble(tmpArticlePrice)) {
+                    if (!tmpArticleSupplierId.equals("")) {
+                        if (getSupplierReg().findSupplier(tmpArticleSupplierId) != null) {
+                            Article tmpArticle = getArticleReg().findArticle(tmpArticleId);
+                            tmpArticle.setName(tmpArticleName);
+                            tmpArticle.setPrice(Double.parseDouble(tmpArticlePrice));
+                            if (getSupplierReg().findSupplier(tmpArticleSupplierId) != null)
+                                tmpArticle.setSupplier(getSupplierReg().findSupplier(tmpArticleSupplierId));
+                            setAdminConfirmationYes();
+                        } else {
+                            setAdminConfirmationNo();
+                            view.getComboAdminArticleSupplier().setSelectedIndex(0);
+                        }
+                    } else {
+                        Article tmpArticle = getArticleReg().findArticle(tmpArticleId);
+                        tmpArticle.setName(tmpArticleName);
+                        tmpArticle.setPrice(Double.parseDouble(tmpArticlePrice));
+                        setAdminConfirmationYes();
+                    }
+                } else {
+                    setAdminConfirmationNo();
+                    view.getTxtAdminArticlePrice().setText("");
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        }
+    }
+
+    private void updateSupplierAsAdmin() {
+        String tmpSupplierId = (String) view.getComboAdminSupplierId().getSelectedItem();
+        String tmpSupplierName = view.getTxtAdminSupplierName().getText();
+        String tmpSupplierPhone = view.getTxtAdminSupplierPhone().getText();
+        String tmpSupplierArticleId = (String) view.getComboAdminSupplierArticle().getSelectedItem();
+        if (getSupplierReg().findSupplier(tmpSupplierId) == null) {
+            if (!tmpSupplierName.equals("") && !tmpSupplierPhone.equals("")) {
+                    if (!tmpSupplierArticleId.equals("")) {
+                        if (getArticleReg().findArticle(tmpSupplierArticleId) != null) {
+                            Article tmpArticle = getArticleReg().findArticle(tmpSupplierArticleId);
+                            if (tmpArticle.getSupplier() == null) {
+                                getSupplierReg().addSupplier(new Supplier(tmpSupplierId, tmpSupplierName, tmpSupplierPhone));
+                                getSupplierReg().findSupplier(tmpSupplierId).addArticle(tmpArticle);
+                                tmpArticle.setSupplier(getSupplierReg().findSupplier(tmpSupplierId));
+                                addSupplierToComboBoxesList(tmpSupplierId);
+                                setAdminConfirmationYes();
+                            } else {
+                                setAdminConfirmationNo();
+                                view.getComboAdminSupplierArticle().setSelectedIndex(0);
+                            }
+                        } else {
+                            setAdminConfirmationNo();
+                            view.getComboAdminSupplierArticle().setSelectedIndex(0);
+                        }
+                    } else {
+                        getSupplierReg().addSupplier(new Supplier(tmpSupplierId, tmpSupplierName, tmpSupplierPhone));
+                        addSupplierToComboBoxesList(tmpSupplierId);
+                        setAdminConfirmationYes();
+                    }
+            } else {
+                setAdminConfirmationNo();
+            }
+        } else {
+            if (!tmpSupplierName.equals("") && !tmpSupplierPhone.equals("")) {
+                    if (!tmpSupplierArticleId.equals("")) {
+                        if (getArticleReg().findArticle(tmpSupplierArticleId) != null) {
+                            Article tmpArticle = getArticleReg().findArticle(tmpSupplierArticleId);
+                            if (tmpArticle.getSupplier() == null) {
+                                Supplier tmpSupplier = getSupplierReg().findSupplier(tmpSupplierId);
+                                tmpSupplier.setName(tmpSupplierName);
+                                tmpSupplier.setPhoneNr(tmpSupplierPhone);
+                                tmpSupplier.addArticle(tmpArticle);
+                                tmpArticle.setSupplier(tmpSupplier);
+                                setAdminConfirmationYes();
+                            } else {
+                                setAdminConfirmationNo();
+                                view.getComboAdminSupplierArticle().setSelectedIndex(0);
+                            }
+                        } else {
+                            setAdminConfirmationNo();
+                            view.getComboAdminSupplierArticle().setSelectedIndex(0);
+                        }
+                    } else {
+                        Supplier tmpSupplier = getSupplierReg().findSupplier(tmpSupplierId);
+                        tmpSupplier.setName(tmpSupplierName);
+                        tmpSupplier.setPhoneNr(tmpSupplierPhone);
+                        setAdminConfirmationYes();
+                    }
+            } else {
+                setAdminConfirmationNo();
+            }
+        }
+    }
+
+    private void updateClientAsAdmin() {
+        String tmpCustomerId = (String) view.getComboAdminClientId().getSelectedItem();
+        String tmpCustomerName = view.getTxtAdminClientName().getText();
+        String tmpCustomerAddress = view.getTxtAdminClientAddress().getText();
+        String tmpCustomerPhone = view.getTxtAdminClientPhone().getText();
+        int tmpCustomerType = view.getComboAdminClientType().getSelectedIndex();
+        boolean fieldsFilledIn = !tmpCustomerName.equals("") && !tmpCustomerAddress.equals("") && !tmpCustomerPhone.equals("");
+        if (getCustomerReg().findCustomer(tmpCustomerId) == null) {
+            if (fieldsFilledIn) {
+                if (tmpCustomerType != 0) {
+                    if (tmpCustomerType == 1)
+                        getCustomerReg().addCustomers(new CustomerPrivate(tmpCustomerId, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhone));
+                    else
+                        getCustomerReg().addCustomers(new CustomerCompany(tmpCustomerId, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhone));
+                    addCustomerToComboBoxesList(tmpCustomerId);
+                    setAdminConfirmationYes();
+                } else {
+                    setAdminConfirmationNo();
+                    view.getComboAdminClientType().setSelectedIndex(0);
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        } else {
+            if (fieldsFilledIn) {
+                if (tmpCustomerType != 0) {
+                    getCustomerReg().removeCustomer(tmpCustomerId);
+                    if (tmpCustomerType == 1)
+                        getCustomerReg().addCustomers(new CustomerPrivate(tmpCustomerId, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhone));
+                    else
+                        getCustomerReg().addCustomers(new CustomerCompany(tmpCustomerId, tmpCustomerName, tmpCustomerAddress, tmpCustomerPhone));
+                    setAdminConfirmationYes();
+                } else {
+                    setAdminConfirmationNo();
+                    view.getComboAdminClientType().setSelectedIndex(0);
+                }
+            } else {
+                setAdminConfirmationNo();
+            }
+        }
+    }
+
+    public void findAsAdmin() {
+        if (view.getRdbtnAdminArticles().isSelected()) {
+            findArticleAsAdmin();
+        } else if (view.getRdbtnAdminSuppliers().isSelected()) {
+            findSupplierAsAdmin();
+        } else if (view.getRdbtnAdminClients().isSelected()) {
+            findClientAsAdmin();
+        } else {
+            setAdminConfirmationNo();
+        }
+    }
+
+    private void findArticleAsAdmin() {
+        String tmpArticleId = (String) view.getComboAdminArticleId().getSelectedItem();
+        if (getArticleReg().findArticle(tmpArticleId) != null) {
+            Article tmpArticle = getArticleReg().findArticle(tmpArticleId);
+            view.getTxtAdminArticleName().setText(tmpArticle.getName());
+            view.getTxtAdminArticlePrice().setText(String.valueOf(tmpArticle.getPrice()));
+            if (tmpArticle.getSupplier().getId() != null)
+                view.getComboAdminArticleSupplier().setSelectedItem(tmpArticle.getSupplier().getId());
+            setAdminConfirmationYes();
+        } else {
+            setAdminConfirmationNo();
+            enableUpperPartOfAdmin();
+        }
+    }
+
+    private void findSupplierAsAdmin() {
+        String tmpSupplierId = (String) view.getComboAdminSupplierId().getSelectedItem();
+        if (getSupplierReg().findSupplier(tmpSupplierId) != null) {
+            Supplier tmpSupplier = getSupplierReg().findSupplier(tmpSupplierId);
+            view.getTxtAdminSupplierName().setText(tmpSupplier.getName());
+            view.getTxtAdminSupplierPhone().setText(tmpSupplier.getPhoneNr());
+            view.getComboAdminSupplierArticle().setSelectedItem(0);
+            setAdminConfirmationYes();
+        } else {
+            setAdminConfirmationNo();
+            enableMiddlePartOfAdmin();
+        }
+    }
+
+    private void findClientAsAdmin() {
+        String tmpCustomerId = (String) view.getComboAdminClientId().getSelectedItem();
+        if (getCustomerReg().findCustomer(tmpCustomerId) != null) {
+            Customer tmpCustomer = getCustomerReg().findCustomer(tmpCustomerId);
+            view.getTxtAdminClientName().setText(tmpCustomer.getName());
+            view.getTxtAdminClientAddress().setText(tmpCustomer.getAddress());
+            view.getTxtAdminClientPhone().setText(tmpCustomer.getPhoneNr());
+            if (tmpCustomer.getClass() == CustomerPrivate.class)
+                view.getComboAdminClientType().setSelectedIndex(1);
+            else if (tmpCustomer.getClass() == CustomerCompany.class)
+                view.getComboAdminClientType().setSelectedIndex(2);
+            setAdminConfirmationYes();
+        } else {
+            setAdminConfirmationNo();
+            enableLowerPartOfAdmin();
+        }
     }
 }

@@ -12,8 +12,22 @@ public class CustomerReg {
     public ArrayList<Customer> getCustomers() { return customers; }
     public void setCustomers(ArrayList<Customer> customers) { this.setCustomers(customers); }
     public void addCustomers(Customer customer) { getCustomers().add(customer); }
-    public void removeCustomer(Customer customer) { getCustomers().remove(customer); }
-    public void removeCustomer(String id) { getCustomers().remove(findCustomer(id)); }
+    public void removeCustomer(Customer customer) {
+        for (Order order: customer.getOrders()) {
+            for (OrderLine orderLine : order.getOrderLines())
+                orderLine.setOrder(null);
+            order.setOrderedBy(null);
+        }
+        getCustomers().remove(customer);
+    }
+    public void removeCustomer(String id) {
+        for (Order order: findCustomer(id).getOrders()) {
+            for (OrderLine orderLine : order.getOrderLines())
+                orderLine.setOrder(null);
+            order.setOrderedBy(null);
+        }
+        getCustomers().remove(findCustomer(id));
+    }
 
     public Customer findCustomer(String id) {
         for (Customer customer : getCustomers()) {

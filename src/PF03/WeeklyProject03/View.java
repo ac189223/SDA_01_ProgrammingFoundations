@@ -49,7 +49,8 @@ public class View {
 	private JLabel lbl25;
 	private JLabel lbl26;
 	private JLabel lbl27;
-	private JTextArea lblPreviewOrderDetails1;
+    private JLabel lbl28;
+    private JTextArea lblPreviewOrderDetails1;
 	private JTextArea lblPreviewOrderDetails2;
 	private JTextArea lblPreviewOrderDetails3;
 	private JTextArea lblPreviewOrderDetails4;
@@ -76,6 +77,7 @@ public class View {
 	private JComboBox comboAdminSupplierId;
 	private JComboBox comboAdminSupplierArticle;
 	private JComboBox comboAdminClientId;
+	private JComboBox comboAdminClientType;
 	private JPasswordField txtCustomerAdminPassword;
 	private JPasswordField txtOrderAdminPassword;
 	private JPasswordField txtPreviewAdminPassword;
@@ -108,11 +110,12 @@ public class View {
 	private JButton btnOrderAddLine;
 	private JButton btnOrderDelete;
 	private JButton btnOrderProceed;
-	private JButton btnOrderCreate;
+    private JButton btnOrderProceedDuplicate;
+    private JButton btnOrderCreate;
 	private JButton btnOrderPasswordCheck;
 	private JButton btnPrevievPasswordCheck;
 	private JButton btnPreviewBackToOrder;
-	private JButton btnAdminCreate;
+	private JButton btnAdminUpdate;
 	private JButton btnAdminFind;
 	private JButton btnAdminAdd;
 	private JButton btnAdminDelete;
@@ -129,6 +132,7 @@ public class View {
 	private String[] listOrdersForCombo = {""};
 	private String[] listOrdersForCustomerForCombo = {""};
 	private String[] listQuantityForCombo = {"", "1", "2", "3", "4", "5", "6", "7", "8", "9"};
+	private String[] listCustomersTypeForCombo = {"", "Private", "Corporate"};
 
 	/**
 	 * Launch the application.
@@ -828,9 +832,21 @@ public class View {
 		btnOrderProceed.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
 		btnOrderProceed.setBounds(21, 455, 402, 47);
 		btnOrderProceed.setEnabled(false);
-		panel02.add(btnOrderProceed);
+        btnOrderProceed.setVisible(false);
+        panel02.add(btnOrderProceed);
 
-		txtOrderAdminPassword = new JPasswordField();
+        btnOrderProceedDuplicate = new JButton("");
+        btnOrderProceedDuplicate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                controller.goToPreview();
+            }
+        });
+        btnOrderProceedDuplicate.setFont(new Font("Lucida Grande", Font.ITALIC, 16));
+        btnOrderProceedDuplicate.setBounds(21, 455, 402, 47);
+        btnOrderProceedDuplicate.setEnabled(false);
+        panel02.add(btnOrderProceedDuplicate);
+
+        txtOrderAdminPassword = new JPasswordField();
 		txtOrderAdminPassword.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -971,6 +987,7 @@ public class View {
 			}
 		});
 		lblPreviewAdmin.setEnabled(false);
+		lblPreviewAdmin.setVisible(false);
 		lblPreviewAdmin.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPreviewAdmin.setBackground(new Color(135, 206, 235));
 		lblPreviewAdmin.setForeground(new Color(0, 0, 0));
@@ -1262,7 +1279,24 @@ public class View {
 		lbl25.setBounds(txtAdminClientPhone.getX() + txtAdminClientPhone.getWidth() - 110, txtAdminClientPhone.getY() + txtAdminClientPhone.getHeight() - 2, 100, 11);
 		panel04.add(lbl25);
 
-		txtAdminConfirmation = new JTextField();
+        comboAdminClientType = new JComboBox(listCustomersTypeForCombo);
+        comboAdminClientType.setEditable(false);
+        comboAdminClientType.setForeground(new Color(169, 169, 169));
+        comboAdminClientType.setEnabled(false);
+        comboAdminClientType.setBounds(233, 351, 190, 26);
+        comboAdminClientType.setEnabled(false);
+        panel04.add(comboAdminClientType);
+
+        lbl28 = new JLabel("Client type");
+        lbl28.setEnabled(false);
+        lbl28.setHorizontalAlignment(SwingConstants.RIGHT);
+        lbl28.setBackground(new Color(135, 206, 235));
+        lbl28.setForeground(new Color(0, 0, 0));
+        lbl28.setFont(new Font("Lucida Grande", Font.PLAIN, 11));
+        lbl28.setBounds(comboAdminClientType.getX() + comboAdminClientType.getWidth() - 110, comboAdminClientType.getY() + comboAdminClientType.getHeight() - 2, 100, 11);
+        panel04.add(lbl28);
+
+        txtAdminConfirmation = new JTextField();
 		txtAdminConfirmation.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -1278,25 +1312,45 @@ public class View {
 		panel04.add(txtAdminConfirmation);
 
 		btnAdminAdd = new JButton("");
-		btnAdminAdd.setEnabled(false);
-		btnAdminAdd.setBounds(233, 395, 80, 29);
+        btnAdminAdd.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                controller.addAsAdmin();
+            }
+        });
+        btnAdminAdd.setEnabled(false);
+		btnAdminAdd.setBounds(233, 423, 80, 29);
 		btnAdminAdd.setEnabled(false);
 		panel04.add(btnAdminAdd);
 
 		btnAdminDelete = new JButton("");
-		btnAdminDelete.setEnabled(false);
-		btnAdminDelete.setBounds(343, 395, 80, 29);
+        btnAdminDelete.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                controller.deleteAsAdmin();
+            }
+        });
+        btnAdminDelete.setEnabled(false);
+		btnAdminDelete.setBounds(343, 423, 80, 29);
 		btnAdminDelete.setEnabled(false);
 		panel04.add(btnAdminDelete);
 		
-		btnAdminCreate = new JButton("");
-		btnAdminCreate.setEnabled(false);
-		btnAdminCreate.setBounds(233, 451, 80, 29);
-		panel04.add(btnAdminCreate);
+		btnAdminUpdate = new JButton("");
+        btnAdminUpdate.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                controller.updateAsAdmin();
+            }
+        });
+        btnAdminUpdate.setEnabled(false);
+		btnAdminUpdate.setBounds(233, 479, 80, 29);
+		panel04.add(btnAdminUpdate);
 		
 		btnAdminFind = new JButton("");
-		btnAdminFind.setEnabled(false);
-		btnAdminFind.setBounds(343, 451, 80, 29);
+        btnAdminFind.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                controller.findAsAdmin();
+            }
+        });
+        btnAdminFind.setEnabled(false);
+		btnAdminFind.setBounds(343, 479, 80, 29);
 		panel04.add(btnAdminFind);
 
 		controller.initializeData();
@@ -1474,13 +1528,16 @@ public class View {
 	public void setBtnOrderDelete(JButton btnOrderDelete) { this.btnOrderDelete = btnOrderDelete; }
 
 	public JButton getBtnOrderProceed() { return btnOrderProceed; }
-	public void setBtnOrderProceed(JButton btnOrderProceed) { this.btnOrderProceed = btnOrderProceed; }
+    public void setBtnOrderProceed(JButton btnOrderProceed) { this.btnOrderProceed = btnOrderProceed; }
 
-	public JButton getBtnOrderCreate() { return btnOrderCreate; }
+    public JButton getBtnOrderProceedDuplicate() { return btnOrderProceedDuplicate; }
+    public void setBtnOrderProceedDuplicate(JButton btnOrderProceedDuplicate) { this.btnOrderProceedDuplicate = btnOrderProceedDuplicate; }
+
+    public JButton getBtnOrderCreate() { return btnOrderCreate; }
 	public void setBtnOrderCreate(JButton btnOrderCreate) { this.btnOrderCreate = btnOrderCreate; }
 
-	public JButton getBtnAdminCreate() { return btnAdminCreate; }
-	public void setBtnAdminCreate(JButton btnAdminCreate) { this.btnAdminCreate = btnAdminCreate; }
+	public JButton getBtnAdminUpdate() { return btnAdminUpdate; }
+	public void setBtnAdminUpdate(JButton btnAdminUpdate) { this.btnAdminUpdate = btnAdminUpdate; }
 
 	public JButton getBtnAdminFind() { return btnAdminFind; }
 	public void setBtnAdminFind(JButton btnAdminFind) { this.btnAdminFind = btnAdminFind; }
@@ -1550,4 +1607,7 @@ public class View {
 
 	public JTextField getTxtOrderCustIdDuplicate() { return txtOrderCustIdDuplicate; }
 	public void setTxtOrderCustIdDuplicate(JTextField txtOrderCustIdDuplicate) { this.txtOrderCustIdDuplicate = txtOrderCustIdDuplicate; }
+
+    public JComboBox getComboAdminClientType() { return comboAdminClientType; }
+    public void setComboAdminClientType(JComboBox comboAdminClientType) { this.comboAdminClientType = comboAdminClientType; }
 }

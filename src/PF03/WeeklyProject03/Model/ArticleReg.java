@@ -12,8 +12,17 @@ public class ArticleReg {
     public ArrayList<Article> getArticles() { return articles; }
     public void setArticles(ArrayList<Article> articles) { this.setArticles(articles); }
     public void addArticle(Article article) { getArticles().add(article); }
-    public void removeArticle(Article article) { getArticles().remove(article); }
-    public void removeArticle(String articleId) { getArticles().remove(findArticle(articleId)); }
+    public void removeArticle(Article article) {
+        findSupplierOf(article.getId()).getSuppliesArticles().remove(article);
+        getArticles().remove(article);
+    }
+    public void removeArticle(String articleId) {
+        if (findSupplierOf(articleId).getSuppliesArticles() != null)
+            findSupplierOf(articleId).getSuppliesArticles().remove(findArticle(articleId));
+        for (OrderLine orderLine: findOrderLines(articleId))
+            orderLine.getOrder().removeOrderLine(orderLine);
+        getArticles().remove(findArticle(articleId));
+    }
     public Article findArticle(String id) {
         for (Article article : getArticles()) {
             if (article.getId().equals(id))

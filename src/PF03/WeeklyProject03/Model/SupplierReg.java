@@ -12,8 +12,16 @@ public class SupplierReg {
     public ArrayList<Supplier> getSuppliers() { return suppliers; }
     public void setSuppliers(ArrayList<Supplier> suppliers) { this.setSuppliers(suppliers); }
     public void addSupplier(Supplier supplier) { getSuppliers().add(supplier); }
-    public void removeSupplier(Supplier supplier) { getSuppliers().remove(supplier); }
-    public void removeSupplier(String supplierId) { getSuppliers().remove(findSupplier(supplierId)); }
+    public void removeSupplier(Supplier supplier) {
+        for (Article article: supplier.getSuppliesArticles())
+            article.setSupplier(null);
+        getSuppliers().remove(supplier);
+    }
+    public void removeSupplier(String supplierId) {
+        for (Article article: findSupplier(supplierId).getSuppliesArticles())
+            article.setSupplier(null);
+        getSuppliers().remove(findSupplier(supplierId));
+    }
     public Supplier findSupplier(String id) {
         for (Supplier supplier : getSuppliers()) {
             if (supplier.getId().equals(id))
