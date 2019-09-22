@@ -367,6 +367,7 @@ public class Controller {
                         for (OrderLine orderLine: tmpOrder.getOrderLines())
                             if (orderLine.getArticle() == tmpArticle) {
                                 tmpOrder.removeOrderLine(orderLine);
+                                view.getComboOrderArticleDelete().removeItem(tmpArticle.getId());
                                 break;
                             }
                         setOrderConfirmationYes();
@@ -380,6 +381,7 @@ public class Controller {
                                     break;
                                 } else if (orderLine.getQuantity() == tmpQuantity) {
                                     tmpOrder.removeOrderLine(orderLine);
+                                    view.getComboOrderArticleDelete().removeItem(tmpArticle.getId());
                                     setOrderConfirmationYes();
                                     break;
                                 } else {
@@ -500,7 +502,6 @@ public class Controller {
         view.getComboAdminSupplierId().removeItem(articleId);
         view.getComboAdminArticleSupplier().removeItem(articleId);
     }
-
 
     public void customizeArticleToComboBoxesList() {
         try {
