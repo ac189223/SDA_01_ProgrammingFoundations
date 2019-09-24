@@ -546,7 +546,7 @@ public class View {
 		btnCustomerPasswordCheck = new JButton("");
 		btnCustomerPasswordCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.goToAdminTab();
+				controller.actionAfterPasswordEntered();
 			}
 		});
 		btnCustomerPasswordCheck.setVisible(false);
@@ -866,7 +866,7 @@ public class View {
 		btnOrderPasswordCheck = new JButton("");
 		btnOrderPasswordCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.goToAdminTab();
+				controller.actionAfterPasswordEntered();
 			}
 		});
 		btnOrderPasswordCheck.setVisible(false);
@@ -970,7 +970,7 @@ public class View {
 		btnPrevievPasswordCheck = new JButton("");
 		btnPrevievPasswordCheck.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.goToAdminTab();
+				controller.actionAfterPasswordEntered();
 			}
 		});
 		btnPrevievPasswordCheck.setVisible(false);
@@ -987,7 +987,7 @@ public class View {
 			}
 		});
 		lblPreviewAdmin.setEnabled(false);
-		lblPreviewAdmin.setVisible(false);
+		//lblPreviewAdmin.setVisible(false);
 		lblPreviewAdmin.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblPreviewAdmin.setBackground(new Color(135, 206, 235));
 		lblPreviewAdmin.setForeground(new Color(0, 0, 0));

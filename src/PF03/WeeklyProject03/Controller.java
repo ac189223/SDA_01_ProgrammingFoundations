@@ -229,19 +229,13 @@ public class Controller {
             custIdIndex = view.getTxtCustomerId().getSelectedIndex();
             Customer tmpCustomer = getCustomerReg().findCustomer(custId);
             if (tmpCustomer != null) {
-                disableUpperPartOfCustomer();
-                disableMiddlePartOfCustomer();
-                disableLowerPartOfCustomer();
-                view.getButtonGroupIsCustomer().clearSelection();
-                view.getPanel02().setEnabled(true);
-                view.getTabbedPane().setSelectedIndex(1);
-                view.getRdbtnOrderCreate().setEnabled(true);
-                view.getRdbtnOrderAddLine().setEnabled(true);
-                view.getRdbtnOrderDeleteArticle().setEnabled(true);
-                enableBtnOrderProceed();
-                createOrderForCustomerToComboBoxesList(tmpCustomer);
-                view.getTxtOrderCustId().setText(custId);
-                view.getTxtOrderCustIdDuplicate().setText(custId);
+                view.getTxtCustomerAdminPassword().setVisible(true);
+                view.getTxtCustomerAdminPassword().setEnabled(true);
+                view.getTxtCustomerAdminPassword().setEchoChar((char)0);
+                view.getTxtCustomerAdminPassword().setText("Enter password");
+                view.getBtnCustomerPasswordCheck().setVisible(true);
+                view.getBtnCustomerPasswordCheck().setEnabled(true);
+                view.getBtnCustomerPasswordCheck().setText("Order");
             } else {
                 setCustomerConfirmationNo();
                 view.getTxtCustomerId().setSelectedIndex(0);
@@ -268,7 +262,7 @@ public class Controller {
             view.getBtnOrderPasswordCheck().setVisible(true);
             view.getBtnOrderPasswordCheck().setEnabled(true);
             view.getBtnOrderPasswordCheck().setText("Go");
-        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+        } else if (view.getTabbedPane().getSelectedIndex() == 2) {
             view.getTxtPreviewAdminPassword().setVisible(true);
             view.getTxtPreviewAdminPassword().setEnabled(true);
             view.getTxtPreviewAdminPassword().setEchoChar((char)0);
@@ -279,10 +273,59 @@ public class Controller {
         }
     }
 
-    public void goToAdminTab() {
+    public void actionAfterPasswordEntered() {
         // GO TO ADMIN Tab as Admin
         char[] enteredPassword = null;
-        if (view.getTabbedPane().getSelectedIndex() == 0) {
+        if (view.getBtnCustomerPasswordCheck().getText().equals("Go") ||
+                view.getBtnOrderPasswordCheck().getText().equals("Go") ||
+                view.getBtnPrevievPasswordCheck().getText().equals("Go")) {
+            if (view.getTabbedPane().getSelectedIndex() == 0) {
+                enteredPassword = view.getTxtCustomerAdminPassword().getPassword();
+                view.getTxtCustomerAdminPassword().setText("");
+                view.getTxtCustomerAdminPassword().setEnabled(false);
+                view.getTxtCustomerAdminPassword().setVisible(false);
+                view.getBtnCustomerPasswordCheck().setText("");
+                view.getBtnCustomerPasswordCheck().setEnabled(false);
+                view.getBtnCustomerPasswordCheck().setVisible(false);
+            } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+                enteredPassword = view.getTxtOrderAdminPassword().getPassword();
+                view.getTxtOrderAdminPassword().setText("");
+                view.getTxtOrderAdminPassword().setEnabled(false);
+                view.getTxtOrderAdminPassword().setVisible(false);
+                view.getBtnOrderPasswordCheck().setText("");
+                view.getBtnOrderPasswordCheck().setEnabled(false);
+                view.getBtnOrderPasswordCheck().setVisible(false);
+            } else if (view.getTabbedPane().getSelectedIndex() == 2) {
+                enteredPassword = view.getTxtPreviewAdminPassword().getPassword();
+                view.getTxtPreviewAdminPassword().setText("");
+                view.getTxtPreviewAdminPassword().setEnabled(false);
+                view.getTxtPreviewAdminPassword().setVisible(false);
+                view.getBtnPrevievPasswordCheck().setText("");
+                view.getBtnPrevievPasswordCheck().setEnabled(false);
+                view.getBtnPrevievPasswordCheck().setVisible(false);
+            }
+            if (String.copyValueOf(enteredPassword).equals("AdminPass")) {
+                disableUpperPartOfCustomer();
+                disableMiddlePartOfCustomer();
+                disableLowerPartOfCustomer();
+                view.getButtonGroupIsCustomer().clearSelection();
+                disableUpperPartOfOrder();
+                disableMiddlePartOfOrder();
+                disableLowerPartOfOrder();
+                view.getButtonGroupOrderActivity().clearSelection();
+                view.getPanel04().setEnabled(true);
+                view.getRdbtnAdminArticles().setEnabled(true);
+                view.getRdbtnAdminSuppliers().setEnabled(true);
+                view.getRdbtnAdminClients().setEnabled(true);
+                view.getButtonGroupAdminActivity().clearSelection();
+                view.getTabbedPane().setSelectedIndex(3);
+            } else if (view.getTabbedPane().getSelectedIndex() == 0) {
+                setCustomerConfirmationNo();
+            } else if (view.getTabbedPane().getSelectedIndex() == 1) {
+                setOrderConfirmationNo();
+            }
+            // GO TO CLIENT TAB as client
+        } else if (view.getBtnCustomerPasswordCheck().getText().equals("Order")) {
             enteredPassword = view.getTxtCustomerAdminPassword().getPassword();
             view.getTxtCustomerAdminPassword().setText("");
             view.getTxtCustomerAdminPassword().setEnabled(false);
@@ -290,38 +333,27 @@ public class Controller {
             view.getBtnCustomerPasswordCheck().setText("");
             view.getBtnCustomerPasswordCheck().setEnabled(false);
             view.getBtnCustomerPasswordCheck().setVisible(false);
-        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
-            enteredPassword = view.getTxtOrderAdminPassword().getPassword();
-            view.getTxtOrderAdminPassword().setText("");
-            view.getTxtOrderAdminPassword().setEnabled(false);
-            view.getTxtOrderAdminPassword().setVisible(false);
-            view.getBtnOrderPasswordCheck().setText("");
-            view.getBtnOrderPasswordCheck().setEnabled(false);
-            view.getBtnOrderPasswordCheck().setVisible(false);
-        } else if (view.getTabbedPane().getSelectedIndex() == 1) {
-            enteredPassword = view.getTxtPreviewAdminPassword().getPassword();
-            view.getTxtPreviewAdminPassword().setText("");
-            view.getTxtPreviewAdminPassword().setEnabled(false);
-            view.getTxtPreviewAdminPassword().setVisible(false);
-            view.getBtnPrevievPasswordCheck().setText("");
-            view.getBtnPrevievPasswordCheck().setEnabled(false);
-            view.getBtnPrevievPasswordCheck().setVisible(false);
-        }
-        if (String.copyValueOf(enteredPassword).equals("AdminPass")) {
-            disableUpperPartOfCustomer();
-            disableMiddlePartOfCustomer();
-            disableLowerPartOfCustomer();
-            view.getButtonGroupIsCustomer().clearSelection();
-            disableUpperPartOfOrder();
-            disableMiddlePartOfOrder();
-            disableLowerPartOfOrder();
-            view.getButtonGroupOrderActivity().clearSelection();
-            view.getPanel04().setEnabled(true);
-            view.getRdbtnAdminArticles().setEnabled(true);
-            view.getRdbtnAdminSuppliers().setEnabled(true);
-            view.getRdbtnAdminClients().setEnabled(true);
-            view.getButtonGroupAdminActivity().clearSelection();
-            view.getTabbedPane().setSelectedIndex(3);
+            if (String.copyValueOf(enteredPassword).equals("CustomPass")) {
+                String custId = (String) view.getTxtCustomerId().getSelectedItem();
+                Customer tmpCustomer = getCustomerReg().findCustomer(custId);
+                disableUpperPartOfCustomer();
+                disableMiddlePartOfCustomer();
+                disableLowerPartOfCustomer();
+                view.getButtonGroupIsCustomer().clearSelection();
+                view.getPanel02().setEnabled(true);
+                view.getTabbedPane().setSelectedIndex(1);
+                view.getRdbtnOrderCreate().setEnabled(true);
+                view.getRdbtnOrderAddLine().setEnabled(true);
+                view.getRdbtnOrderDeleteArticle().setEnabled(true);
+                enableBtnOrderProceed();
+                createOrderForCustomerToComboBoxesList(tmpCustomer);
+                view.getTxtOrderCustId().setText(custId);
+                view.getTxtOrderCustIdDuplicate().setText(custId);
+            } else {
+                view.getTxtCustomerAdminPassword().setVisible(false);
+                view.getBtnCustomerPasswordCheck().setVisible(false);
+                setCustomerConfirmationNo();
+            }
         }
     }
 
