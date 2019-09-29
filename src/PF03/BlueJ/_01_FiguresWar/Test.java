@@ -95,6 +95,7 @@ public class Test {
         if (distance(ifWinner, ifLooser) < ifWinner.getRadius() + ifLooser.getRadius()) {
             caught = true;
             winner = ifWinner;
+            goOver(ifWinner, ifLooser);
         }
     }
 
@@ -131,6 +132,11 @@ public class Test {
             squareRoot = (startValue + endValue) / 2;
         }
         return squareRoot;
+    }
+
+    private void goOver(Circle ifWinner, Circle ifLooser) {
+        ifWinner.slowMoveHorizontal(ifLooser.getXMiddle() - ifWinner.getXMiddle());
+        ifWinner.slowMoveVertical(ifLooser.getYMiddle() - ifWinner.getYMiddle());
     }
 
     private void closure(Canvas canvas, Circle blue) {
