@@ -8,7 +8,6 @@ public class Test {
     private static Test test = new Test();
     private Circle blue;
     private boolean hasTarget = false;
-    private boolean onTarget = false;
     private Circle headOfSnake;
     private ArrayList<Circle> snake = new ArrayList<>();
     private Circle targetCircle;
