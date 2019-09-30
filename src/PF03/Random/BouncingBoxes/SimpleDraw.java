@@ -11,7 +11,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/** Displays a window and delegates drawing to _063_DrawGraphics. */
+/** Displays a window and delegates drawing to DrawGraphics. */
 public class SimpleDraw extends JPanel implements Runnable {
     private static final long serialVersionUID = -7469734580960165754L;
     private boolean animate = true;
