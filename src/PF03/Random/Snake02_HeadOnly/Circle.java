@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake04;
+package PF03.Random.Snake02_HeadOnly;
 
 import java.awt.geom.Ellipse2D;
 
@@ -134,7 +134,7 @@ public class Circle {
     private void draw() {
         if (isVisible) {
             Canvas canvas = Canvas.getCanvas();
-            canvas.draw(this, color, new Ellipse2D.Double(xPosition, yPosition,
+            canvas.draw(this, color, new Ellipse2D.Double(xPosition, yPosition, 
                                                           diameter, diameter));
             canvas.wait(10);
         }

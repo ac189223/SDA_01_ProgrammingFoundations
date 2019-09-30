@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake02_HeadOnly;
+package PF03.Random.Snake01_GreenFever;
 
 import javax.swing.*;
 import java.awt.*;

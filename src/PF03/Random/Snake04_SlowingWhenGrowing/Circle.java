@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake03_SquareLoosingTail;
+package PF03.Random.Snake04_SlowingWhenGrowing;
 
 import java.awt.geom.Ellipse2D;
 

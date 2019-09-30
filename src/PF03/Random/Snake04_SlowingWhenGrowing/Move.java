@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake04;
+package PF03.Random.Snake04_SlowingWhenGrowing;
 
 public class Move {
     private int horizontal;

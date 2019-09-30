@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake02_HeadOnly;
+package PF03.Random.Snake01_GreenFever;
 
 import java.awt.geom.Ellipse2D;
 
@@ -16,10 +16,17 @@ public class Circle {
         this.setColor("blue");
     }
 
-    public Circle(double xPosition, double yPosition, double diameter, String color) {
-        this.setxPosition(xPosition);
-        this.setyPosition(yPosition);
-        this.setDiameter(diameter);
+    public Circle(double xMiddle, double yMiddle, double radius) {
+        this.setxPosition(xMiddle - radius);
+        this.setyPosition(yMiddle - radius);
+        this.setDiameter(radius * 2);
+        this.setColor("blue");
+    }
+
+    public Circle(double xMiddle, double yMiddle, double radius, String color) {
+        this.setxPosition(xMiddle - radius);
+        this.setyPosition(yMiddle - radius);
+        this.setDiameter(radius * 2);
         this.setColor(color);
     }
 
@@ -34,6 +41,15 @@ public class Circle {
     public void setDiameter(double diameter) { this.diameter = diameter; }
     public void setColor(String color) { this.color = color; }
     public void setVisible(boolean visible) { isVisible = visible; }
+
+    public double getXMiddle() { return xPosition + diameter / 2; }
+    public void setXMiddle(double xPosition) { this.xPosition = xPosition; }
+
+    public double getYMiddle() { return yPosition + diameter / 2; }
+    public void setYMiddle(double yPosition) { this.yPosition = yPosition; }
+
+    public double getRadius() { return diameter / 2; }
+    public void setRadius(double diameter) { this.diameter = diameter; }
 
     public void makeVisible() {
         isVisible = true;

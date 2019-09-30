@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake03_SquareLoosingTail;
+package PF03.Random.Snake03_SquareLoosingTail;
 
 import java.awt.*;
 import java.util.ArrayList;

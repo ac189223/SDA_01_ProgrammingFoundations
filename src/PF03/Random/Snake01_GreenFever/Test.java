@@ -1,4 +1,4 @@
-package PF03.BlueJ._01_FiguresSnake01_GreenFever;
+package PF03.Random.Snake01_GreenFever;
 
 import java.awt.*;
 import java.util.ArrayList;
