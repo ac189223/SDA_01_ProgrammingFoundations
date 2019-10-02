@@ -1,4 +1,4 @@
-package PF03.BlueJ._08_Zuul;
+package PF04_IndividualProject._08_Zuul;
 
 /**
  * Representations for all the valid command words for the game

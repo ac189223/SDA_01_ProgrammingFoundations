@@ -1,8 +1,7 @@
-package PF03.BlueJ._08_Zuul;
+package PF04_IndividualProject._08_Zuul;
 
 import java.util.Set;
 import java.util.HashMap;
-import java.util.Iterator;
 
 /**
  * Class Room - a room in an adventure game.
