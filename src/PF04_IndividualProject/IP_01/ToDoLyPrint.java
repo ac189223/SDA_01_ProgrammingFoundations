@@ -5,21 +5,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Test {
-    private static Test t = new Test();
+public class ToDoLyPrint {
+    private static ToDoLyPrint t = new ToDoLyPrint();
     private Register reg = new Register();
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("=-_-=");
-        int optionChosen;                               // Main choice what to do
 
         //    UIManager.put("OptionPane.minimumSize",new Dimension(300,300));
 
         /** Create data and take a look on it */
-        t.createData();
+    //    t.createData();
+        t.reg.uploadData("src/PF04_IndividualProject/Resources/IPData.csv");
         t.reg.printStatus();
 
-        optionChosen = -1;
+        int optionChosen = -1;               // Main choice what to do
         while (true) {
             Object[] options = {4, 3, 2, 1};
             while (optionChosen < 0 || optionChosen > 3)
@@ -41,11 +41,8 @@ public class Test {
             switch (optionChosen) {
                 case 0:     // Save and quit
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    JOptionPane.showMessageDialog(frame,
-                            "Your data were saved to file. " +
-                                    "\nThank you for visiting us - come again in the future",
-                            "ToDoLy    =-_-=",
-                            JOptionPane.PLAIN_MESSAGE);
+                    showMessage(frame, "Your data were saved to file. " +
+                            "\nThank you for visiting us - come again in the future");
                     System.exit(0);
 
                 case 1:     // Edit task
@@ -79,28 +76,21 @@ public class Test {
                         }
                         switch (chosenActivity) {
                             case 0:     // Back to main menu
-                                optionChosen = -1;
                                 break;
 
                             case 1:     // Remove task
                                 t.reg.removeTask(chosenTask);
-                                JOptionPane.showMessageDialog(frame,
-                                        "Task was removed from the register",
-                                        "ToDoLy    =-_-=",
-                                        JOptionPane.PLAIN_MESSAGE);
+                                showMessage(frame, "Task was removed from the register");
                                 break;
 
                             case 2:     // Mark as done
                                 t.reg.markTaskAsDone(chosenTask);
-                                JOptionPane.showMessageDialog(frame,
-                                        "Task was marked as done",
-                                        "ToDoLy    =-_-=",
-                                        JOptionPane.PLAIN_MESSAGE);
+                                showMessage(frame, "Task was marked as done");
                                 break;
 
                             case 3:     // Edit fields
                                 int chosenField = -1;
-                                while (chosenField < 0 || chosenField > 3) {
+                                while (chosenField < 0 || chosenField > 4) {
                                     Object[] fields = {5, 4, 3, 2, 1};
                                     chosenField = JOptionPane.showOptionDialog(frame,
                                             "Choose activity for " + chosenTask + ":" +
@@ -118,7 +108,6 @@ public class Test {
 
                                     switch (chosenField) {
                                         case 0:     // Back to main menu
-                                            optionChosen = -1;
                                             break;
 
                                         case 1:     // Set status
@@ -137,10 +126,7 @@ public class Test {
                                                 t.reg.findTask(chosenTask).setDone(true);
                                             else
                                                 t.reg.findTask(chosenTask).setDone(false);
-                                            JOptionPane.showMessageDialog(frame,
-                                                    "Task status was fixed",
-                                                    "ToDoLy    =-_-=",
-                                                    JOptionPane.PLAIN_MESSAGE);
+                                            showMessage(frame, "Task status was fixed");
                                             break;
 
                                         case 2:     // Reassign to project
@@ -158,17 +144,11 @@ public class Test {
                                                 } while (!t.reg.getTasksIds().contains(chosenTask));
                                                 t.reg.removeTaskFromProject(chosenTask);
                                                 t.reg.addTaskToProject(chosenTask, chosenProject);
-                                                JOptionPane.showMessageDialog(frame,
-                                                        "Task was reassigned",
-                                                        "ToDoLy    =-_-=",
-                                                        JOptionPane.PLAIN_MESSAGE);
+                                                showMessage(frame, "Task was reassigned");
                                                 break;
 
                                             } else {
-                                                JOptionPane.showMessageDialog(frame,        // No input yet about projects
-                                                        "There are no projects stored",
-                                                        "ToDoLy    =-_-=",
-                                                        JOptionPane.PLAIN_MESSAGE);
+                                                showMessage(frame, "There are no projects stored");
                                                 break;
                                             }
 
@@ -207,45 +187,40 @@ public class Test {
                                             } while (!days.contains(chosenDueDateDay));
                                             String chosenDueDate = chosenDueDateMonth + chosenDueDateDay;
                                             t.reg.findTask(chosenTask).setDueDate(chosenDueDate);
-                                            JOptionPane.showMessageDialog(frame,
-                                                    "Tasks due date was changed",
-                                                    "ToDoLy    =-_-=",
-                                                    JOptionPane.PLAIN_MESSAGE);
+                                            showMessage(frame, "Tasks due date was changed");
                                             break;
 
                                         case 4:
                                             String chosenTitle = "";
                                             do {
-                                                chosenTitle = JOptionPane.showInputDialog(frame,        // Ask for score
+                                                do {
+                                                chosenTitle = JOptionPane.showInputDialog(frame,        // Ask for title
                                                         "Enter new title ",
                                                         "ToDoLy    =-_-=",
                                                         JOptionPane.PLAIN_MESSAGE);
+                                                } while (chosenTitle == null);
                                             } while (chosenTitle.equals(""));
                                             t.reg.findTask(chosenTask).setTitle(chosenTitle);
-                                            JOptionPane.showMessageDialog(frame,
-                                                    "Tasks title was changed",
-                                                    "ToDoLy    =-_-=",
-                                                    JOptionPane.PLAIN_MESSAGE);
+                                            showMessage(frame, "Tasks title was changed");
                                             break;
                                     }
                                 }
                         }
                     } else {
-                        JOptionPane.showMessageDialog(frame,        // No input yet about tasks
-                                "There are no tasks stored",
-                                "ToDoLy    =-_-=",
-                                JOptionPane.PLAIN_MESSAGE);
+                        showMessage(frame, "There are no tasks stored");
                         break;
                     }
-
+                break;
 
                 case 2:     // Add new task
                     String newTitle = "";
                     do {
-                        newTitle = JOptionPane.showInputDialog(frame,        // Ask for task title
-                                "Enter task title ",
-                                "ToDoLy    =-_-=",
-                                JOptionPane.PLAIN_MESSAGE);
+                        do {
+                            newTitle = JOptionPane.showInputDialog(frame,        // Ask for task title
+                                    "Enter task title ",
+                                    "ToDoLy    =-_-=",
+                                    JOptionPane.PLAIN_MESSAGE);
+                        } while (newTitle == null);
                     } while (newTitle.equals(""));
                     String chosenDueDateMonth = "";
                     List<String> months = new ArrayList<>(Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
@@ -281,30 +256,20 @@ public class Test {
                     } while (!days.contains(chosenDueDateDay));
                     String newDueDate = chosenDueDateMonth + chosenDueDateDay;
                     t.reg.addTask(new Task(newTitle, newDueDate));
-                    JOptionPane.showMessageDialog(frame,
-                            "New tasks was added as " + t.reg.getTasks().get(t.reg.getTasks().size() - 1).getId(),
-                            "ToDoLy    =-_-=",
-                            JOptionPane.PLAIN_MESSAGE);
+                    showMessage(frame, "New tasks was added as " + t.reg.getTasks().get(t.reg.getTasks().size() - 1).getId());
                     break;
 
                 case 3:     // Print out
                     if (t.reg.getTasks().size() == 0) {
-                        JOptionPane.showMessageDialog(frame,        // No input yet
-                                "There are no tasks stored !",
-                                "ToDoLy    =-_-=",
-                                JOptionPane.PLAIN_MESSAGE);
-                        break;
+                        showMessage(frame, "There are no tasks stored !");
+                    } else {
+                        StringBuilder lineToPrint = new StringBuilder();
+                        for (Task task : t.reg.getTasks()) {        // Add tasks to string
+                            lineToPrint.append("\n").append(task.getId()).append(" - ")
+                                    .append(task.getTitle()).append(" with due date ").append(task.getDueDate());
+                        }
+                        showMessage(frame, "Tasks:" + lineToPrint);
                     }
-
-                    StringBuilder lineToPrint = new StringBuilder();
-                    for (Task task: t.reg.getTasks()) {        // Add tasks to string
-                        lineToPrint.append("\n").append(task.getId()).append(" - ")
-                                .append(task.getTitle()).append(" with due date ").append(task.getDueDate());
-                    }
-                    JOptionPane.showMessageDialog(frame,        // Print all scores
-                            "Tasks:" + lineToPrint,
-                            "ToDoLy    =-_-=",
-                            JOptionPane.PLAIN_MESSAGE);
                     break;
             }
             // Reset to be able to print initial screen
@@ -345,12 +310,20 @@ public class Test {
         reg.markProjectAsDone(reg.getProjects().get(0).getId());
     }
 
+    private static void showMessage(JFrame frame, String message) {
+        JOptionPane.showMessageDialog(frame,
+                message,
+                "ToDoLy    =-_-=",
+                JOptionPane.PLAIN_MESSAGE);
+
+    }
+
     private static String amountDone() {
-        return null;
+        return String.valueOf(t.reg.getTasks().stream().filter(task -> task.ifDone()).count());
     }
 
     private static String amountToDo() {
-        return null;
+        return String.valueOf(t.reg.getTasks().stream().filter(task -> !task.ifDone()).count());
     }
 
 }

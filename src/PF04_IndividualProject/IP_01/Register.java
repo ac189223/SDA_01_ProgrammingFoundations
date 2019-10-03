@@ -26,6 +26,16 @@ public class Register {
     public void setProjects(ArrayList<Project> projects) { this.projects = projects; }
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
 
+    public void uploadData(String fileName) {
+        DataReader dataReader = new DataReader();
+        tasks = dataReader.getData(fileName).getTasks();
+        tasksIds = dataReader.getData(fileName).getTasksIds();
+        projects = dataReader.getData(fileName).getProjects();
+        projectsIds = dataReader.getData(fileName).getProjectsIds();
+        tasks.stream().filter(task -> !task.getAssignedToProject().equals(""))
+                .forEach(task -> addTaskToProject(task.getId(), task.getAssignedToProject()));
+    }
+
     public void addTask(Task task) {
         task.setId("task" + randomId(getTasksIds()));
         getTasks().add(task);
@@ -58,8 +68,8 @@ public class Register {
 
     public void markProjectAsDone(String id) {
         boolean check = true;
-        for (Task task: findProject(id).getAssignedTasks()) {
-            if (!task.ifDone())
+        for (String taskId: findProject(id).getAssignedTasks()) {
+            if (!findTask(taskId).ifDone())
                 check = false;
         }
         if (check)
@@ -76,36 +86,36 @@ public class Register {
     }
 
     public void addTaskToProject(String taskId, String projectId) {
-        findTask(taskId).setAssignedToProject(findProject(projectId));
-        findProject(projectId).getAssignedTasks().add(findTask(taskId));
+        findTask(taskId).setAssignedToProject(projectId);
+        findProject(projectId).getAssignedTasks().add(taskId);
     }
 
     public void removeTaskFromProject(String taskId) {
-        if (findTask(taskId).getAssignedToProject() != null) {
-            findTask(taskId).getAssignedToProject().getAssignedTasks().remove(findTask(taskId));
-            findTask(taskId).setAssignedToProject(null);
+        if (findTask(taskId).getAssignedToProject() != "") {
+            findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
+            findTask(taskId).setAssignedToProject("");
         }
     }
 
     public void removeAllTasksFromProject(String projectId) {
-        ArrayList<Task> assignedTasks = findProject(projectId).getAssignedTasks();
+        ArrayList<String> assignedTasks = findProject(projectId).getAssignedTasks();
         while (assignedTasks.size() > 0) {
-            assignedTasks.get(0).setAssignedToProject(null);
+            findTask(assignedTasks.get(0)).setAssignedToProject("");
             findProject(projectId).getAssignedTasks().remove(assignedTasks.get(0));
         }
     }
 
     public void removeTask(String taskId) {
-        if (findTask(taskId).getAssignedToProject() != null)
-            findTask(taskId).getAssignedToProject().getAssignedTasks().remove(findTask(taskId));
+        if (!findTask(taskId).getAssignedToProject().equals(""))
+            findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
         getTasks().remove(findTask(taskId));
         getTasksIds().remove(taskId);
     }
 
     public void removeProjectAlways(String projectId) {
-        for (Task task: findProject(projectId).getAssignedTasks()) {
-            getTasksIds().remove(task.getId());
-            getTasks().remove(task);
+        for (String taskId: findProject(projectId).getAssignedTasks()) {
+            getTasksIds().remove(taskId);
+            getTasks().remove(findTask(taskId));
         }
         getProjectsIds().remove(projectId);
         getProjects().remove(findProject(projectId));
@@ -126,16 +136,16 @@ public class Register {
             else
                 System.out.print("(-)");
             System.out.println("  " + project.getId() + ": " + project.getTitle() + " with due date " + project.getDueDate());
-            for (Task task : project.getAssignedTasks()) {
-                if (task.ifDone())
+            for (String taskId : project.getAssignedTasks()) {
+                if (findTask(taskId).ifDone())
                     System.out.print("(+)");
                 else
                     System.out.print("(-)");
-                System.out.println("        " + task.getId() + ": " + task.getTitle() + " with due date " + task.getDueDate());
+                System.out.println("        " + taskId + ": " + findTask(taskId).getTitle() + " with due date " + findTask(taskId).getDueDate());
             }
         }
         for (Task task: getTasks()) {
-            if (task.getAssignedToProject() == null) {
+            if (task.getAssignedToProject() == "") {
                 if (task.ifDone())
                     System.out.print("(+)");
                 else
@@ -145,4 +155,5 @@ public class Register {
         }
         System.out.println("==============  =-_-=  ================");
     }
+
 }
