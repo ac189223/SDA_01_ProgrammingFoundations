@@ -1,9 +1,9 @@
 package PF04_IndividualProject.IP_01;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ToDoLyPrint {
     private static ToDoLyPrint t = new ToDoLyPrint();
@@ -12,10 +12,7 @@ public class ToDoLyPrint {
     public static void main(String[] args) {
         JFrame frame = new JFrame("=-_-=");
 
-        //    UIManager.put("OptionPane.minimumSize",new Dimension(300,300));
-
         /** Create data and take a look on it */
-    //    t.createData();
         t.reg.uploadData("src/PF04_IndividualProject/Resources/IPData.csv");
         t.reg.printStatus();
 
@@ -24,13 +21,12 @@ public class ToDoLyPrint {
             Object[] options = {4, 3, 2, 1};
             while (optionChosen < 0 || optionChosen > 3)
                 optionChosen = JOptionPane.showOptionDialog(frame,
-                        "Welcome to ToDoLy " +
-                                "\n\nYou have " + amountToDo() + " tasks todo and " + amountDone() + " tasks are done" +
-                                "\nPick an option:" +
-                                "\n\n(1) Show Task List (by date or object)" +
-                                "\n(2) Add New Task" +
-                                "\n(3) Edit Task (update, mark as done, remove)" +
-                                "\n(4) Save and Quit",
+                        "You have " + amountToDo() + " tasks todo and " + amountDone() + " tasks are done" +
+                                "\n\nChoose an option" +
+                                "\n\n(1) Show tasks (sorted by project, due date, Id or title)" +
+                                "\n(2) Add new task" +
+                                "\n(3) Edit task (update, mark as done, remove)" +
+                                "\n(4) Save and quit",
                         "ToDoLy    =-_-=",
                         JOptionPane.YES_NO_CANCEL_OPTION,
                         JOptionPane.PLAIN_MESSAGE,
@@ -41,7 +37,8 @@ public class ToDoLyPrint {
             switch (optionChosen) {
                 case 0:     // Save and quit
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    showMessage(frame, "Your data were saved to file. " +
+                    t.reg.saveData("src/PF04_IndividualProject/Resources/IPData.csv");
+                    showMessage(frame, "Your data was saved to file" +
                             "\nThank you for visiting us - come again in the future");
                     System.exit(0);
 
@@ -62,8 +59,8 @@ public class ToDoLyPrint {
                         while (chosenActivity < 0 || chosenActivity > 3) {
                             Object[] activities = {4, 3, 2, 1};
                             chosenActivity = JOptionPane.showOptionDialog(frame,
-                                    "Choose activity for " + chosenTask + ":" +
-                                            "\n\n(1) Update" +
+                                    "Choose activity for " + chosenTask +
+                                            "\n\n(1) Update (title, due date, project assignment, status)" +
                                             "\n(2) Mark as done" +
                                             "\n(3) Remove" +
                                             "\n(4) Back to main menu",
@@ -93,7 +90,7 @@ public class ToDoLyPrint {
                                 while (chosenField < 0 || chosenField > 4) {
                                     Object[] fields = {5, 4, 3, 2, 1};
                                     chosenField = JOptionPane.showOptionDialog(frame,
-                                            "Choose activity for " + chosenTask + ":" +
+                                            "Choose field to update for " + chosenTask +
                                                     "\n\n(1) Title" +
                                                     "\n(2) Due date" +
                                                     "\n(3) Project assignment" +
@@ -111,18 +108,20 @@ public class ToDoLyPrint {
                                             break;
 
                                         case 1:     // Set status
-                                            String chosenStatus;
-                                            do {
-                                                Object[] statusChoices = {"Done", "In progress", "Not started"};
-                                                chosenStatus = (String) JOptionPane.showInputDialog(frame,
-                                                        "Choose a status from a list",
+                                            int chosenStatus = -1;
+                                            while (chosenStatus < 0 || chosenStatus > 1) {
+                                                Object[] statusChoices = {"Done", "Not done"};
+                                                chosenStatus = JOptionPane.showOptionDialog(frame,
+                                                        "Choose status",
                                                         "ToDoLy    =-_-=",
+                                                        JOptionPane.YES_NO_CANCEL_OPTION,
                                                         JOptionPane.PLAIN_MESSAGE,
                                                         null,
                                                         statusChoices,
                                                         statusChoices[0]);
-                                            } while (!t.reg.getTasksIds().contains(chosenTask));
-                                            if (chosenStatus.equals("Done"))
+                                            }
+
+                                            if (chosenStatus == 0)
                                                 t.reg.findTask(chosenTask).setDone(true);
                                             else
                                                 t.reg.findTask(chosenTask).setDone(false);
@@ -142,6 +141,7 @@ public class ToDoLyPrint {
                                                             projectChoices,
                                                             projectChoices[0]);
                                                 } while (!t.reg.getTasksIds().contains(chosenTask));
+
                                                 t.reg.removeTaskFromProject(chosenTask);
                                                 t.reg.addTaskToProject(chosenTask, chosenProject);
                                                 showMessage(frame, "Task was reassigned");
@@ -153,39 +153,16 @@ public class ToDoLyPrint {
                                             }
 
                                         case 3:     // Change due date
-                                            String chosenDueDateMonth = "";
-                                            List<String> months = new ArrayList<>(Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
+                                            String chosenDueDate = "";
+                                            DateValidator dateValidator = new DateValidator();
                                             do {
-                                                Object[] dueDateMonthChoices = months.toArray();
-                                                chosenDueDateMonth = (String) JOptionPane.showInputDialog(frame,
-                                                        "Choose a month of due date",
-                                                            "ToDoLy    =-_-=",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                            null,
-                                                                dueDateMonthChoices,
-                                                                dueDateMonthChoices[0]);
-                                            } while (!months.contains(chosenDueDateMonth));
-                                            List<String> days = new ArrayList<>(Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13",
-                                                    "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28"));
-                                            if (!chosenDueDateMonth.equals("02")) {
-                                                days.add("29");
-                                                days.add("30");
-                                            } else if (chosenDueDateMonth.equals("01") || chosenDueDateMonth.equals("03") || chosenDueDateMonth.equals("05") ||
-                                                    chosenDueDateMonth.equals("07") || chosenDueDateMonth.equals("08") || chosenDueDateMonth.equals("10") ||
-                                                    chosenDueDateMonth.equals("12"))
-                                                days.add("31");
-                                            String chosenDueDateDay = "";
-                                            do {
-                                                Object[] dueDateDaysChoices = days.toArray();
-                                                chosenDueDateDay = (String) JOptionPane.showInputDialog(frame,
-                                                        "Choose a day of due date",
-                                                        "ToDoLy    =-_-=",
-                                                        JOptionPane.PLAIN_MESSAGE,
-                                                        null,
-                                                        dueDateDaysChoices,
-                                                        dueDateDaysChoices[0]);
-                                            } while (!days.contains(chosenDueDateDay));
-                                            String chosenDueDate = chosenDueDateMonth + chosenDueDateDay;
+                                                do {
+                                                    do {
+                                                        chosenDueDate = inputLine(frame, "Enter new due date (yyyyMMdd)");    // Ask for due date
+                                                    } while (chosenDueDate == null);
+                                                } while (chosenDueDate.equals(""));
+                                            } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));
+
                                             t.reg.findTask(chosenTask).setDueDate(chosenDueDate);
                                             showMessage(frame, "Tasks due date was changed");
                                             break;
@@ -194,12 +171,10 @@ public class ToDoLyPrint {
                                             String chosenTitle = "";
                                             do {
                                                 do {
-                                                chosenTitle = JOptionPane.showInputDialog(frame,        // Ask for title
-                                                        "Enter new title ",
-                                                        "ToDoLy    =-_-=",
-                                                        JOptionPane.PLAIN_MESSAGE);
+                                                chosenTitle = inputLine(frame, "Enter new title");     // Ask for title
                                                 } while (chosenTitle == null);
                                             } while (chosenTitle.equals(""));
+
                                             t.reg.findTask(chosenTask).setTitle(chosenTitle);
                                             showMessage(frame, "Tasks title was changed");
                                             break;
@@ -216,58 +191,73 @@ public class ToDoLyPrint {
                     String newTitle = "";
                     do {
                         do {
-                            newTitle = JOptionPane.showInputDialog(frame,        // Ask for task title
-                                    "Enter task title ",
-                                    "ToDoLy    =-_-=",
-                                    JOptionPane.PLAIN_MESSAGE);
+                            newTitle = inputLine(frame, "Enter task title");        // Ask for title
                         } while (newTitle == null);
                     } while (newTitle.equals(""));
-                    String chosenDueDateMonth = "";
-                    List<String> months = new ArrayList<>(Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"));
+
+                    String newDueDate = "";
+                    DateValidator dateValidator = new DateValidator();
                     do {
-                        Object[] dueDateMonthChoices = months.toArray();
-                        chosenDueDateMonth = (String) JOptionPane.showInputDialog(frame,
-                                "Choose a month of due date",
-                                "ToDoLy    =-_-=",
-                                JOptionPane.PLAIN_MESSAGE,
-                                null,
-                                dueDateMonthChoices,
-                                dueDateMonthChoices[0]);
-                    } while (!months.contains(chosenDueDateMonth));
-                    List<String> days = new ArrayList<>(Arrays.asList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10","11", "12", "13",
-                            "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28"));
-                    if (!chosenDueDateMonth.equals("02")) {
-                        days.add("29");
-                        days.add("30");
-                    } else if (chosenDueDateMonth.equals("01") || chosenDueDateMonth.equals("03") || chosenDueDateMonth.equals("05") ||
-                            chosenDueDateMonth.equals("07") || chosenDueDateMonth.equals("08") || chosenDueDateMonth.equals("10") ||
-                            chosenDueDateMonth.equals("12"))
-                        days.add("31");
-                    String chosenDueDateDay = "";
-                    do {
-                        Object[] dueDateDaysChoices = days.toArray();
-                        chosenDueDateDay = (String) JOptionPane.showInputDialog(frame,
-                                "Choose a day of due date",
-                                "ToDoLy    =-_-=",
-                                JOptionPane.PLAIN_MESSAGE,
-                                null,
-                                dueDateDaysChoices,
-                                dueDateDaysChoices[0]);
-                    } while (!days.contains(chosenDueDateDay));
-                    String newDueDate = chosenDueDateMonth + chosenDueDateDay;
-                    t.reg.addTask(new Task(newTitle, newDueDate));
+                        do {
+                            do {
+                                newDueDate = inputLine(frame, "Enter due date (yyyyMMdd)");        // Ask for due date
+                            } while (newDueDate == null);
+                        } while (newDueDate.equals(""));
+                    } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));t.reg.addTask(new Task(newTitle, newDueDate));
+
                     showMessage(frame, "New tasks was added as " + t.reg.getTasks().get(t.reg.getTasks().size() - 1).getId());
                     break;
 
                 case 3:     // Print out
                     if (t.reg.getTasks().size() == 0) {
-                        showMessage(frame, "There are no tasks stored !");
+                        showMessage(frame, "There are no tasks stored");
+
                     } else {
-                        StringBuilder lineToPrint = new StringBuilder();
-                        for (Task task : t.reg.getTasks()) {        // Add tasks to string
-                            lineToPrint.append("\n").append(task.getId()).append(" - ")
-                                    .append(task.getTitle()).append(" with due date ").append(task.getDueDate());
+                        int chosenSorting = -1;
+                        while (chosenSorting < 0 || chosenSorting > 3) {
+                            Object[] sortingChoices = {"project", "due date", "Id", "title"};
+                            chosenSorting = JOptionPane.showOptionDialog(frame,
+                                    "Print tasks sorted by",
+                                    "ToDoLy    =-_-=",
+                                    JOptionPane.YES_NO_CANCEL_OPTION,
+                                    JOptionPane.PLAIN_MESSAGE,
+                                    null,
+                                    sortingChoices,
+                                    sortingChoices[0]);
                         }
+
+                        StringBuilder lineToPrint = new StringBuilder();
+                        List<Task> sortedList = null;
+                        switch (chosenSorting) {
+                            case 0:
+                                sortedList = t.reg.getTasks().stream()        // Sort by project
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
+                                        .stream()
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                break;
+
+                            case 1:
+                                sortedList = t.reg.getTasks().stream()        // Sort by due date
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
+                                        .stream()
+                                        .sorted(Comparator.comparing(Task::getDueDate)).collect(Collectors.toList());
+                                break;
+
+                            case 2:
+                                sortedList = t.reg.getTasks().stream()        // Sort by Id
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                break;
+
+                            case 3:
+                                sortedList = t.reg.getTasks().stream()        // Sort by title
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
+                                        .stream()
+                                        .sorted(Comparator.comparing(Task::getTitle)).collect(Collectors.toList());
+                                break;
+                        }
+                        sortedList.forEach(task -> lineToPrint        // Add tasks to string
+                                    .append("\n").append(task.getId()).append(" - ")
+                                    .append(task.getTitle()).append(" with due date ").append(task.getDueDate()));
                         showMessage(frame, "Tasks:" + lineToPrint);
                     }
                     break;
@@ -277,45 +267,19 @@ public class ToDoLyPrint {
         }
     }
 
-    private void createData() {
-        createTasks();
-        createProjects();
-        connect();
-        markDone();
-    }
-
-    private void createTasks() {
-        reg.addTask(new Task("clean kitchen", "1019"));
-        reg.addTask(new Task("wash car", "1006"));
-        reg.addTask(new Task("cut grass", "1002"));
-        reg.addTask(new Task("fix doors", "1030"));
-        reg.addTask(new Task("buy shoes", "1021"));
-        reg.addTask(new Task("paint walls", "1014"));
-    }
-
-    private void createProjects() {
-        reg.addProject(new Project("inside", "1101"));
-        reg.addProject(new Project("outside", "1115"));
-    }
-
-    private void connect() {
-        reg.addTaskToProject(reg.getTasks().get(3).getId(), reg.getProjects().get(0).getId());
-        reg.addTaskToProject(reg.getTasks().get(1).getId(), reg.getProjects().get(1).getId());
-        reg.addTaskToProject(reg.getTasks().get(5).getId(), reg.getProjects().get(1).getId());
-    }
-
-    private void markDone() {
-        reg.markTaskAsDone(reg.getTasks().get(2).getId());
-        reg.markTaskAsDone(reg.getTasks().get(3).getId());
-        reg.markProjectAsDone(reg.getProjects().get(0).getId());
-    }
-
     private static void showMessage(JFrame frame, String message) {
         JOptionPane.showMessageDialog(frame,
                 message,
                 "ToDoLy    =-_-=",
                 JOptionPane.PLAIN_MESSAGE);
 
+    }
+
+    private static String inputLine(JFrame frame, String message) {
+        return JOptionPane.showInputDialog(frame,
+                message,
+                "ToDoLy    =-_-=",
+                JOptionPane.PLAIN_MESSAGE);
     }
 
     private static String amountDone() {

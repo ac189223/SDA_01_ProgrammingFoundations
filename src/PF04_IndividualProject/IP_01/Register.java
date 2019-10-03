@@ -156,4 +156,9 @@ public class Register {
         System.out.println("==============  =-_-=  ================");
     }
 
+    public void saveData(String fileName) {
+        DataWriter dataWriter = new DataWriter();
+        dataWriter.removeOldLines('#', fileName);
+        dataWriter.appendNewLines(fileName, projects, tasks);
+    }
 }

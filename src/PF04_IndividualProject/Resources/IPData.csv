@@ -1,10 +1,5 @@
-# ProjectsFields: id,title,dueDate,done,assignedTasks
-# TasksFields: id,title,dueDate,done,assignedToProject
-proj092,inside,1101,false,
-proj163,outside,1115,false,
-task372,clean kitchen,1019,true,
-task002,wash car,1006,false,proj163
-task877,cut grass,1002,true,
-task287,fix doors,1030,true,proj092
-task545,buy shoes,1021,false,
-task103,paint walls,1014,false,proj163
+proj092,inside,20191101,false,
+proj163,outside,20191115,false,
+task545,buy shoes,20191021,false,
+task103,paint walls,20191014,false,proj163
+task896,wewe,20200202,false,
