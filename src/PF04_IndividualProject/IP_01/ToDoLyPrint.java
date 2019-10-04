@@ -59,7 +59,8 @@ public class ToDoLyPrint {
                         while (chosenActivity < 0 || chosenActivity > 3) {
                             Object[] activities = {4, 3, 2, 1};
                             chosenActivity = JOptionPane.showOptionDialog(frame,
-                                    "Choose activity for " + chosenTask +
+                                    "Choose activity for " + chosenTask + " (" +
+                                            t.reg.findTask(chosenTask).getTitle() + ")" +
                                             "\n\n(1) Update (title, due date, project assignment, status)" +
                                             "\n(2) Mark as done" +
                                             "\n(3) Remove" +
@@ -89,13 +90,22 @@ public class ToDoLyPrint {
                                 int chosenField = -1;
                                 while (chosenField < 0 || chosenField > 4) {
                                     Object[] fields = {5, 4, 3, 2, 1};
+                                    String fieldsMessage = "Choose field to update for " + chosenTask +
+                                            "\n\n(1) Title" + " (" + t.reg.findTask(chosenTask).getTitle() + ")" +
+                                            "\n(2) Due date" + " (" + t.reg.findTask(chosenTask).getDueDate() + ")" +
+                                            "\n(3) Project assignment";
+                                    if (!t.reg.findTask(chosenTask).getAssignedToProject().equals(""))
+                                        fieldsMessage += " (" +
+                                                t.reg.findTask(chosenTask).getAssignedToProject() + ")";
+                                    fieldsMessage += "\n(4) Status";
+                                    if (t.reg.findTask(chosenTask).ifDone() == true)
+                                        fieldsMessage += " (done)";
+                                    else
+                                        fieldsMessage += " (not done)";
+                                    fieldsMessage += "\n(5) Back to main menu";
+
                                     chosenField = JOptionPane.showOptionDialog(frame,
-                                            "Choose field to update for " + chosenTask +
-                                                    "\n\n(1) Title" +
-                                                    "\n(2) Due date" +
-                                                    "\n(3) Project assignment" +
-                                                    "\n(4) Status" +
-                                                    "\n(5) Back to main menu",
+                                             fieldsMessage,
                                             "ToDoLy    =-_-=",
                                             JOptionPane.YES_NO_CANCEL_OPTION,
                                             JOptionPane.PLAIN_MESSAGE,
@@ -203,8 +213,9 @@ public class ToDoLyPrint {
                                 newDueDate = inputLine(frame, "Enter due date (yyyyMMdd)");        // Ask for due date
                             } while (newDueDate == null);
                         } while (newDueDate.equals(""));
-                    } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));t.reg.addTask(new Task(newTitle, newDueDate));
+                    } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));
 
+                    t.reg.addTask(new Task(newTitle, newDueDate));
                     showMessage(frame, "New tasks was added as " + t.reg.getTasks().get(t.reg.getTasks().size() - 1).getId());
                     break;
 

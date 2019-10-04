@@ -20,7 +20,7 @@ public class Project {
         this.setId(id);
         this.setTitle(title);
         this.setDueDate(dueDate);
-        this.setDone(false);
+        this.setDone(done);
         this.setAssignedTasks(new ArrayList<>());
     }
 
@@ -28,7 +28,7 @@ public class Project {
         this.setId(id);
         this.setTitle(title);
         this.setDueDate(dueDate);
-        this.setDone(false);
+        this.setDone(done);
         this.setAssignedTasks(new ArrayList<>());
     }
 
