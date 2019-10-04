@@ -27,7 +27,7 @@ public class Register {
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
 
     public void uploadData(String fileName) {
-        DataReader dataReader = new DataReader();
+        DataFileOperator dataReader = new DataFileOperator();
         tasks = dataReader.getData(fileName).getTasks();
         tasksIds = dataReader.getData(fileName).getTasksIds();
         projects = dataReader.getData(fileName).getProjects();
@@ -157,8 +157,7 @@ public class Register {
     }
 
     public void saveData(String fileName) {
-        DataWriter dataWriter = new DataWriter();
-
+        DataFileOperator dataWriter = new DataFileOperator();
         dataWriter.appendNewLines(fileName, dataWriter.chooseLinesToKeep('d', fileName), projects, tasks);
     }
 }
