@@ -1,5 +1,5 @@
-# ProjectsFields: id,title,dueDate,done,assignedTasks
-# TasksFields: id,title,dueDate,done,assignedToProject
+description ProjectsFields: id,title,dueDate,done,assignedTasks
+description TasksFields: id,title,dueDate,done,assignedToProject
 proj092,inside,20191101,false,
 proj163,outside,20191115,false,
 task372,clean kitchen,20191019,true,

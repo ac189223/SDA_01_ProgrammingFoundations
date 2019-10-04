@@ -158,7 +158,7 @@ public class Register {
 
     public void saveData(String fileName) {
         DataWriter dataWriter = new DataWriter();
-        dataWriter.removeOldLines('#', fileName);
-        dataWriter.appendNewLines(fileName, projects, tasks);
+
+        dataWriter.appendNewLines(fileName, dataWriter.removeOldLines('d', fileName), projects, tasks);
     }
 }

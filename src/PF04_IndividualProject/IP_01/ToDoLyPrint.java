@@ -233,7 +233,7 @@ public class ToDoLyPrint {
                                 sortedList = t.reg.getTasks().stream()        // Sort by project
                                         .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
                                         .stream()
-                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                        .sorted(Comparator.comparing(Task::getAssignedToProject)).collect(Collectors.toList());
                                 break;
 
                             case 1:

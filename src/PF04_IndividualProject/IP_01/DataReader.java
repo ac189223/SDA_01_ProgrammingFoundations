@@ -18,7 +18,7 @@ public class DataReader {
     public DataReader() { }
 
     // Read data from file
-    public ReadedLists getData(String filename)
+    public ReadedLists getData(String fileName)
     {
         // Create projects from a CSV input line.
         Function<String, Project> createProject =
@@ -71,19 +71,19 @@ public class DataReader {
         ArrayList<Task> tasks;
         ArrayList<Project> projects;
         try {
-            projects = Files.lines(Paths.get(filename))
+            projects = Files.lines(Paths.get(fileName))
                     .filter(record -> record.length() > 0 && record.charAt(0) == 'p' )
                     .map(createProject)
                     .filter(project -> project != null)
                     .collect(Collectors.toCollection(ArrayList::new));
-            tasks = Files.lines(Paths.get(filename))
+            tasks = Files.lines(Paths.get(fileName))
                     .filter(record -> record.length() > 0 && record.charAt(0) == 't' )
                     .map(createTask)
                     .filter(task -> task != null)
                     .collect(Collectors.toCollection(ArrayList::new));
         }
         catch(IOException e) {
-            System.out.println("Unable to open " + filename);
+            System.out.println("Unable to open " + fileName);
             tasks = new ArrayList<>();
             projects = new ArrayList<>();
         }
