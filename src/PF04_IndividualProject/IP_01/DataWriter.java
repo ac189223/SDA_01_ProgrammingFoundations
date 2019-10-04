@@ -12,24 +12,13 @@ import java.util.stream.Collectors;
 public class DataWriter {
     public DataWriter() { }
 
-    public ArrayList<String> removeOldLines(char lineContent, String fileName)
+    public ArrayList<String> chooseLinesToKeep(char lineContent, String fileName)
     {
         try {
-            File file = new File(fileName);
-            File temp = new File("_temp_");
-            PrintWriter out = new PrintWriter(new FileWriter(temp));
-//            Files.lines(file.toPath())
-  //                  .filter(record -> record.charAt(0) == 'd')
-    //                .forEach(out::println);
-
             ArrayList<String> descriptions;
-            descriptions = Files.lines(file.toPath())
-                    .filter(record -> record.charAt(0) == 'd')
+            descriptions = Files.lines(Paths.get(fileName))
+                    .filter(record -> record.charAt(0) == lineContent)
                     .collect(Collectors.toCollection(ArrayList::new));
-
-            out.flush();
-            out.close();
-            temp.renameTo(file);
             return descriptions;
         } catch (IOException e) {
             System.out.println("Unable to open " + fileName);
@@ -40,7 +29,8 @@ public class DataWriter {
     public void appendNewLines(String fileName, ArrayList<String> descriptions, ArrayList<Project> projects, ArrayList<Task> tasks) {
         try {
             File file = new File(fileName);
-            PrintWriter out = new PrintWriter(new FileWriter(file));
+            File temp = new File("_temp_");
+            PrintWriter out = new PrintWriter(new FileWriter(temp));
             descriptions.forEach(out::println);
             projects.stream()
                     .map(project -> project.getId() + "," + project.getTitle() + "," +
@@ -52,6 +42,7 @@ public class DataWriter {
                     .forEach(out::println);
             out.flush();
             out.close();
+            temp.renameTo(file);
         } catch (IOException e) {
             System.out.println("Unable to open " + fileName);
         }

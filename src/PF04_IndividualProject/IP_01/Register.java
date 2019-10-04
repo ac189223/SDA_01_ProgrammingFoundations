@@ -159,6 +159,6 @@ public class Register {
     public void saveData(String fileName) {
         DataWriter dataWriter = new DataWriter();
 
-        dataWriter.appendNewLines(fileName, dataWriter.removeOldLines('d', fileName), projects, tasks);
+        dataWriter.appendNewLines(fileName, dataWriter.chooseLinesToKeep('d', fileName), projects, tasks);
     }
 }
