@@ -21,7 +21,7 @@ public class DataFileOperator {
     public DataFileOperator() { }
 
     // Read data from file
-    public ReadedLists getData(String fileName)
+    public DataLists getData(String fileName)
     {
         // Create projects from a CSV input line.
         Function<String, Project> createProject =
@@ -96,7 +96,7 @@ public class DataFileOperator {
         ArrayList<String> projectsIds = new ArrayList<>();
         projects.stream().forEach(project -> projectsIds.add(project.getId()));
 
-        return new ReadedLists(tasks, tasksIds, projects, projectsIds);
+        return new DataLists(tasks, tasksIds, projects, projectsIds);
     }
 
     // Choose lines to keep

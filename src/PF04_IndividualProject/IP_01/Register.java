@@ -160,4 +160,11 @@ public class Register {
         DataFileOperator dataWriter = new DataFileOperator();
         dataWriter.appendNewLines(fileName, dataWriter.chooseLinesToKeep('d', fileName), projects, tasks);
     }
+
+    public void setTaskStatus(String chosenTask, int chosenStatus) {
+        if (chosenStatus == 0)
+            findTask(chosenTask).setDone(true);
+        else if (chosenStatus == 1)
+            findTask(chosenTask).setDone(false);
+    }
 }

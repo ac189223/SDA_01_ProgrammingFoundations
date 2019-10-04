@@ -25,7 +25,6 @@ public class ToDoLyPrint {
 
             switch (optionChosen) {
                 case 0:     // Save and quit
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     register.saveData(FILE_NAME);
                     showMessage(frame, buildMessage("saveData"));
                     System.exit(0);
@@ -35,19 +34,15 @@ public class ToDoLyPrint {
                         String chosenTask;
                         do {
                             Object[] choices = register.getTasksIds().toArray();
-                            chosenTask = (String) JOptionPane.showInputDialog(frame,
-                                    buildMessage("chooseTask"),
-                                    "ToDoLy    =-_-=",
-                                    JOptionPane.PLAIN_MESSAGE,
-                                    null,
-                                    choices,
-                                    choices[0]);
+                            chosenTask = showInputDialog(frame, buildMessage("chooseTask"), choices);
                         } while (!register.getTasksIds().contains(chosenTask));
+
                         int chosenActivity = -1;
                         while (chosenActivity < 0 || chosenActivity > 3) {
                             Object[] activities = {4, 3, 2, 1};
                             chosenActivity = showOptionDialog(frame, buildMessage("chooseActivity", chosenTask), activities);
                         }
+
                         switch (chosenActivity) {
                             case 0:     // Back to main menu
                                 break;
@@ -78,11 +73,7 @@ public class ToDoLyPrint {
                                                 Object[] statusChoices = {"Done", "Not done"};
                                                 chosenStatus = showOptionDialog(frame, buildMessage("chooseStatus"), statusChoices);
                                             }
-
-                                            if (chosenStatus == 0)
-                                                register.findTask(chosenTask).setDone(true);
-                                            else
-                                                register.findTask(chosenTask).setDone(false);
+                                            register.setTaskStatus(chosenTask, chosenStatus);
                                             showMessage(frame, buildMessage("fixStatus"));
                                             break;
 
@@ -92,13 +83,8 @@ public class ToDoLyPrint {
                                                 do {
                                                     do {
                                                         Object[] projectChoices = register.getProjectsIds().toArray();
-                                                        chosenProject = (String) JOptionPane.showInputDialog(frame,
-                                                                buildMessage("chooseProject"),
-                                                                "ToDoLy    =-_-=",
-                                                                JOptionPane.PLAIN_MESSAGE,
-                                                                null,
-                                                                projectChoices,
-                                                                projectChoices[0]);
+                                                        chosenProject = showInputDialog(frame,
+                                                                buildMessage("chooseProject"), projectChoices);
                                                     } while (chosenProject == null);
                                                 } while (!register.getProjectsIds().contains(chosenProject));
 
@@ -223,6 +209,19 @@ public class ToDoLyPrint {
                 JOptionPane.PLAIN_MESSAGE,null, list, list[0]);
     }
 
+    private static String showInputDialog(JFrame frame, String message, Object[] list) {
+        return (String) JOptionPane.showInputDialog(frame, message, TITLE,
+                JOptionPane.PLAIN_MESSAGE, null, list, list[0]);
+    }
+
+    private static String inputLine(JFrame frame, String message) {
+        return JOptionPane.showInputDialog(frame, message, TITLE, JOptionPane.PLAIN_MESSAGE);
+    }
+
+    private static void showMessage(JFrame frame, String message) {
+        JOptionPane.showMessageDialog(frame, message, TITLE, JOptionPane.PLAIN_MESSAGE);
+    }
+
     private static String buildMessage(String popUpIdentifier) {
         return buildMessage(popUpIdentifier, "", null);
     }
@@ -318,20 +317,6 @@ public class ToDoLyPrint {
             });
         }
         return String.valueOf(builtMessage);
-    }
-
-    private static void showMessage(JFrame frame, String message) {
-        JOptionPane.showMessageDialog(frame,
-                message,
-                "ToDoLy    =-_-=",
-                JOptionPane.PLAIN_MESSAGE);
-    }
-
-    private static String inputLine(JFrame frame, String message) {
-        return JOptionPane.showInputDialog(frame,
-                message,
-                "ToDoLy    =-_-=",
-                JOptionPane.PLAIN_MESSAGE);
     }
 
     private static String amountDone() {

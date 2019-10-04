@@ -3,6 +3,6 @@ description TasksFields: id,title,dueDate,done,assignedToProject
 proj092,inside,20191101,true,
 proj163,outside,20191115,false,
 task103,uht,20191014,false,proj163
-task405,wewe,20101010,false,proj163
-task571,wrwr,20090909,false,
-task044,kupic wino,20191004,false,
+task405,wewe,20101010,false,proj092
+task571,wrwr,20090909,false,proj163
+task044,kupic wino,20191004,true,

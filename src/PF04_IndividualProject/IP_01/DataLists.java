@@ -2,13 +2,13 @@ package PF04_IndividualProject.IP_01;
 
 import java.util.ArrayList;
 
-final class ReadedLists {
+final class DataLists {
     private final ArrayList<Task> tasks;
     private final ArrayList<String> tasksIds;
     private final ArrayList<Project> projects;
     private final ArrayList<String> projectsIds;
 
-    public ReadedLists(ArrayList<Task> tasks, ArrayList<String> tasksIds, ArrayList<Project> projects, ArrayList<String> projectsIds) {
+    public DataLists(ArrayList<Task> tasks, ArrayList<String> tasksIds, ArrayList<Project> projects, ArrayList<String> projectsIds) {
         this.tasks = tasks;
         this.tasksIds = tasksIds;
         this.projects = projects;

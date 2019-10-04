@@ -41,6 +41,4 @@ public class Task {
     public void setDueDate(String dueDate) { this.dueDate = dueDate; }
     public void setDone(boolean done) { this.done = done; }
     public void setAssignedToProject(String assignedToProject) { this.assignedToProject = assignedToProject; }
-
-
 }
