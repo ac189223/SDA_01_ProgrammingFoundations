@@ -19,8 +19,8 @@ public class ToDoLyPrint {
 
         int optionChosen = -1;               // Main choice what to do
         while (true) {
-            Object[] options = {4, 3, 2, 1};
-            while (optionChosen < 0 || optionChosen > 3)
+            Object[] options = {5, 4, 3, 2, 1};
+            while (optionChosen < 0 || optionChosen > 4)
                 optionChosen = showOptionDialog(frame, buildMessage("chooseOption"), options);
 
             switch (optionChosen) {
@@ -155,7 +155,7 @@ public class ToDoLyPrint {
                     showMessage(frame, buildMessage("addedTask"));
                     break;
 
-                case 3:     // Print out
+                case 3:     // Print out sorted
                     if (register.getTasks().size() == 0) {
                         showMessage(frame, buildMessage("noTasks"));
 
@@ -170,7 +170,7 @@ public class ToDoLyPrint {
                         switch (chosenSorting) {
                             case 0:
                                 sortedList = register.getTasks().stream()        // Sort by project
-                                        .filter(task -> task.getAssignedToProject() != "")
+                                        .filter(task -> !task.getAssignedToProject().equals(""))
                                         .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
                                         .stream()
                                         .sorted(Comparator.comparing(Task::getAssignedToProject)).collect(Collectors.toList());
@@ -195,7 +195,64 @@ public class ToDoLyPrint {
                                         .sorted(Comparator.comparing(Task::getTitle)).collect(Collectors.toList());
                                 break;
                         }
-                        showMessage(frame, buildMessage("sortedList", sortedList));
+                        showMessage(frame, buildMessage("list", sortedList));
+                    }
+                    break;
+
+                case 4:     // Print out filtered
+                    if (register.getTasks().size() == 0) {
+                        showMessage(frame, buildMessage("noTasks"));
+
+                    } else {
+                        int chosenFiltering = -1;
+                        while (chosenFiltering < 0 || chosenFiltering > 3) {
+                            Object[] filteringChoices = {"not done", "done", "not assigned", "assigned"};
+                            chosenFiltering = showOptionDialog(frame, buildMessage("chooseFiltering"), filteringChoices);
+                        }
+
+                        List<Task> filteredList = null;
+                        switch (chosenFiltering) {
+                            case 0:
+                                filteredList = register.getTasks().stream()        // Filter not done
+                                        .filter(task -> !task.ifDone())
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                break;
+
+                            case 1:
+                                filteredList = register.getTasks().stream()        // Filter done
+                                        .filter(task -> task.ifDone())
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                break;
+
+                            case 2:
+                                filteredList = register.getTasks().stream()        // Filter not assigned
+                                        .filter(task -> task.getAssignedToProject().equals(""))
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                break;
+
+                            case 3:
+                                String chosenProject = "";        // Choose project
+                                if (register.getProjects().size() != 0) {
+                                    do {
+                                        do {
+                                            Object[] projectChoices = register.getProjectsIds().toArray();
+                                            chosenProject = showInputDialog(frame,
+                                                    buildMessage("chooseProject"), projectChoices);
+                                        } while (chosenProject == null);
+                                    } while (!register.getProjectsIds().contains(chosenProject));
+
+                                } else {
+                                    showMessage(frame, buildMessage("noProjects"));
+                                }
+
+                                String finalChosenProject = chosenProject;
+                                filteredList = register.getTasks().stream()        // Filter by project assignment
+                                        .filter(task -> task.getAssignedToProject().equals(finalChosenProject))
+                                        .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                break;
+
+                        }
+                        showMessage(frame, buildMessage("list", filteredList));
                     }
                     break;
             }
@@ -241,10 +298,11 @@ public class ToDoLyPrint {
             builtMessage.append("You have ").append(amountToDo()).append(" tasks todo and ")
                     .append(amountDone()).append(" tasks are done")
                     .append("\n\nChoose an option")
-                    .append("\n\n(1) Show tasks (sorted by project, due date, Id or title)")
-                    .append("\n(2) Add new task")
-                    .append("\n(3) Edit task (update, mark as done, remove)")
-                    .append("\n(4) Save and quit");
+                    .append("\n\n(1) Filter tasks (by assignment or status)")
+                    .append("\n(2) Show tasks (sorted by project, due date, Id or title)")
+                    .append("\n(3) Add new task")
+                    .append("\n(4) Edit task (update, mark as done, remove)")
+                    .append("\n(5) Save and quit");
         } else if (popUpIdentifier.equals("saveData")) {
             builtMessage.append("Your data was saved to file");
         } else if (popUpIdentifier.equals("chooseTask")) {
@@ -303,7 +361,9 @@ public class ToDoLyPrint {
                     .append(register.getTasks().get(register.getTasks().size() - 1).getId());
         } else if (popUpIdentifier.equals("chooseSorting")) {
             builtMessage.append("Print tasks sorted by");
-        } else if (popUpIdentifier.equals("sortedList")) {
+        } else if (popUpIdentifier.equals("chooseFiltering")) {
+            builtMessage.append("Print tasks that are");
+        } else if (popUpIdentifier.equals("list")) {
             builtMessage.append("Tasks");
             sortedList.forEach(task -> {        // Add tasks to string
                 builtMessage.append("\n").append(task.getId()).append(" - ");
@@ -326,5 +386,4 @@ public class ToDoLyPrint {
     private static String amountToDo() {
         return String.valueOf(register.getTasks().stream().filter(task -> !task.ifDone()).count());
     }
-
 }
