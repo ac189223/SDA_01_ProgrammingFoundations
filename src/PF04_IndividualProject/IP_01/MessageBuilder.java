@@ -15,12 +15,28 @@ public class MessageBuilder {
     public String buildMessage(Register register, String popUpIdentifier, String chosenTask, List<Task> sortedList) {
         StringBuilder builtMessage = new StringBuilder();
 
-        if (popUpIdentifier.equals("chooseOption")) {
-            builtMessage.append("You have ").append(amountToDo(register)).append(" task");
-            if (!amountToDo(register).equals("1"))
+        if (popUpIdentifier.equals("chooseMain")) {
+            builtMessage.append("You have ")
+                    .append(amountOfTasksToDo(register) + amountOfTasksDone(register))
+                    .append(" task");
+            if ((amountOfTasksToDo(register) + amountOfTasksDone(register)) != 1)
                 builtMessage.append("s");
-            builtMessage.append(" to do and ").append(amountDone(register)).append(" task");
-            if (!amountDone(register).equals("1"))
+            builtMessage.append(" and ")
+                    .append(amountOfProjectsToDo(register) + amountOfProjectsDone(register))
+                    .append(" project");
+            if ((amountOfProjectsToDo(register) + amountOfProjectsDone(register)) != 1)
+                builtMessage.append("s")
+                        .append("\n\nChoose an option")
+                        .append("\n\n(1) Print all tasks and projects")
+                        .append("\n(2) Work with tasks")
+                        .append("\n(3) Work with projects")
+                        .append("\n(4) Save and quit");
+        } else if (popUpIdentifier.equals("chooseOption")) {
+            builtMessage.append("You have ").append(amountOfTasksToDo(register)).append(" task");
+            if (amountOfTasksToDo(register) != 1)
+                builtMessage.append("s");
+            builtMessage.append(" to do and ").append(amountOfTasksDone(register)).append(" task");
+            if (amountOfTasksDone(register) != 1)
                 builtMessage.append("s");
             builtMessage.append(" finished")
                     .append("\n\nChoose an option")
@@ -100,7 +116,7 @@ public class MessageBuilder {
                     .append("\n(3) Finished")
                     .append("\n(4) Unfinished");
         } else if (popUpIdentifier.equals("list")) {
-            builtMessage.append("Tasks");
+            builtMessage.append("Tasks\n");
             sortedList.forEach(task -> {        // Add tasks to string
                 builtMessage.append("\n").append(task.getId()).append(" - ");
                 if (task.getAssignedToProject() != "")
@@ -111,15 +127,58 @@ public class MessageBuilder {
                 else
                     builtMessage.append(" - unfinished");
             });
+        } else if (popUpIdentifier.equals("noTasksNoProjects")) {
+            builtMessage.append("There are no tasks and no projects stored");
+        } else if (popUpIdentifier.equals("listForMain")) {
+            builtMessage.append("Projects and tasks\n");
+            for (Project project: register.getProjects()) {             // Add projects
+                builtMessage.append("\n").append(project.getId()).append(" - ")
+                        .append(project.getTitle()).append(" with due date ").append(project.getDueDate());
+                if (project.ifDone())
+                    builtMessage.append(" - finished");
+                else
+                    builtMessage.append(" - unfinished");
+
+                for (String taskId : project.getAssignedTasks()) {
+                    builtMessage.append("\n    ").append(taskId).append(" - ");
+                    if (register.findTask(taskId).getAssignedToProject() != "")
+                        builtMessage.append(register.findTask(taskId).getAssignedToProject()).append(" - ");
+                    builtMessage.append(register.findTask(taskId).getTitle())
+                            .append(" with due date ").append(register.findTask(taskId).getDueDate());
+                    if (register.findTask(taskId).ifDone())
+                        builtMessage.append(" - finished");
+                    else
+                        builtMessage.append(" - unfinished");
+                }
+            }
+            for (Task task: register.getTasks()) {
+                if (task.getAssignedToProject() == "") {
+                    builtMessage.append("\n").append(task.getId()).append(" - ");
+                    if (task.getAssignedToProject() != "")
+                        builtMessage.append(task.getAssignedToProject()).append(" - ");
+                    builtMessage.append(task.getTitle()).append(" with due date ").append(task.getDueDate());
+                    if (task.ifDone())
+                        builtMessage.append(" - finished");
+                    else
+                        builtMessage.append(" - unfinished");
+                }
+            }
         }
         return String.valueOf(builtMessage);
     }
 
-    private String amountDone(Register register) {
-        return String.valueOf(register.getTasks().stream().filter(task -> task.ifDone()).count());
+    private int amountOfTasksDone(Register register) {
+        return (int) register.getTasks().stream().filter(task -> task.ifDone()).count();
     }
 
-    private String amountToDo(Register register) {
-        return String.valueOf(register.getTasks().stream().filter(task -> !task.ifDone()).count());
+    private int amountOfTasksToDo(Register register) {
+        return (int) register.getTasks().stream().filter(task -> !task.ifDone()).count();
     }
-}
+
+    private int amountOfProjectsDone(Register register) {
+        return (int) register.getProjects().stream().filter(project -> project.ifDone()).count();
+    }
+
+    private int amountOfProjectsToDo(Register register) {
+        return (int) register.getProjects().stream().filter(project -> !project.ifDone()).count();
+    }}

@@ -65,7 +65,7 @@ public class Register {
         if (check)
             findProject(id).setDone(true);
         else
-            System.out.println("Mark all dependent tasks as done first");
+            System.out.println("Mark all dependent tasks as finished first");
     }
 
     public Project findProject(String id) {
@@ -148,8 +148,8 @@ public class Register {
 
     public void setTaskStatus(String chosenTask, int chosenStatus) {
         if (chosenStatus == 0)
-            findTask(chosenTask).setDone(true);
-        else if (chosenStatus == 1)
             findTask(chosenTask).setDone(false);
+        else if (chosenStatus == 1)
+            findTask(chosenTask).setDone(true);
     }
 }
