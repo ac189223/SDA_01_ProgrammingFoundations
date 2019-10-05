@@ -26,16 +26,6 @@ public class Register {
     public void setProjects(ArrayList<Project> projects) { this.projects = projects; }
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
 
-    public void uploadData(String fileName) {
-        DataFileOperator dataReader = new DataFileOperator();
-        tasks = dataReader.getData(fileName).getTasks();
-        tasksIds = dataReader.getData(fileName).getTasksIds();
-        projects = dataReader.getData(fileName).getProjects();
-        projectsIds = dataReader.getData(fileName).getProjectsIds();
-        tasks.stream().filter(task -> !task.getAssignedToProject().equals(""))
-                .forEach(task -> addTaskToProject(task.getId(), task.getAssignedToProject()));
-    }
-
     public void addTask(Task task) {
         task.setId("task" + randomId(getTasksIds()));
         getTasks().add(task);
@@ -154,11 +144,6 @@ public class Register {
             }
         }
         System.out.println("==============  =-_-=  ================");
-    }
-
-    public void saveData(String fileName) {
-        DataFileOperator dataWriter = new DataFileOperator();
-        dataWriter.appendNewLines(fileName, dataWriter.chooseLinesToKeep('d', fileName), projects, tasks);
     }
 
     public void setTaskStatus(String chosenTask, int chosenStatus) {
