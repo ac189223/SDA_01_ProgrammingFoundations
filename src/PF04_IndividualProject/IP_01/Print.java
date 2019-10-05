@@ -2,7 +2,7 @@ package PF04_IndividualProject.IP_01;
 
 import javax.swing.*;
 
-public class PrintTasks {
+public class Print {
     private static final String TITLE = "ToDoLy    =-_-=";
 
     public static void main(String[] args) {
