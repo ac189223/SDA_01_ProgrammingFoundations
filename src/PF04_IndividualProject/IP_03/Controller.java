@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_03;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -9,7 +9,7 @@ public class Controller {
     private static final String FILE_NAME = "src/PF04_IndividualProject/Resources/IPData.csv";
     private Register register = new Register();
     private MessageBuilder messageBuilder = new MessageBuilder();
-    private Print print = new Print();
+    private PrintTasks printTasks = new PrintTasks();
     private JFrame frame = new JFrame("=-_-=");
 
     public Controller() { }
@@ -23,13 +23,13 @@ public class Controller {
         while (true) {
             Object[] options = {5, 4, 3, 2, 1};
             while (optionChosen < 0 || optionChosen > 4)
-                optionChosen = print.showOptionDialog(frame,
+                optionChosen = printTasks.showOptionDialog(frame,
                         messageBuilder.buildMessage(register,"chooseOption"), options);
 
             switch (optionChosen) {
                 case 0:     // Save and quit
                     saveData(FILE_NAME);
-                    print.showMessage(frame, messageBuilder.buildMessage(register,"saveData"));
+                    printTasks.showMessage(frame, messageBuilder.buildMessage(register,"saveData"));
                     System.exit(0);
 
                 case 1:     // Edit task
@@ -37,14 +37,14 @@ public class Controller {
                         String chosenTask;
                         do {
                             Object[] choices = register.getTasksIds().toArray();
-                            chosenTask = print.showInputDialog(frame,
+                            chosenTask = printTasks.showInputDialog(frame,
                                     messageBuilder.buildMessage(register,"chooseTask"), choices);
                         } while (!register.getTasksIds().contains(chosenTask));
 
                         int chosenActivity = -1;
                         while (chosenActivity < 0 || chosenActivity > 3) {
                             Object[] activities = {4, 3, 2, 1};
-                            chosenActivity = print.showOptionDialog(frame,
+                            chosenActivity = printTasks.showOptionDialog(frame,
                                     messageBuilder.buildMessage(register,"chooseActivity", chosenTask, null), activities);
                         }
 
@@ -54,19 +54,19 @@ public class Controller {
 
                             case 1:     // Remove task
                                 register.removeTask(chosenTask);
-                                print.showMessage(frame, messageBuilder.buildMessage(register,"removeTask"));
+                                printTasks.showMessage(frame, messageBuilder.buildMessage(register,"removeTask"));
                                 break;
 
                             case 2:     // Mark as done
                                 register.markTaskAsDone(chosenTask);
-                                print.showMessage(frame, messageBuilder.buildMessage(register,"markTaskAsDone"));
+                                printTasks.showMessage(frame, messageBuilder.buildMessage(register,"markTaskAsDone"));
                                 break;
 
                             case 3:     // Edit fields
                                 int chosenField = -1;
                                 while (chosenField < 0 || chosenField > 4) {
                                     Object[] fields = {5, 4, 3, 2, 1};
-                                    chosenField = print.showOptionDialog(frame,
+                                    chosenField = printTasks.showOptionDialog(frame,
                                             messageBuilder.buildMessage(register, "chooseField", chosenTask, null), fields);
 
                                     switch (chosenField) {
@@ -77,11 +77,11 @@ public class Controller {
                                             int chosenStatus = -1;
                                             while (chosenStatus < 0 || chosenStatus > 1) {
                                                 Object[] statusChoices = {"Done", "Not done"};
-                                                chosenStatus = print.showOptionDialog(frame,
+                                                chosenStatus = printTasks.showOptionDialog(frame,
                                                         messageBuilder.buildMessage(register,"chooseStatus"), statusChoices);
                                             }
                                             register.setTaskStatus(chosenTask, chosenStatus);
-                                            print.showMessage(frame,
+                                            printTasks.showMessage(frame,
                                                     messageBuilder.buildMessage(register,"fixStatus"));
                                             break;
 
@@ -91,19 +91,19 @@ public class Controller {
                                                 do {
                                                     do {
                                                         Object[] projectChoices = register.getProjectsIds().toArray();
-                                                        chosenProject = print.showInputDialog(frame,
+                                                        chosenProject = printTasks.showInputDialog(frame,
                                                                 messageBuilder.buildMessage(register,"chooseProject"), projectChoices);
                                                     } while (chosenProject == null);
                                                 } while (!register.getProjectsIds().contains(chosenProject));
 
                                                 register.removeTaskFromProject(chosenTask);
                                                 register.addTaskToProject(chosenTask, chosenProject);
-                                                print.showMessage(frame,
+                                                printTasks.showMessage(frame,
                                                         messageBuilder.buildMessage(register,"reassignedTask"));
                                                 break;
 
                                             } else {
-                                                print.showMessage(frame,
+                                                printTasks.showMessage(frame,
                                                         messageBuilder.buildMessage(register,"noProjects"));
                                                 break;
                                             }
@@ -114,14 +114,14 @@ public class Controller {
                                             do {
                                                 do {
                                                     do {
-                                                        chosenDueDate = print.inputLine(frame,
+                                                        chosenDueDate = printTasks.inputLine(frame,
                                                                 messageBuilder.buildMessage(register,"chooseDueDate"));    // Ask for due date
                                                     } while (chosenDueDate == null);
                                                 } while (chosenDueDate.equals(""));
                                             } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));
 
                                             register.findTask(chosenTask).setDueDate(chosenDueDate);
-                                            print.showMessage(frame,
+                                            printTasks.showMessage(frame,
                                                     messageBuilder.buildMessage(register,"changedDueDate"));
                                             break;
 
@@ -129,20 +129,20 @@ public class Controller {
                                             String chosenTitle = "";
                                             do {
                                                 do {
-                                                    chosenTitle = print.inputLine(frame,
+                                                    chosenTitle = printTasks.inputLine(frame,
                                                             messageBuilder.buildMessage(register,"chooseTitle"));     // Ask for title
                                                 } while (chosenTitle == null);
                                             } while (chosenTitle.equals(""));
 
                                             register.findTask(chosenTask).setTitle(chosenTitle);
-                                            print.showMessage(frame,
+                                            printTasks.showMessage(frame,
                                                     messageBuilder.buildMessage(register,"changedTitle"));
                                             break;
                                     }
                                 }
                         }
                     } else {
-                        print.showMessage(frame, messageBuilder.buildMessage(register,"noTasks"));
+                        printTasks.showMessage(frame, messageBuilder.buildMessage(register,"noTasks"));
                         break;
                     }
                     break;
@@ -151,7 +151,7 @@ public class Controller {
                     String newTitle = "";
                     do {
                         do {
-                            newTitle = print.inputLine(frame,
+                            newTitle = printTasks.inputLine(frame,
                                     messageBuilder.buildMessage(register,"enterTitle"));        // Ask for title
                         } while (newTitle == null);
                     } while (newTitle.equals(""));
@@ -161,25 +161,25 @@ public class Controller {
                     do {
                         do {
                             do {
-                                newDueDate = print.inputLine(frame,
+                                newDueDate = printTasks.inputLine(frame,
                                         messageBuilder.buildMessage(register,"enterDueDate"));        // Ask for due date
                             } while (newDueDate == null);
                         } while (newDueDate.equals(""));
                     } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));
 
                     register.addTask(new Task(newTitle, newDueDate));
-                    print.showMessage(frame, messageBuilder.buildMessage(register,"addedTask"));
+                    printTasks.showMessage(frame, messageBuilder.buildMessage(register,"addedTask"));
                     break;
 
                 case 3:     // Print out sorted
                     if (register.getTasks().size() == 0) {
-                        print.showMessage(frame, messageBuilder.buildMessage(register,"noTasks"));
+                        printTasks.showMessage(frame, messageBuilder.buildMessage(register,"noTasks"));
 
                     } else {
                         int chosenSorting = -1;
                         while (chosenSorting < 0 || chosenSorting > 3) {
                             Object[] sortingChoices = {"project", "due date", "Id", "title"};
-                            chosenSorting = print.showOptionDialog(frame,
+                            chosenSorting = printTasks.showOptionDialog(frame,
                                     messageBuilder.buildMessage(register,"chooseSorting"), sortingChoices);
                         }
 
@@ -212,21 +212,21 @@ public class Controller {
                                         .sorted(Comparator.comparing(Task::getTitle)).collect(Collectors.toList());
                                 break;
                         }
-                        print.showMessage(frame,
+                        printTasks.showMessage(frame,
                                 messageBuilder.buildMessage(register,"list", sortedList));
                     }
                     break;
 
                 case 4:     // Print out filtered
                     if (register.getTasks().size() == 0) {
-                        print.showMessage(frame,
+                        printTasks.showMessage(frame,
                                 messageBuilder.buildMessage(register,"noTasks"));
 
                     } else {
                         int chosenFiltering = -1;
                         while (chosenFiltering < 0 || chosenFiltering > 3) {
                             Object[] filteringChoices = {"not done", "done", "not assigned", "assigned"};
-                            chosenFiltering = print.showOptionDialog(frame,
+                            chosenFiltering = printTasks.showOptionDialog(frame,
                                     messageBuilder.buildMessage(register,"chooseFiltering"), filteringChoices);
                         }
 
@@ -256,13 +256,13 @@ public class Controller {
                                     do {
                                         do {
                                             Object[] projectChoices = register.getProjectsIds().toArray();
-                                            chosenProject = print.showInputDialog(frame,
+                                            chosenProject = printTasks.showInputDialog(frame,
                                                     messageBuilder.buildMessage(register,"chooseProject"), projectChoices);
                                         } while (chosenProject == null);
                                     } while (!register.getProjectsIds().contains(chosenProject));
 
                                 } else {
-                                    print.showMessage(frame,
+                                    printTasks.showMessage(frame,
                                             messageBuilder.buildMessage(register,"noProjects"));
                                 }
 
@@ -273,7 +273,7 @@ public class Controller {
                                 break;
 
                         }
-                        print.showMessage(frame, messageBuilder.buildMessage(register,"list", filteredList));
+                        printTasks.showMessage(frame, messageBuilder.buildMessage(register,"list", filteredList));
                     }
                     break;
             }

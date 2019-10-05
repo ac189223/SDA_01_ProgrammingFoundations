@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_03;
 
 import javax.swing.*;
 
