@@ -2,7 +2,7 @@ description ProjectsFields: id,title,dueDate,done,assignedTasks
 description TasksFields: id,title,dueDate,done,assignedToProject
 proj092,inside,20191101,true,
 proj163,outside,20191115,false,
-task103,uht,20191014,false,proj092
+task103,uht,20191014,true,proj092
 task405,wewe,20101010,false,proj092
 task571,wrwr,20090909,false,proj163
 task044,kupic wino,20191004,true,

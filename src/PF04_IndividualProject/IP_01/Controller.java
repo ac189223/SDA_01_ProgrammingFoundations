@@ -76,7 +76,7 @@ public class Controller {
                                         case 1:     // Set status
                                             int chosenStatus = -1;
                                             while (chosenStatus < 0 || chosenStatus > 1) {
-                                                Object[] statusChoices = {"Done", "Not done"};
+                                                Object[] statusChoices = {2, 1};
                                                 chosenStatus = print.showOptionDialog(frame,
                                                         messageBuilder.buildMessage(register,"chooseStatus"), statusChoices);
                                             }
@@ -178,7 +178,7 @@ public class Controller {
                     } else {
                         int chosenSorting = -1;
                         while (chosenSorting < 0 || chosenSorting > 3) {
-                            Object[] sortingChoices = {"project", "due date", "Id", "title"};
+                            Object[] sortingChoices = {4, 3, 2, 1};
                             chosenSorting = print.showOptionDialog(frame,
                                     messageBuilder.buildMessage(register,"chooseSorting"), sortingChoices);
                         }
@@ -225,7 +225,7 @@ public class Controller {
                     } else {
                         int chosenFiltering = -1;
                         while (chosenFiltering < 0 || chosenFiltering > 3) {
-                            Object[] filteringChoices = {"not done", "done", "not assigned", "assigned"};
+                            Object[] filteringChoices = {4, 3, 2, 1};
                             chosenFiltering = print.showOptionDialog(frame,
                                     messageBuilder.buildMessage(register,"chooseFiltering"), filteringChoices);
                         }

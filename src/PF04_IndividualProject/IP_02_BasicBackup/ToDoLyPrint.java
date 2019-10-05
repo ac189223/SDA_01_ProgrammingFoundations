@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_02;
+package PF04_IndividualProject.IP_02_BasicBackup;
 
 import javax.swing.*;
 import java.util.Comparator;
