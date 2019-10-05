@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_02;
 
 import javax.swing.*;
 import java.util.Comparator;
@@ -296,7 +296,7 @@ public class ToDoLyPrint {
 
         if (popUpIdentifier.equals("chooseOption")) {
             builtMessage.append("You have ").append(amountToDo()).append(" tasks todo and ")
-                    .append(amountDone()).append(" tasks are done")
+                    .append(amountDone()).append(" tasks done")
                     .append("\n\nChoose an option")
                     .append("\n\n(1) Filter tasks (by assignment or status)")
                     .append("\n(2) Show tasks (sorted by project, due date, Id or title)")
