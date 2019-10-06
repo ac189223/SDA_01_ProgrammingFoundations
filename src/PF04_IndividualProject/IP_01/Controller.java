@@ -232,7 +232,7 @@ public class Controller {
                                         break;
                                 }
                                 print.showMessage(frame,
-                                        messageBuilder.list(register, sortedList));
+                                        messageBuilder.list(sortedList));
                             }
                             break;
 
@@ -292,7 +292,7 @@ public class Controller {
                                         break;
 
                                 }
-                                print.showMessage(frame, messageBuilder.list(register, filteredList));
+                                print.showMessage(frame, messageBuilder.list(filteredList));
                             }
                             break;
                     }

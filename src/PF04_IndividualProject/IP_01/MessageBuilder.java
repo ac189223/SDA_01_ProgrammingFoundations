@@ -3,9 +3,9 @@ package PF04_IndividualProject.IP_01;
 import java.util.List;
 
 public class MessageBuilder {
-    private StringBuilder builtMessage = new StringBuilder();
 
     public String chooseMain(Register register) {
+        StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("You have ").append(amountOfTasksToDo(register) + amountOfTasksDone(register)).append(" task");
         if ((amountOfTasksToDo(register) + amountOfTasksDone(register)) != 1)
             builtMessage.append("s");
@@ -21,6 +21,7 @@ public class MessageBuilder {
     }
 
     public String chooseOption(Register register) {
+        StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("You have ").append(amountOfTasksToDo(register)).append(" task");
         if (amountOfTasksToDo(register) != 1)
             builtMessage.append("s");
@@ -38,16 +39,15 @@ public class MessageBuilder {
     }
 
     public String saveData() {
-        builtMessage.append("Your data was saved to file");
-        return String.valueOf(builtMessage);
+        return  "Your data was saved to file";
     }
 
     public String chooseTask() {
-        builtMessage.append("Choose a task from a list");
-        return String.valueOf(builtMessage);
+        return "Choose a task from a list";
     }
 
     public String chooseActivity(Register register, String chosenTask) {
+        StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Choose activity for ").append(chosenTask).append(" (")
                 .append(register.findTask(chosenTask).getTitle()).append(")")
                 .append("\n\n(1) Update (title, due date, project assignment, status)")
@@ -58,16 +58,15 @@ public class MessageBuilder {
     }
 
     public String removeTask() {
-        builtMessage.append("Task was removed from the register");
-        return String.valueOf(builtMessage);
+        return "Task was removed from the register";
     }
 
     public String markTaskAsDone() {
-        builtMessage.append("Task was marked as finished");
-        return String.valueOf(builtMessage);
+        return "Task was marked as finished";
     }
 
     public String chooseField(Register register, String chosenTask) {
+        StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Choose field to update for ").append(chosenTask)
                 .append("\n\n(1) Title (").append(register.findTask(chosenTask).getTitle()).append(")")
                 .append("\n(2) Due date (").append(register.findTask(chosenTask).getDueDate()).append(")")
@@ -75,7 +74,7 @@ public class MessageBuilder {
         if (!register.findTask(chosenTask).getAssignedToProject().equals(""))
             builtMessage.append(" (").append(register.findTask(chosenTask).getAssignedToProject()).append(")");
         builtMessage.append("\n(4) Status");
-        if (register.findTask(chosenTask).ifDone() == true)
+        if (register.findTask(chosenTask).ifDone())
             builtMessage.append(" (finished)");
         else
             builtMessage.append(" (unfinished)");
@@ -84,89 +83,83 @@ public class MessageBuilder {
     }
 
     public String chooseStatus() {
-        builtMessage.append("Choose status from below").append("\n(1) Finished").append("\n(2) Unfinished");
-        return String.valueOf(builtMessage);
+        String builtMessage = "Choose status from below" +
+                "\n\n(1) Finished" +
+                "\n(2) Unfinished";
+        return builtMessage;
     }
 
     public String fixStatus() {
-        builtMessage.append("Task status was fixed");
-        return String.valueOf(builtMessage);
+        return "Task status was fixed";
     }
 
     public String chooseProject() {
-        builtMessage.append("Choose project from a list");
-        return String.valueOf(builtMessage);
+        return "Choose project from a list";
     }
 
     public String reassignedTask() {
-        builtMessage.append("Task was reassigned");
-        return String.valueOf(builtMessage);
+        return "Task was reassigned";
     }
 
     public String noProjects() {
-        builtMessage.append("There are no projects stored");
-        return String.valueOf(builtMessage);
+        return "There are no projects stored";
     }
 
     public String chooseDueDate() {
-        builtMessage.append("Enter new due date (yyyyMMdd)");
-        return String.valueOf(builtMessage);
+        return "Enter new due date (yyyyMMdd)";
     }
 
     public String changedDueDate() {
-        builtMessage.append("Tasks due date was changed");
-        return String.valueOf(builtMessage);
+        return "Tasks due date was changed";
     }
 
     public String chooseTitle() {
-        builtMessage.append("Enter new title");
-        return String.valueOf(builtMessage);
+        return "Enter new title";
     }
 
     public String changedTitle() {
-        builtMessage.append("Tasks title was changed");
-        return String.valueOf(builtMessage);
+        return "Tasks title was changed";
     }
 
     public String noTasks() {
-        builtMessage.append("There are no tasks stored");
-        return String.valueOf(builtMessage);
+        return "There are no tasks stored";
     }
 
     public String enterTitle() {
-        builtMessage.append("Enter task title");
-        return String.valueOf(builtMessage);
+        return "Enter task title";
     }
 
     public String enterDueDate() {
-        builtMessage.append("Enter due date (yyyyMMdd)");
-        return String.valueOf(builtMessage);
+        return "Enter due date (yyyyMMdd)";
     }
 
     public String addedTask(Register register) {
-        builtMessage.append("New tasks was added as ").append(register.getTasks().get(register.getTasks().size() - 1).getId());
+        StringBuilder builtMessage = new StringBuilder();
+        builtMessage.append("New tasks was added as ").
+                append(register.getTasks().get(register.getTasks().size() - 1).getId());
         return String.valueOf(builtMessage);
     }
 
     public String chooseSorting() {
-        builtMessage.append("Print tasks sorted by")
-                .append("\n(1) Title")
-                .append("\n(2) Id")
-                .append("\n(3) Due date")
-                .append("\n(4) Project");
-        return String.valueOf(builtMessage);
+        String builtMessage = "Print tasks sorted by" +
+                "\n\n(1) Title" +
+                "\n(2) Id" +
+                "\n(3) Due date" +
+                "\n(4) Project";
+        return builtMessage;
     }
 
     public String chooseFiltering() {
-        builtMessage.append("Print")
-                .append("\n(1) Assigned")
-                .append("\n(2) Not assigned")
-                .append("\n(3) Finished")
-                .append("\n(4) Unfinished");
-        return String.valueOf(builtMessage);
+        String builtMessage = "Print" +
+                "\n\n(1) Assigned" +
+                "\n(2) Not assigned" +
+                "\n(3) Finished" +
+                "\n(4) Unfinished";
+        return builtMessage;
     }
 
-    public String list(Register register, List<Task> sortedList) {
+    public String list(List<Task> sortedList) {
+        StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Tasks\n");
         sortedList.forEach(task -> {        // Add tasks to string
             builtMessage.append("\n").append(task.getId()).append(" - ");
@@ -182,11 +175,11 @@ public class MessageBuilder {
     }
 
     public String noTasksNoProjects() {
-        builtMessage.append("There are no tasks and no projects stored");
-        return String.valueOf(builtMessage);
+        return "There are no tasks and no projects stored";
     }
 
     public String listForMain(Register register) {
+        StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Projects and tasks\n");
         for (Project project: register.getProjects()) {             // Add projects
             builtMessage.append("\n").append(project.getId()).append(" - ")
