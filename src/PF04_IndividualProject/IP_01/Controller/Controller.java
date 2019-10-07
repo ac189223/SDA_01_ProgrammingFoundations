@@ -1,4 +1,9 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_01.Controller;
+
+import PF04_IndividualProject.IP_01.Model.Project;
+import PF04_IndividualProject.IP_01.Model.Register;
+import PF04_IndividualProject.IP_01.Model.Task;
+import PF04_IndividualProject.IP_01.View.Print;
 
 import javax.swing.*;
 import java.util.*;

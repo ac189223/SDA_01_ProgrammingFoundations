@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_01.Controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,4 +1,7 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_01.Controller;
+
+import PF04_IndividualProject.IP_01.Model.Project;
+import PF04_IndividualProject.IP_01.Model.Task;
 
 import java.util.ArrayList;
 

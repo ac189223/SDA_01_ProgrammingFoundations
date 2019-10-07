@@ -1,4 +1,6 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_01.View;
+
+import PF04_IndividualProject.IP_01.Controller.Controller;
 
 import javax.swing.*;
 

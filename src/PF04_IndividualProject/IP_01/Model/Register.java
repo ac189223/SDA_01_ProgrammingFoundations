@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01;
+package PF04_IndividualProject.IP_01.Model;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,7 +9,7 @@ public class Register {
     ArrayList<Project> projects;
     ArrayList<String> projectsIds;
 
-    Register() {
+    public Register() {
         this.setTasks(new ArrayList<>());
         this.setTasksIds(new ArrayList<>());
         this.setProjects(new ArrayList<>());
