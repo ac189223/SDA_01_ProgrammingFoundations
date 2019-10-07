@@ -56,7 +56,7 @@ public class Register {
         return null;
     }
 
-    public void markProjectAsDone(String id) {
+    public void markProjectAsDoneDependent(String id) {
         boolean check = true;
         for (String taskId: findProject(id).getAssignedTasks()) {
             if (!findTask(taskId).ifDone())
@@ -66,6 +66,11 @@ public class Register {
             findProject(id).setDone(true);
         else
             System.out.println("Mark all dependent tasks as finished first");
+    }
+
+    public void markProjectAsDoneAlways(String id) {
+        findProject(id).getAssignedTasks().forEach(this::markTaskAsDone);
+        findProject(id).setDone(true);
     }
 
     public Project findProject(String id) {
@@ -151,5 +156,12 @@ public class Register {
             findTask(chosenTask).setDone(false);
         else if (chosenStatus == 1)
             findTask(chosenTask).setDone(true);
+    }
+
+    public void setProjectStatus(String chosenProject, int chosenStatus) {
+        if (chosenStatus == 0)
+            findProject(chosenProject).setDone(false);
+        else if (chosenStatus == 1)
+            markProjectAsDoneAlways(chosenProject);
     }
 }

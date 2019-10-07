@@ -46,7 +46,15 @@ public class Controller {
                             break;
 
                         case 1:     // Edit task or project
-                            if (register.getTasks().size() != 0) {
+                            if (register.getProjects().size() == 0 && mainChosen == 1) {
+                                print.showMessage(frame, messageBuilder.noProjects());
+                                break;
+
+                            } else if (register.getTasks().size() == 0 && mainChosen == 2) {
+                                print.showMessage(frame, messageBuilder.noTasks());
+                                break;
+
+                            } else {
                                 String chosenTask;
                                 do {
                                     Object[] choices = null;
@@ -70,12 +78,18 @@ public class Controller {
                                         break;
 
                                     case 1:     // Remove task or project
-                                        register.removeTask(chosenTask);
+                                        if (mainChosen == 1)
+                                            register.removeProjectAlways(chosenTask);          /** REMOVE PROJECT _ AND TASKS ????? */
+                                        else
+                                            register.removeTask(chosenTask);
                                         print.showMessage(frame, messageBuilder.removeTask(mainChosen));
                                         break;
 
                                     case 2:     // Mark as done
-                                        register.markTaskAsDone(chosenTask);
+                                        if (mainChosen == 1)
+                                            register.markProjectAsDoneAlways(chosenTask);
+                                        else
+                                            register.markTaskAsDone(chosenTask);
                                         print.showMessage(frame, messageBuilder.markTaskAsDone(mainChosen));
                                         break;
 
@@ -97,7 +111,10 @@ public class Controller {
                                                         chosenStatus = print.showOptionDialog(frame,
                                                                 messageBuilder.chooseStatus(), statusChoices);
                                                     }
-                                                    register.setTaskStatus(chosenTask, chosenStatus);
+                                                    if (mainChosen == 1)
+                                                        register.setProjectStatus(chosenTask, chosenStatus);
+                                                    else
+                                                        register.setTaskStatus(chosenTask, chosenStatus);
                                                     print.showMessage(frame,
                                                             messageBuilder.fixStatus(mainChosen));
                                                     break;
@@ -124,7 +141,7 @@ public class Controller {
                                                                             messageBuilder.chooseTask(mainChosen), taskChoices);
                                                                 } while (chosenTaskToAddToProject == null);
                                                             } while (!register.getTasksIds().contains(chosenTaskToAddToProject));
-                                                            // OK
+                                                            
                                                             if (!register.findTask(chosenTaskToAddToProject).getAssignedToProject().equals(chosenTask)) {
                                                                 register.findTask(chosenTaskToAddToProject).setAssignedToProject(chosenTask);
                                                                 register.addTaskToProject(chosenTaskToAddToProject, chosenTask);
@@ -176,7 +193,10 @@ public class Controller {
                                                         } while (chosenDueDate.equals(""));
                                                     } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));
 
-                                                    register.findTask(chosenTask).setDueDate(chosenDueDate);
+                                                    if (mainChosen == 1)
+                                                        register.findProject(chosenTask).setDueDate(chosenDueDate);
+                                                    else
+                                                        register.findTask(chosenTask).setDueDate(chosenDueDate);
                                                     print.showMessage(frame,
                                                             messageBuilder.changedDueDate(mainChosen));
                                                     break;
@@ -190,16 +210,16 @@ public class Controller {
                                                         } while (chosenTitle == null);
                                                     } while (chosenTitle.equals(""));
 
-                                                    register.findTask(chosenTask).setTitle(chosenTitle);
+                                                    if (mainChosen == 1)
+                                                        register.findProject(chosenTask).setTitle(chosenTitle);
+                                                    else
+                                                        register.findTask(chosenTask).setTitle(chosenTitle);
                                                     print.showMessage(frame,
                                                             messageBuilder.changedTitle(mainChosen));
                                                     break;
                                             }
                                         }
                                 }
-                            } else {
-                                print.showMessage(frame, messageBuilder.noTasks());
-                                break;
                             }
                             break;
 
@@ -223,16 +243,19 @@ public class Controller {
                                 } while (newDueDate.equals(""));
                             } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));
 
-                            register.addTask(new Task(newTitle, newDueDate));
+                            if (mainChosen == 1)
+                                register.addProject(new Project(newTitle, newDueDate));
+                            else
+                                register.addTask(new Task(newTitle, newDueDate));
                             print.showMessage(frame, messageBuilder.addedTask(register, mainChosen));
                             break;
 
                         case 3:     // Print out sorted
-                            if (register.getProjects().size() == 0 && mainChosen == 2) {
+                            if (register.getProjects().size() == 0 && mainChosen == 1) {
                                 print.showMessage(frame, messageBuilder.noProjects());
                                 break;
 
-                            } else if (register.getTasks().size() == 0 && mainChosen == 1) {
+                            } else if (register.getTasks().size() == 0 && mainChosen == 2) {
                                 print.showMessage(frame, messageBuilder.noTasks());
                                 break;
 
@@ -310,11 +333,11 @@ public class Controller {
                             break;
 
                         case 4:     // Print out filtered
-                            if (register.getProjects().size() == 0 && mainChosen == 2) {
+                            if (register.getProjects().size() == 0 && mainChosen == 1) {
                                 print.showMessage(frame, messageBuilder.noProjects());
                                 break;
 
-                            } else if (register.getTasks().size() == 0 && mainChosen == 1) {
+                            } else if (register.getTasks().size() == 0 && mainChosen == 2) {
                                 print.showMessage(frame, messageBuilder.noTasks());
                                 break;
 
