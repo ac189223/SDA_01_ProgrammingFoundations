@@ -1,8 +1,7 @@
 package PF04_IndividualProject.IP_01;
 
 import javax.swing.*;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Controller {
@@ -34,51 +33,50 @@ public class Controller {
                     print.showMessage(frame, messageBuilder.saveData());
                     System.exit(0);
 
-                case 1:
-                    // Task choice what to do
-                    break;
-
-                case 2:
-                    int optionChosen = -1;               // Task choice what to do
+                case 1:               // Project choice what to do
+                case 2:               // Task choice what to do
+                    int optionChosen = -1;
                     Object[] options = {5, 4, 3, 2, 1};
                     while (optionChosen < 0 || optionChosen > 4)
                         optionChosen = print.showOptionDialog(frame,
-                                messageBuilder.chooseOption(register), options);
+                                messageBuilder.chooseOption(register, mainChosen), options);
 
                     switch (optionChosen) {
-                        case 0:     // Save and quit
-                            saveData(FILE_NAME);
-                            print.showMessage(frame, messageBuilder.saveData());
-                            System.exit(0);
+                        case 0:     // Back to main menu
+                            break;
 
-                        case 1:     // Edit task
+                        case 1:     // Edit task or project
                             if (register.getTasks().size() != 0) {
                                 String chosenTask;
                                 do {
-                                    Object[] choices = register.getTasksIds().toArray();
-                                   chosenTask = print.showInputDialog(frame,
-                                            messageBuilder.chooseTask(), choices);
-                                } while (!register.getTasksIds().contains(chosenTask));
+                                    Object[] choices = null;
+                                    if (mainChosen == 1)
+                                        choices = register.getProjectsIds().toArray();
+                                    else
+                                        choices = register.getTasksIds().toArray();
+                                    chosenTask = print.showInputDialog(frame,
+                                            messageBuilder.chooseTask(mainChosen), choices);
+                                } while (!register.getTasksIds().contains(chosenTask) && !register.getProjectsIds().contains(chosenTask));
 
                                 int chosenActivity = -1;
                                 while (chosenActivity < 0 || chosenActivity > 3) {
                                     Object[] activities = {4, 3, 2, 1};
                                     chosenActivity = print.showOptionDialog(frame,
-                                            messageBuilder.chooseActivity(register, chosenTask), activities);
+                                            messageBuilder.chooseActivity(register, chosenTask, mainChosen), activities);
                                 }
 
                                 switch (chosenActivity) {
                                     case 0:     // Back to main menu
                                         break;
 
-                                    case 1:     // Remove task
+                                    case 1:     // Remove task or project
                                         register.removeTask(chosenTask);
-                                        print.showMessage(frame, messageBuilder.removeTask());
+                                        print.showMessage(frame, messageBuilder.removeTask(mainChosen));
                                         break;
 
                                     case 2:     // Mark as done
                                         register.markTaskAsDone(chosenTask);
-                                        print.showMessage(frame, messageBuilder.markTaskAsDone());
+                                        print.showMessage(frame, messageBuilder.markTaskAsDone(mainChosen));
                                         break;
 
                                     case 3:     // Edit fields
@@ -86,7 +84,7 @@ public class Controller {
                                         while (chosenField < 0 || chosenField > 4) {
                                             Object[] fields = {5, 4, 3, 2, 1};
                                             chosenField = print.showOptionDialog(frame,
-                                                    messageBuilder.chooseField(register, chosenTask), fields);
+                                                    messageBuilder.chooseField(register, chosenTask, mainChosen), fields);
 
                                             switch (chosenField) {
                                                 case 0:     // Back to main menu
@@ -101,11 +99,52 @@ public class Controller {
                                                     }
                                                     register.setTaskStatus(chosenTask, chosenStatus);
                                                     print.showMessage(frame,
-                                                            messageBuilder.fixStatus());
+                                                            messageBuilder.fixStatus(mainChosen));
                                                     break;
 
-                                                case 2:     // Reassign to project
-                                                    if (register.getProjects().size() != 0) {
+                                                case 2:     // Reassign to project or assign tasks
+                                                    if (register.getProjects().size() == 0 && mainChosen == 2) {
+                                                        print.showMessage(frame,
+                                                                messageBuilder.noProjects());
+                                                        break;
+
+                                                    } else if (register.getTasks().size() == 0 && mainChosen == 1) {
+                                                        print.showMessage(frame,
+                                                                messageBuilder.noTasks());
+                                                        break;
+
+                                                    } else if (mainChosen == 1) {
+                                                        boolean addNextTask = true;
+                                                        String chosenTaskToAddToProject;
+                                                        do {
+                                                            do {
+                                                                do {
+                                                                    Object[] taskChoices = register.getTasksIds().toArray();
+                                                                    chosenTaskToAddToProject = print.showInputDialog(frame,
+                                                                            messageBuilder.chooseTask(mainChosen), taskChoices);
+                                                                } while (chosenTaskToAddToProject == null);
+                                                            } while (!register.getTasksIds().contains(chosenTaskToAddToProject));
+                                                            // OK
+                                                            if (!register.findTask(chosenTaskToAddToProject).getAssignedToProject().equals(chosenTask)) {
+                                                                register.findTask(chosenTaskToAddToProject).setAssignedToProject(chosenTask);
+                                                                register.addTaskToProject(chosenTaskToAddToProject, chosenTask);
+                                                            }
+                                                            print.showMessage(frame,
+                                                                    messageBuilder.addedTaskToProject(chosenTaskToAddToProject, chosenTask));
+
+                                                            int ifAddNext = -1;
+                                                            while (ifAddNext < 0 || ifAddNext > 1) {
+                                                                Object[] statusChoices = {2, 1};
+                                                                ifAddNext = print.showOptionDialog(frame,
+                                                                        messageBuilder.ifAddNext(), statusChoices);
+                                                            }
+                                                            if (ifAddNext == 0)
+                                                                addNextTask = false;
+
+                                                        } while (addNextTask);
+                                                        break;
+
+                                                    } else {
                                                         String chosenProject;
                                                         do {
                                                             do {
@@ -115,16 +154,14 @@ public class Controller {
                                                             } while (chosenProject == null);
                                                         } while (!register.getProjectsIds().contains(chosenProject));
 
-                                                        register.removeTaskFromProject(chosenTask);
-                                                        register.addTaskToProject(chosenTask, chosenProject);
+                                                        if (!register.findTask(chosenTask).getAssignedToProject().equals(chosenProject)) {
+                                                            register.removeTaskFromProject(chosenTask);
+                                                            register.addTaskToProject(chosenTask, chosenProject);
+                                                        }
                                                         print.showMessage(frame,
                                                                 messageBuilder.reassignedTask());
                                                         break;
 
-                                                    } else {
-                                                        print.showMessage(frame,
-                                                                messageBuilder.noProjects());
-                                                        break;
                                                     }
 
                                                 case 3:     // Change due date
@@ -141,7 +178,7 @@ public class Controller {
 
                                                     register.findTask(chosenTask).setDueDate(chosenDueDate);
                                                     print.showMessage(frame,
-                                                            messageBuilder.changedDueDate());
+                                                            messageBuilder.changedDueDate(mainChosen));
                                                     break;
 
                                                 case 4:
@@ -155,7 +192,7 @@ public class Controller {
 
                                                     register.findTask(chosenTask).setTitle(chosenTitle);
                                                     print.showMessage(frame,
-                                                            messageBuilder.changedTitle());
+                                                            messageBuilder.changedTitle(mainChosen));
                                                     break;
                                             }
                                         }
@@ -171,7 +208,7 @@ public class Controller {
                             do {
                                 do {
                                     newTitle = print.inputLine(frame,
-                                            messageBuilder.enterTitle());        // Ask for title
+                                            messageBuilder.enterTitle(mainChosen));        // Ask for title
                                 } while (newTitle == null);
                             } while (newTitle.equals(""));
 
@@ -187,25 +224,43 @@ public class Controller {
                             } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));
 
                             register.addTask(new Task(newTitle, newDueDate));
-                            print.showMessage(frame, messageBuilder.addedTask(register));
+                            print.showMessage(frame, messageBuilder.addedTask(register, mainChosen));
                             break;
 
                         case 3:     // Print out sorted
-                            if (register.getTasks().size() == 0) {
+                            if (register.getProjects().size() == 0 && mainChosen == 2) {
+                                print.showMessage(frame, messageBuilder.noProjects());
+                                break;
+
+                            } else if (register.getTasks().size() == 0 && mainChosen == 1) {
                                 print.showMessage(frame, messageBuilder.noTasks());
+                                break;
 
                             } else {
                                 int chosenSorting = -1;
                                 while (chosenSorting < 0 || chosenSorting > 3) {
                                     Object[] sortingChoices = {4, 3, 2, 1};
                                     chosenSorting = print.showOptionDialog(frame,
-                                            messageBuilder.chooseSorting(), sortingChoices);
+                                            messageBuilder.chooseSorting(mainChosen), sortingChoices);
                                 }
 
-                                List<Task> sortedList = null;
+                                List<Task> sortedTasks = null;
+                                List<Project> sortedProjects = null;
                                 switch (chosenSorting) {
                                     case 0:
-                                        sortedList = register.getTasks().stream()        // Sort by project
+                                        if (mainChosen == 1) {
+                                            sortedProjects = register.getProjects();       // Sort by number of tasks
+                                            for (int i = 0; i < sortedProjects.size(); i++) {                  // Use bubble sort
+                                                for (int j = 0; j < sortedProjects.size() - i - 1; j++) {
+                                                    if((sortedProjects.get(j)).getAssignedTasks().size() >
+                                                            (sortedProjects.get(j + 1)).getAssignedTasks().size()) {
+                                                        Collections.swap(sortedProjects, j, j + 1);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                            sortedTasks = register.getTasks().stream()        // Sort by project
                                                 .filter(task -> !task.getAssignedToProject().equals(""))
                                                 .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
                                                 .stream()
@@ -213,33 +268,55 @@ public class Controller {
                                         break;
 
                                     case 1:
-                                        sortedList = register.getTasks().stream()        // Sort by due date
+                                        if (mainChosen == 1)
+                                            sortedProjects = register.getProjects().stream()        // Sort by due date
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList())
+                                                    .stream()
+                                                    .sorted(Comparator.comparing(Project::getDueDate)).collect(Collectors.toList());
+                                        else
+                                            sortedTasks = register.getTasks().stream()        // Sort by due date
                                                 .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
                                                 .stream()
                                                 .sorted(Comparator.comparing(Task::getDueDate)).collect(Collectors.toList());
                                         break;
 
                                     case 2:
-                                        sortedList = register.getTasks().stream()        // Sort by Id
+                                        if (mainChosen == 1)
+                                            sortedProjects = register.getProjects().stream()        // Sort by Id
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList());
+                                        else
+                                            sortedTasks = register.getTasks().stream()        // Sort by Id
                                                 .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
                                         break;
 
                                     case 3:
-                                        sortedList = register.getTasks().stream()        // Sort by title
+                                        if (mainChosen == 1)
+                                            sortedProjects = register.getProjects().stream()        // Sort by title
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList())
+                                                    .stream()
+                                                    .sorted(Comparator.comparing(Project::getTitle)).collect(Collectors.toList());
+                                        else
+                                            sortedTasks = register.getTasks().stream()        // Sort by title
                                                 .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList())
                                                 .stream()
                                                 .sorted(Comparator.comparing(Task::getTitle)).collect(Collectors.toList());
                                         break;
                                 }
-                                print.showMessage(frame,
-                                        messageBuilder.list(sortedList));
+                                if (mainChosen == 1)
+                                    print.showMessage(frame, messageBuilder.list(sortedProjects, null, mainChosen));
+                                else
+                                    print.showMessage(frame, messageBuilder.list(null, sortedTasks, mainChosen));
                             }
                             break;
 
                         case 4:     // Print out filtered
-                            if (register.getTasks().size() == 0) {
-                                print.showMessage(frame,
-                                        messageBuilder.noTasks());
+                            if (register.getProjects().size() == 0 && mainChosen == 2) {
+                                print.showMessage(frame, messageBuilder.noProjects());
+                                break;
+
+                            } else if (register.getTasks().size() == 0 && mainChosen == 1) {
+                                print.showMessage(frame, messageBuilder.noTasks());
+                                break;
 
                             } else {
                                 int chosenFiltering = -1;
@@ -249,50 +326,74 @@ public class Controller {
                                             messageBuilder.chooseFiltering(), filteringChoices);
                                 }
 
-                                List<Task> filteredList = null;
+                                List<Task> filteredTasks = null;
+                                List<Project> filteredProjects = null;
                                 switch (chosenFiltering) {
                                     case 0:
-                                        filteredList = register.getTasks().stream()        // Filter unfinished
-                                                .filter(task -> !task.ifDone())
-                                                .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
+                                        if (mainChosen == 1)
+                                            filteredProjects = register.getProjects().stream()        // Filter unfinished
+                                                    .filter(task -> !task.ifDone())
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList());
+                                        else
+                                            filteredTasks = register.getTasks().stream()        // Filter unfinished
+                                                    .filter(task -> !task.ifDone())
+                                                    .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
                                         break;
 
                                     case 1:
-                                        filteredList = register.getTasks().stream()        // Filter finished
+                                        if (mainChosen == 1)
+                                            filteredProjects = register.getProjects().stream()        // Filter finished
+                                                    .filter(Project::ifDone)
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList());
+                                        else
+                                            filteredTasks = register.getTasks().stream()        // Filter finished
                                                 .filter(Task::ifDone)
                                                 .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
                                         break;
 
                                     case 2:
-                                        filteredList = register.getTasks().stream()        // Filter not assigned
+                                        if (mainChosen == 1)
+                                            filteredProjects = register.getProjects().stream()        // Filter without assigned tasks
+                                                    .filter(project -> project.getAssignedTasks().size() == 0)
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList());
+                                        else
+                                            filteredTasks = register.getTasks().stream()        // Filter not assigned
                                                 .filter(task -> task.getAssignedToProject().equals(""))
                                                 .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
                                         break;
 
                                     case 3:
-                                        String chosenProject = "";        // Choose project
-                                        if (register.getProjects().size() != 0) {
-                                            do {
+                                        if (mainChosen == 1)
+                                            filteredProjects = register.getProjects().stream()        // Filter with assigned tasks
+                                                    .filter(project -> project.getAssignedTasks().size() != 0)
+                                                    .sorted(Comparator.comparing(Project::getId)).collect(Collectors.toList());
+                                        else {
+                                            String chosenProject = "";        // Choose project
+                                            if (register.getProjects().size() != 0) {
                                                 do {
-                                                    Object[] projectChoices = register.getProjectsIds().toArray();
-                                                    chosenProject = print.showInputDialog(frame,
-                                                            messageBuilder.chooseProject(), projectChoices);
-                                                } while (chosenProject == null);
-                                            } while (!register.getProjectsIds().contains(chosenProject));
+                                                    do {
+                                                        Object[] projectChoices = register.getProjectsIds().toArray();
+                                                        chosenProject = print.showInputDialog(frame,
+                                                                messageBuilder.chooseProject(), projectChoices);
+                                                    } while (chosenProject == null);
+                                                } while (!register.getProjectsIds().contains(chosenProject));
 
-                                        } else {
-                                            print.showMessage(frame,
-                                                    messageBuilder.noProjects());
+                                            } else {
+                                                print.showMessage(frame,
+                                                        messageBuilder.noProjects());
+                                            }
+
+                                            String finalChosenProject = chosenProject;
+                                            filteredTasks = register.getTasks().stream()        // Filter by project assignment
+                                                    .filter(task -> task.getAssignedToProject().equals(finalChosenProject))
+                                                    .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
                                         }
-
-                                        String finalChosenProject = chosenProject;
-                                        filteredList = register.getTasks().stream()        // Filter by project assignment
-                                                .filter(task -> task.getAssignedToProject().equals(finalChosenProject))
-                                                .sorted(Comparator.comparing(Task::getId)).collect(Collectors.toList());
                                         break;
-
                                 }
-                                print.showMessage(frame, messageBuilder.list(filteredList));
+                                if (mainChosen == 1)
+                                    print.showMessage(frame, messageBuilder.list(filteredProjects, null, mainChosen));
+                                else
+                                    print.showMessage(frame, messageBuilder.list(null, filteredTasks, mainChosen));
                             }
                             break;
                     }
