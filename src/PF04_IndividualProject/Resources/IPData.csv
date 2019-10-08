@@ -1,6 +1,6 @@
 description ProjectsFields: id,title,dueDate,done,assignedTasks
 description TasksFields: id,title,dueDate,done,assignedToProject
-proj163,outside,20191115,false,
+proj163,outside,20191115,true,
 proj092,inside,20191101,false,
 task103,uht,20191014,true,proj092
 task405,wewe,20101010,true,proj092
