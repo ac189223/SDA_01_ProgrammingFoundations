@@ -132,4 +132,7 @@ public class PopUpsBuilder {
     public void printFilteredProjects(List<Project> filteredProjects) {
         getPrint().showMessage(getFrame(), getMessageBuilder().listOfProjects(filteredProjects));
     }
+
+    /** =================    =================    Tasks popups    =================    ================= */
+
 }
