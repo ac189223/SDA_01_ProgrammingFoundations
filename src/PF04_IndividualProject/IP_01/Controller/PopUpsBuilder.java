@@ -1,11 +1,9 @@
 package PF04_IndividualProject.IP_01.Controller;
 
-import PF04_IndividualProject.IP_01.Model.Project;
 import PF04_IndividualProject.IP_01.Model.Register;
 import PF04_IndividualProject.IP_01.View.Print;
 
 import javax.swing.*;
-import java.util.List;
 
 public class PopUpsBuilder {
     private MessageBuilder messageBuilder;
@@ -49,90 +47,4 @@ public class PopUpsBuilder {
 
     public void mainTasksAndProjectsList(Register register) { getPrint().showMessage(getFrame(), getMessageBuilder().listForMain(register));
     }
-
-    /** =================    =================    Projects popups    =================    ================= */
-
-    public int chooseOptionForProject(Register register) {
-        Object[] options = {5, 4, 3, 2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseOption(register, 1), options);
-    }
-
-    public String chooseProjectToEdit(Register register) {
-        Object[] choices = register.getProjectsIds().toArray();
-        return getPrint().showInputDialog(getFrame(), getMessageBuilder().chooseTask(), choices);
-    }
-
-    public int chooseActivityForProject(Register register, String chosenProject) {
-        Object[] activities = {4, 3, 2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseActivityForProject(register, chosenProject), activities);
-    }
-
-    public void projectRemovalConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().removeProject()); }
-
-    public void projectMarkedAsDoneConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().markProjectAsDone()); }
-
-    public int chooseProjectFieldToEdit(Register register, String chosenProject) {
-        Object[] fields = {5, 4, 3, 2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseProjectField(register, chosenProject), fields);
-    }
-
-    public int chooseProjectStatus() {
-        Object[] statusChoices = {2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseStatus(), statusChoices);
-    }
-
-    public void fixProjectStatusConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().fixProjectStatus()); }
-
-    public String chooseTaskToAddToTheProject(Register register) {
-        Object[] taskChoices = register.getTasksIds().toArray();
-        return getPrint().showInputDialog(getFrame(), getMessageBuilder().chooseTask(), taskChoices);
-    }
-
-    public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProject(chosenTaskToAddToProject, chosenProject));
-    }
-
-    public void taskAlreadyInProjectInformation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().taskAlreadyInProject(chosenTaskToAddToProject, chosenProject));
-    }
-
-    public int ifAddNext() {
-        Object[] statusChoices = {2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().ifAddNext(), statusChoices);
-    }
-
-    public String changeProjectDueDate() { return getPrint().inputLine(getFrame(), getMessageBuilder().chooseDueDate()); }
-
-    public void changeDueDateConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().changedProjectDueDate()); }
-
-    public void changedProjectTitleConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().changedProjectTitle()); }
-
-    public String chooseNewTitleForProject() { return getPrint().inputLine(getFrame(), getMessageBuilder().chooseTitle()); }
-
-    public String enterNewTitleForProject() { return getPrint().inputLine(getFrame(), getMessageBuilder().enterProjectTitle()); }
-
-    public String enterNewDueDateForProject() { return getPrint().inputLine(getFrame(), getMessageBuilder().enterDueDate()); }
-
-    public void addedNewTaskConfirmation(Register register) { getPrint().showMessage(getFrame(), getMessageBuilder().addedTask(register)); }
-
-    public int chooseSortingForProjects() {
-        Object[] sortingChoices = {4, 3, 2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseProjectsSorting(), sortingChoices);
-    }
-
-    public void printSortedProjects(List<Project> sortedProjects) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().listOfProjects(sortedProjects));
-    }
-
-    public int chooseFilteringForProjects() {
-        Object[] filteringChoices = {4, 3, 2, 1};
-        return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseFiltering(), filteringChoices);
-    }
-
-    public void printFilteredProjects(List<Project> filteredProjects) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().listOfProjects(filteredProjects));
-    }
-
-    /** =================    =================    Tasks popups    =================    ================= */
-
 }
