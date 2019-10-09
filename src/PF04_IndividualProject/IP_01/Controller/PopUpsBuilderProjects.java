@@ -64,14 +64,6 @@ public class PopUpsBuilderProjects extends PopUpsBuilder{
         return getPrint().showInputDialog(getFrame(), getMessageBuilderProjects().chooseTask(), taskChoices);
     }
 
-    public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilderProjects().addedTaskToProject(chosenTaskToAddToProject, chosenProject));
-    }
-
-    public void taskAlreadyInProjectInformation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilderProjects().taskAlreadyInProject(chosenTaskToAddToProject, chosenProject));
-    }
-
     public int ifAddNext() {
         Object[] statusChoices = {2, 1};
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().ifAddNextTask(), statusChoices);
@@ -79,7 +71,7 @@ public class PopUpsBuilderProjects extends PopUpsBuilder{
 
     public String changeProjectDueDate() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().chooseDueDate()); }
 
-    public void changeDueDateConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectDueDate()); }
+    public void changeProjectDueDateConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectDueDate()); }
 
     public void changedProjectTitleConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectTitle()); }
 

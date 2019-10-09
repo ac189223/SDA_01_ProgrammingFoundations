@@ -34,6 +34,14 @@ public class MessageBuilder {
 
     public String chooseProject() { return "Choose project from a list"; }
 
+    public String addedTaskToProject(String chosenTask, String chosenProject) {
+        return "Task " + chosenTask + " was added to project " + chosenProject;
+    }
+
+    public String taskAlreadyInProject(String chosenTask, String chosenProject) {
+        return "Task " + chosenTask + " was already added to project " + chosenProject;
+    }
+
     public String noProjects() { return "There are no projects stored"; }
 
     public String chooseDueDate() { return "Enter new due date (yyyyMMdd)"; }

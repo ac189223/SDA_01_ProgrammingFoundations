@@ -47,4 +47,14 @@ public class PopUpsBuilder {
 
     public void mainTasksAndProjectsList(Register register) { getPrint().showMessage(getFrame(), getMessageBuilder().listForMain(register));
     }
+
+    public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
+        getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProject(chosenTaskToAddToProject, chosenProject));
+    }
+
+    public void taskAlreadyInProjectInformation(String chosenTaskToAddToProject, String chosenProject) {
+        getPrint().showMessage(getFrame(), getMessageBuilder().taskAlreadyInProject(chosenTaskToAddToProject, chosenProject));
+    }
+
+
 }

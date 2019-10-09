@@ -57,14 +57,6 @@ public class MessageBuilderProjects extends MessageBuilder{
 
     public String fixProjectStatus() { return  "Project status was fixed"; }
 
-    public String addedTaskToProject(String chosenTask, String chosenProject) {
-        return "Task " + chosenTask + " was added to project " + chosenProject;
-    }
-
-    public String taskAlreadyInProject(String chosenTask, String chosenProject) {
-        return "Task " + chosenTask + " was already added to project " + chosenProject;
-    }
-
     public String ifAddNextTask() {
         return "Choose an option" + "\n\n(1) Add next task" + "\n(2) Go to main menu";
     }

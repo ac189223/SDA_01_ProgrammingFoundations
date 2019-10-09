@@ -195,7 +195,7 @@ public class ControllerProjects {
         } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));
 
         register.findProject(chosenProject).setDueDate(chosenDueDate);
-        getPopUpsBuilderProjects().changeDueDateConfirmation();
+        getPopUpsBuilderProjects().changeProjectDueDateConfirmation();
     }
 
     private void changeProjectTitle(Register register, String chosenProject) {
