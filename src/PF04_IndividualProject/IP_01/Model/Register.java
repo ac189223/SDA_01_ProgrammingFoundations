@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Register {
-    ArrayList<Task> tasks;
-    ArrayList<String> tasksIds;
-    ArrayList<Project> projects;
-    ArrayList<String> projectsIds;
+    private ArrayList<Task> tasks;
+    private ArrayList<String> tasksIds;
+    private ArrayList<Project> projects;
+    private ArrayList<String> projectsIds;
 
     public Register() {
         this.setTasks(new ArrayList<>());
