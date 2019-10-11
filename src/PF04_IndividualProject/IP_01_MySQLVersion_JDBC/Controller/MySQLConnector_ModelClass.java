@@ -1,30 +1,29 @@
 package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
 
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Project;
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Task;
-
 import java.sql.*;
-import java.util.ArrayList;
 
-public class MySQLConnector {
-    private SQLBuilder sqlString = new SQLBuilder();
-
-    public SQLBuilder getSqlString() { return sqlString; }
+public class MySQLConnector_ModelClass {
 
     public Connection startConnection()
     {
         Connection conn;
-        final String DRIVER = "com.mysql.cj.jdbc.Driver";
-        final String URL = "jdbc:mysql://localhost:3306/";
-        final String DB_NAME = "ip";
-        final String USER_NAME = "root";
-        final String PASSWORD = "ac01AC=!";
+        String url = "jdbc:mysql://localhost:3306/";
+        String dbName = "ip";
+        String driver = "com.mysql.cj.jdbc.Driver";
+        String userName = "root";
+        String password = "ac01AC=!";
 
-        try {
-            Class.forName(DRIVER).newInstance();
-            conn = DriverManager.getConnection(URL + DB_NAME + "?user=" + USER_NAME + "&password=" + PASSWORD);
+        try
+        {
+            Class.forName(driver).newInstance();
+            // conn = DriverManager.getConnection(url+dbName, userName, password);
+            conn = DriverManager.getConnection(url + dbName + "?user=" + userName + "&password=" + password);
+            // System.out.println("Connected to the database");
             return conn;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
+            // e.printStackTrace();
             System.out.println("NO CONNECTION =(");
         }
         return null;
@@ -34,42 +33,27 @@ public class MySQLConnector {
         try
         {
             conn.close();
+            // System.out.println("Disconnected from database");
         } catch (SQLException e) {
             System.out.println("CANNOT DISCONNECT =(");
         }
     }
 
-    public DataLists readData() {
-        ArrayList<Task> tasks = new ArrayList<>();
-        ArrayList<Project> projects = new ArrayList<>();
+    public void readData(String sqlString) {
         try
         {
             Connection conn = (startConnection());
             Statement stmt = conn.createStatement();
             ResultSet rs = null;
-            rs = stmt.executeQuery(getSqlString().readTasksSqlString());
+            rs = stmt.executeQuery(sqlString);
             while (rs.next())
-                try {
-                    tasks.add(new Task(rs.getString(1).trim(), rs.getString(2).trim(),
-                            rs.getString(3).trim().replace("-", ""),
-                            rs.getBoolean(4), rs.getString(5).trim()));
-                } catch (NullPointerException e) {
-                    tasks.add(new Task(rs.getString(1).trim(), rs.getString(2).trim(),
-                            rs.getString(3).trim().replace("-", ""),
-                            rs.getBoolean(4)));
-                }
-            rs = stmt.executeQuery(getSqlString().readProjectsSqlString());
-            while (rs.next())
-                projects.add(new Project(rs.getString(1).trim(),rs.getString(2).trim(),
-                        rs.getString(3).trim().replace("-", ""),
-                        rs.getBoolean(4)));
+
+                System.out.println(rs.getString(1).trim() + " " + rs.getString(2).trim());
             closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("READ - CANNOT EXECUTE =(");
         }
-
-        return new DataLists(tasks, projects);
     }
 
     public void appendData(String sqlString) {

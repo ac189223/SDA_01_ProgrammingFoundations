@@ -1,8 +1,8 @@
 package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
 
-import PF04_IndividualProject.IP_04_SplitControllerVersion.Model.Project;
-import PF04_IndividualProject.IP_04_SplitControllerVersion.Model.Register;
-import PF04_IndividualProject.IP_04_SplitControllerVersion.Model.Task;
+import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Project;
+import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Task;
 
 public class MessageBuilder {
 

@@ -1,9 +1,8 @@
 package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
 
-import PF04_IndividualProject.IP_04_SplitControllerVersion.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Register;
 
 public class Controller {
-    private static final String FILE_NAME = "src/PF04_IndividualProject/Resources/IPData.csv";
     private ControllerProjects controllerProjects;
     private ControllerTasks controllerTasks;
     private PopUpsBuilder popUpsBuilder;
@@ -28,7 +27,7 @@ public class Controller {
 
     public void run() {
         /** Create data and take a look on it */
-        uploadData(FILE_NAME);
+        uploadData();
         getRegister().printStatus();
 
         /** Start with popups */
@@ -42,7 +41,7 @@ public class Controller {
 
         switch (mainChosen) {
             case 0:                         // Save and quit
-                saveDataChosen();
+//                saveDataChosen();
             case 1:                         // Project choice what to do
                 projectsChosen();
                 break;
@@ -56,27 +55,28 @@ public class Controller {
         }
     }
 
-    private void uploadData(String fileName) {
-        DataFileOperator dataReader = new DataFileOperator();
-        getRegister().setTasks(dataReader.getData(fileName).getTasks());
-        getRegister().setTasksIds(dataReader.getData(fileName).getTasksIds());
-        getRegister().setProjects(dataReader.getData(fileName).getProjects());
-        getRegister().setProjectsIds(dataReader.getData(fileName).getProjectsIds());
+    private void uploadData() {
+        MySQLConnector dataReader = new MySQLConnector();
+        DataLists dataLists = dataReader.readData();
+        getRegister().setTasks(dataLists.getTasks());
+        getRegister().getTasks().stream().forEach(task -> getRegister().getTasksIds().add(task.getId()));
+        getRegister().setProjects(dataLists.getProjects());
+        getRegister().getProjects().stream().forEach(project -> getRegister().getProjectsIds().add(project.getId()));
         getRegister().getTasks().stream().filter(task -> !task.getAssignedToProject().equals(""))
                 .forEach(task -> getRegister().addTaskToProject(task.getId(), task.getAssignedToProject()));
     }
 
-    private void saveDataChosen() {
-        saveData(FILE_NAME);
-        getPopUpsBuilder().saveConfirmation();
-        System.exit(0);
-    }
+//    private void saveDataChosen() {
+//        saveData();
+//        getPopUpsBuilder().saveConfirmation();
+//        System.exit(0);
+//    }
 
-    private void saveData(String fileName) {
-        DataFileOperator dataWriter = new DataFileOperator();
-        dataWriter.appendNewLines(fileName,
-                dataWriter.chooseLinesToKeep('d', fileName), getRegister().getProjects(), getRegister().getTasks());
-    }
+//    private void saveData() {
+//        MySQLOperator dataWriter = new MySQLOperator();
+//        dataWriter.appendNewLines(fileName,
+//                dataWriter.chooseLinesToKeep('d', fileName), getRegister().getProjects(), getRegister().getTasks());
+//    }
 
     private void projectsChosen() {
         getControllerProjects().run(getRegister());
