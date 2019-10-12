@@ -31,12 +31,12 @@ public class PopUpsBuilder {
         return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseMain(register), mains);
     }
 
-    public void saveConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().saveData()); }
+    public void saveConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().saveDataConfirmation()); }
 
-    public void noProjectsInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noProjects()); }
+    public void noProjectsInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noProjectsInfo()); }
 
     public void noTasksInfo() {
-        getPrint().showMessage(getFrame(), getMessageBuilder().noProjects());
+        getPrint().showMessage(getFrame(), getMessageBuilder().noProjectsInfo());
     }
 
     public void noTasksNoProjectsInfo() {
@@ -47,11 +47,11 @@ public class PopUpsBuilder {
     }
 
     public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProject(chosenTaskToAddToProject, chosenProject));
+        getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProjectConfirmation(chosenTaskToAddToProject, chosenProject));
     }
 
     public void taskAlreadyInProjectInformation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().taskAlreadyInProject(chosenTaskToAddToProject, chosenProject));
+        getPrint().showMessage(getFrame(), getMessageBuilder().taskAlreadyInProjectInfo(chosenTaskToAddToProject, chosenProject));
     }
 
 
