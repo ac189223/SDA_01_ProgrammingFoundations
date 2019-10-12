@@ -5,19 +5,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateValidator {
+
+    /** =================    =================    Date format validation    =================   ================= */
+
     public boolean isThisDateValid(String dateToValidate, String dateFromat){
 
-        if (dateToValidate == null) { return false; }
+        if (dateToValidate == null) { return false; }                   // Empty date is not valid
 
-        SimpleDateFormat sdf = new SimpleDateFormat(dateFromat);
-        sdf.setLenient(false);
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFromat);        // Setting valid format according to input
+        sdf.setLenient(false);                                          // To avoid transformation of input like 20191575
 
         try {
-            //if not valid, it will throw ParseException
-            Date date = sdf.parse(dateToValidate);
+            Date date = sdf.parse(dateToValidate);                      // Try to fit date into selected format
         } catch (ParseException e) {
-            return false;
+            return false;                                               // Return false if does not fit
         }
-        return true;
+        return true;                                                    // Return true if it is ok
     }
 }

@@ -25,73 +25,83 @@ public class Controller {
     public void setPopUpsBuilder(PopUpsBuilder popUpsBuilder) { this.popUpsBuilder = popUpsBuilder; }
     public void setRegister(Register register) { this.register = register; }
 
-    public void run() {
-        /** Create data and take a look on it */
-        uploadData();
-        getRegister().printStatus();
+    /** =================    =================    Controller    =================   ================= */
 
-        /** Start with popups */
-        while (true) { mainChoice(); }
+    // Main program
+    public void run() {
+        uploadData();                                   // Upload data from MySQL database
+        getRegister().printStatus();                    // Check if successful
+
+        while (true) { mainChoice(); }                  // Start with popups and get back to main menu every time
     }
 
+    // Main menu, first choice
     private void mainChoice() {
-        int mainChosen = -1;                // Main choice what to do
+        int mainChosen = -1;
         while (mainChosen < 0 || mainChosen > 3)
             mainChosen = getPopUpsBuilder().mainChoice(getRegister());
 
         switch (mainChosen) {
             case 0:                         // Save and quit
                 saveDataChosen();
-            case 1:                         // Project choice what to do
+            case 1:                         // Work with projects
                 projectsChosen();
                 break;
-            case 2:                         // Task choice what to do
+            case 2:                         // Work with tasks
                 tasksChosen();
                 break;
-            case 3:                         // Print all
+            case 3:                         // Print out all
                 printAllChosen();
                 break;
         }
     }
 
+    // Upload data from MySQL database
     private void uploadData() {
         MySQLConnector dataReader = new MySQLConnector();
-        DataLists dataLists = dataReader.readData();
+        DataLists dataLists = dataReader.readData();                    // Retrieve data in DataLists format
+                                                                        // And populate registers lists
         getRegister().setTasks(dataLists.getTasks());
         getRegister().getTasks().forEach(task -> getRegister().getTasksIds().add(task.getId()));
         getRegister().setProjects(dataLists.getProjects());
         getRegister().getProjects().forEach(project -> getRegister().getProjectsIds().add(project.getId()));
+                                                                        // Create tasks assignations in projects
         getRegister().getTasks().stream().filter(task -> !task.getAssignedToProject().equals(""))
                 .forEach(task -> getRegister().addTaskToProject(task.getId(), task.getAssignedToProject()));
     }
 
+    // Save data
     private void saveDataChosen() {
-        saveData();
-        getPopUpsBuilder().saveConfirmation();
-        System.exit(0);
+        saveData();                                                     // Save data into MySQL database
+        getPopUpsBuilder().saveConfirmation();                          // Print confirmation
+        System.exit(0);                                          // Close application
     }
 
+    // Save data into MySQL database
     private void saveData() {
         MySQLConnector dataWriter = new MySQLConnector();
-        dataWriter.dropDatabase();
-        dataWriter.createDatabase();
-        dataWriter.populateTables(register);
+        dataWriter.dropTables();                                      // Delete old tables
+        dataWriter.createTables();                                    // Create new tables
+        dataWriter.populateTables(register);                          // Write data into new tables
     }
 
+    // Work with projects
     private void projectsChosen() {
         getControllerProjects().run(getRegister());
-    }
+    }           // Run projects register
 
+    // Work with tasks
     private void tasksChosen() {
         getControllerTasks().run(getRegister());
-    }
+    }                 // Run tasks register
 
+    // Print out all tasks and projects
     private void printAllChosen() {
         if (getRegister().getTasks().size() == 0 && getRegister().getProjects().size() == 0) {
-            getPopUpsBuilder().noTasksNoProjectsInfo();
+            getPopUpsBuilder().noTasksNoProjectsInfo();                     // Inform if database is empty
 
         } else {
-            getPopUpsBuilder().mainTasksAndProjectsList(getRegister());
+            getPopUpsBuilder().mainTasksAndProjectsList(getRegister());     // Print out all tasks and projects
         }
     }
 }

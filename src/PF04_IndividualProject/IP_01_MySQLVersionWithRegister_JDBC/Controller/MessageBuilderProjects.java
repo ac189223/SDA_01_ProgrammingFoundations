@@ -9,15 +9,18 @@ public class MessageBuilderProjects extends MessageBuilder {
 
     /** =================    =================    Projects messages    =================   ================= */
 
+    // Message for projects main menu
     public String chooseOptionForProject(Register register) {
         StringBuilder builtMessage = new StringBuilder();
-        builtMessage.append("You have ").append(amountOfProjectsToDo(register)).append(" project");
+        builtMessage.append("You have ")
+                .append(amountOfProjectsToDo(register)).append(" project");         // Amount of unfinished projects
         if (amountOfProjectsToDo(register) != 1)
             builtMessage.append("s");
-        builtMessage.append(" to do and ").append(amountOfProjectsDone(register)).append(" project");
+        builtMessage.append(" to do and ")
+                .append(amountOfProjectsDone(register)).append(" project");         // Amount of finished projects
         if (amountOfProjectsDone(register) != 1)
             builtMessage.append("s");
-        builtMessage.append(" finished").append("\n\nChoose an option")
+        builtMessage.append(" finished").append("\n\nChoose an option")             // Main choice for projects
                 .append("\n\n(1) Filter projects (by assignment or status)")
                 .append("\n(2) Show projects (sorted by title, Id, due date, amount of tasks)")
                 .append("\n(3) Add new project")
@@ -26,20 +29,18 @@ public class MessageBuilderProjects extends MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    public String chooseActivityForProject(Register register, String chosenTask) {
-        String builtMessage = "Choose activity for " + chosenTask + " (" +
-                register.findProject(chosenTask).getTitle() + ")" +
-                "\n\n(1) Update (title, due date, status)" +
+    // Edit activities menu for projects
+    public String chooseActivityForProject(Register register, String chosenProject) {
+        String builtMessage = "Choose activity for " + chosenProject + " (" +
+                register.findProject(chosenProject).getTitle() + ")" +
+                "\n\n(1) Update (title, due date, assign tasks, status)" +
                 "\n(2) Mark as finished" +
                 "\n(3) Remove" +
                 "\n(4) Back to main menu";
         return builtMessage;
     }
 
-    public String removeProject() { return "Project was removed from the register"; }
-
-    public String markProjectAsDone() { return "Project was marked as finished"; }
-
+    // Update fields possibilities menu for projects (with actual values printed)
     public String chooseProjectField(Register register, String chosenTask) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Choose field to update for ").append(chosenTask)
@@ -55,49 +56,37 @@ public class MessageBuilderProjects extends MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    public String fixProjectStatus() { return  "Project status was fixed"; }
-
+    // Choices
     public String ifAddNextTask() {
         return "Choose an option" + "\n\n(1) Add next task" + "\n(2) Go to main menu";
     }
 
-    public String changedProjectDueDate() { return  "Project due date was changed"; }
-
-    public String changedProjectTitle() { return  "Project title was changed"; }
-
     public String enterProjectTitle() { return  "Enter project title"; }
 
-    public String addedProject(Register register) {
+    public String chooseProjectsSorting() {
+        return  "Print projects sorted by \n\n(1) Title \n(2) Id \n(3) Due date \n(4) Amount of tasks";
+    }
+
+    // Confirmations
+    public String removeProjectConfirmation() { return "Project was removed from the register"; }
+
+    public String markProjectAsDoneConfirmation() { return "Project was marked as finished"; }
+
+    public String fixProjectStatusConfirmation() { return  "Project status was fixed"; }
+
+    public String changedProjectDueDateConfirmation() { return  "Project due date was changed"; }
+
+    public String changedProjectTitleConfirmation() { return  "Project title was changed"; }
+
+    public String addedProjectConfirmation(Register register) {
         return "New project was added as " + register.getProjects().get(register.getProjects().size() - 1).getId();
     }
 
-    public String chooseProjectsSorting() {
-        String builtMessage = "";
-        builtMessage = "Print projects sorted by" +
-                "\n\n(1) Title" +
-                "\n(2) Id" +
-                "\n(3) Due date" +
-                "\n(4) Amount of tasks";
-        return builtMessage;
-    }
-
-    public String listOfProjects(List<Project> sortedProjects) {
+    // Print out for filtered or sorted projects
+    public String listOfProjects(List<Project> projects) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Projects\n");
-        sortedProjects.forEach(project -> {        // Add tasks to string
-            builtMessage.append("\n").append(project.getId());
-            if (project.getAssignedTasks().size() != 0)  {
-                if (project.getAssignedTasks().size() == 1)
-                    builtMessage.append(" with ").append(project.getAssignedTasks().size()).append(" task");
-                else
-                    builtMessage.append(" with ").append(project.getAssignedTasks().size()).append(" tasks");
-            }
-            builtMessage.append(" - named \"").append(project.getTitle()).append("\", with due date ").append(project.getDueDate());
-            if (project.ifDone())
-                builtMessage.append(" - finished");
-            else
-                builtMessage.append(" - unfinished");
-        });
+        projects.forEach(project -> builtMessage.append(addProjectToListForMain(project)));   // Add projects to list
         return String.valueOf(builtMessage);
     }
 }

@@ -6,6 +6,10 @@ import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Task;
 import java.util.ArrayList;
 
 final class DataLists {
+    /** =================    =================    Format of data    =================   ================= */
+    /** =================    =================     to be fetched    =================   ================= */
+    /** =================    =================     from database    =================   ================= */
+
     private final ArrayList<Task> tasks;
     private final ArrayList<Project> projects;
 

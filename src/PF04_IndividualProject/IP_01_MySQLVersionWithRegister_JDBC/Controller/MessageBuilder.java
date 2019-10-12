@@ -11,13 +11,15 @@ public class MessageBuilder {
     // Message for main menu
     public String chooseMain(Register register) {
         StringBuilder builtMessage = new StringBuilder();
-        builtMessage.append("You have ").append(amountOfTasks(register)).append(" task");
+        builtMessage.append("You have ").
+                append(amountOfTasks(register)).append(" task");                // Amount of tasks
         if ((amountOfTasks(register)) != 1)
             builtMessage.append("s");
-        builtMessage.append(" and ").append(amountOfProjects(register)).append(" project");
+        builtMessage.append(" and ").
+                append(amountOfProjects(register)).append(" project");          // Amount of projects
         if ((amountOfProjects(register)) != 1)
             builtMessage.append("s")
-                    .append("\n\nChoose an option")
+                    .append("\n\nChoose an option")                             // Main choice
                     .append("\n\n(1) Print all tasks and projects")
                     .append("\n(2) Work with tasks")
                     .append("\n(3) Work with projects")
@@ -47,7 +49,7 @@ public class MessageBuilder {
         return "Task " + chosenTask + " was added to project " + chosenProject;
     }
 
-    //Informations
+    // Information
     public String taskAlreadyInProjectInfo(String chosenTask, String chosenProject) {
         return "Task " + chosenTask + " was already added to project " + chosenProject;
     }
@@ -63,59 +65,65 @@ public class MessageBuilder {
     public String listForMain(Register register) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Projects and assigned tasks\n");
-        for (Project project: register.getProjects()) {                    // Loop through projects
-            builtMessage.append(addProjectToList(builtMessage, project));
-
-            for (String taskId : project.getAssignedTasks()) {
-                builtMessage.append("\n    ").append(taskId);
-                if (!register.findTask(taskId).getAssignedToProject().equals(""))
-                    builtMessage.append(" assigned to ").append(register.findTask(taskId).getAssignedToProject());
-                builtMessage.append(" - named \"").append(register.findTask(taskId).getTitle())
-                        .append("\", with due date ").append(register.findTask(taskId).getDueDate());
-                if (register.findTask(taskId).ifDone())
-                    builtMessage.append(" - finished");
-                else
-                    builtMessage.append(" - unfinished");
-            }
+        for (Project project: register.getProjects()) {                                         // For every project
+            builtMessage.append("\n")
+                    .append(String.valueOf(addProjectToListForMain(project)).substring(5));     // Add project
+            for (String taskId : project.getAssignedTasks())                                    // For all dependent tasks
+                builtMessage.append(addTaskToListForMain(register.findTask(taskId)));           // Add tasks
         }
         builtMessage.append("\n\nNot assigned tasks\n");
         for (Task task: register.getTasks()) {
-            if (task.getAssignedToProject().equals("")) {
-                builtMessage.append("\n").append(task.getId())
-                        .append(" - named \"").append(task.getTitle())
-                        .append("\", with due date ").append(task.getDueDate());
-                if (task.ifDone())
-                    builtMessage.append(" - finished");
-                else
-                    builtMessage.append(" - unfinished");
+            if (task.getAssignedToProject().equals("")) {                                       // Filter unassigned tasks
+                builtMessage.append("\n")
+                        .append(String.valueOf(addTaskToListForMain(task)).substring(5));       // Add them also
             }
         }
         return String.valueOf(builtMessage);
     }
 
-    // Add projects to list
-    private Appendable addProjectToList(StringBuilder builtMessage, Project project) {
-        builtMessage.append("\n").append(project.getId());
+    // Add projects to list printed from main menu
+    public Appendable addProjectToListForMain(Project project) {
+        StringBuilder appendix = new StringBuilder();
+        appendix.append("\n    ").append(project.getId());
         if (project.getAssignedTasks().size() != 0)  {
-            builtMessage.append(" with ").append(project.getAssignedTasks().size()).append(" task");
+            appendix.append(" with ").append(project.getAssignedTasks().size()).append(" task");
             if (project.getAssignedTasks().size() != 1)
-                builtMessage.append("s");
+                appendix.append("s");
         }
-        builtMessage.append(" - named \"").append(project.getTitle())
+        appendix.append(" - named \"").append(project.getTitle())
                 .append("\", with due date ").append(project.getDueDate());
         if (project.ifDone())
-            builtMessage.append(" - finished");
+            appendix.append(" - finished");
         else
-            builtMessage.append(" - unfinished");
-        return builtMessage;
+            appendix.append(" - unfinished");
+        return appendix;
+    }
+
+    // Add tasks to list printed from main menu
+    public Appendable addTaskToListForMain(Task task) {
+        StringBuilder appendix = new StringBuilder();
+        appendix.append("\n    ").append(task.getId());
+        if (!task.getAssignedToProject().equals(""))
+            appendix.append(" assigned to ").append(task.getAssignedToProject());
+        appendix.append(" - named \"").append(task.getTitle())
+                .append("\", with due date ").append(task.getDueDate());
+        if (task.ifDone())
+            appendix.append(" - finished");
+        else
+            appendix.append(" - unfinished");
+        return appendix;
     }
 
     // Counters
     int amountOfTasks(Register register) { return amountOfTasksDone(register) + amountOfTasksToDo(register); }
+
     int amountOfTasksDone(Register register) { return (int) register.getTasks().stream().filter(Task::ifDone).count(); }
+
     int amountOfTasksToDo(Register register) { return (int) register.getTasks().stream().filter(task -> !task.ifDone()).count(); }
 
     int amountOfProjects(Register register) { return amountOfProjectsDone(register) + amountOfProjectsToDo(register); }
+
     int amountOfProjectsDone(Register register) { return (int) register.getProjects().stream().filter(Project::ifDone).count(); }
+
     int amountOfProjectsToDo(Register register) { return (int) register.getProjects().stream().filter(project -> !project.ifDone()).count(); }
 }

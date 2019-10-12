@@ -7,6 +7,7 @@ public class SQLBuilder {
 
     /** =================    =================    SQL queries    =================   ================= */
 
+    // SQL queries to read data
     public String readTasksSqlString() {
         return "SELECT id, title, due_date, status, project_id FROM tasks;";
     }
@@ -15,10 +16,12 @@ public class SQLBuilder {
         return "SELECT id, title, due_date, status FROM projects;";
     }
 
+    // SQL query to clear database
     public String deleteTables() {
         return "DROP TABLE IF EXISTS tasks, projects;";
     }
 
+    // SQL queries to create tables
     public String createTableProjects() {
         return "CREATE TABLE IF NOT EXISTS projects (" +
                 "  id VARCHAR(7) NOT NULL," +
@@ -52,6 +55,7 @@ public class SQLBuilder {
                 "DEFAULT CHARACTER SET = utf8;";
     }
 
+    // SQL queries to populate tables with data
     public String populateTableProjects(Project project) {
         StringBuilder sqlString = new StringBuilder();
         sqlString.append("INSERT INTO projects ")
@@ -59,8 +63,8 @@ public class SQLBuilder {
                 .append("VALUES (")
                 .append("'").append(project.getId()).append("', ")
                 .append("'").append(project.getTitle()).append("', ")
-                .append("'").append(getDate(project.getDueDate())).append("', ")
-                .append(ifDone(project.ifDone())).append(");");
+                .append("'").append(getDate(project.getDueDate())).append("', ")        // Convert date before adding
+                .append(ifDone(project.ifDone())).append(");");                         // Convert boolean before adding
         return String.valueOf(sqlString);
     }
 
@@ -71,8 +75,8 @@ public class SQLBuilder {
                 .append("VALUES (")
                 .append("'").append(task.getId()).append("', ")
                 .append("'").append(task.getTitle()).append("', ")
-                .append("'").append(getDate(task.getDueDate())).append("', ")
-                .append(ifDone(task.ifDone())).append(", ");
+                .append("'").append(getDate(task.getDueDate())).append("', ")        // Convert date before adding
+                .append(ifDone(task.ifDone())).append(", ");                         // Convert boolean before adding
         if (task.getAssignedToProject() == "")
             sqlString.append("NULL);");
         else
@@ -80,6 +84,7 @@ public class SQLBuilder {
         return String.valueOf(sqlString);
     }
 
+    // Date format conversion (adding "-")
     private Appendable getDate(String dueDate) {
         StringBuilder date = new StringBuilder();
         date.append(dueDate, 0, 4).append("-")
@@ -88,6 +93,7 @@ public class SQLBuilder {
         return date;
     }
 
+    // Conversion of boolean to string
     private StringBuilder ifDone(boolean ifDone) {
         StringBuilder done = new StringBuilder();
         if (ifDone)

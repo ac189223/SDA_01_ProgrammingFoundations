@@ -24,15 +24,22 @@ public class PopUpsBuilder {
     public void setPrint(Print print) { this.print = print; }
     public void setFrame(JFrame frame) { this.frame = frame; }
 
-    /** =================    =================    Main popups    =================   ================= */
+    /** =================    =================    Popups    =================   ================= */
 
+    // Popup for main menu
     public int mainChoice(Register register) {
         Object[] mains = {4, 3, 2, 1};
         return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseMain(register), mains);
     }
 
+    // Confirmation popups
     public void saveConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().saveDataConfirmation()); }
 
+    public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
+        getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProjectConfirmation(chosenTaskToAddToProject, chosenProject));
+    }
+
+    // Information popups
     public void noProjectsInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noProjectsInfo()); }
 
     public void noTasksInfo() {
@@ -43,16 +50,11 @@ public class PopUpsBuilder {
         getPrint().showMessage(getFrame(), getMessageBuilder().noTasksNoProjects());
     }
 
-    public void mainTasksAndProjectsList(Register register) { getPrint().showMessage(getFrame(), getMessageBuilder().listForMain(register));
-    }
-
-    public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
-        getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProjectConfirmation(chosenTaskToAddToProject, chosenProject));
-    }
-
     public void taskAlreadyInProjectInformation(String chosenTaskToAddToProject, String chosenProject) {
         getPrint().showMessage(getFrame(), getMessageBuilder().taskAlreadyInProjectInfo(chosenTaskToAddToProject, chosenProject));
     }
 
-
+    //  Popup with list printed out from main menu
+    public void mainTasksAndProjectsList(Register register) { getPrint().showMessage(getFrame(), getMessageBuilder().listForMain(register));
+    }
 }

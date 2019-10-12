@@ -28,11 +28,13 @@ public class PopUpsBuilderProjects extends PopUpsBuilder {
 
     /** =================    =================    Projects popups    =================    ================= */
 
+    // Popup for main menu for projects
     public int chooseOptionForProject(Register register) {
         Object[] options = {5, 4, 3, 2, 1};
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().chooseOptionForProject(register), options);
     }
 
+    // Choice popups
     public String chooseProjectToEdit(Register register) {
         Object[] choices = register.getProjectsIds().toArray();
         return getPrint().showInputDialog(getFrame(), getMessageBuilderProjects().chooseTask(), choices);
@@ -42,10 +44,6 @@ public class PopUpsBuilderProjects extends PopUpsBuilder {
         Object[] activities = {4, 3, 2, 1};
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().chooseActivityForProject(register, chosenProject), activities);
     }
-
-    public void projectRemovalConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().removeProject()); }
-
-    public void projectMarkedAsDoneConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().markProjectAsDone()); }
 
     public int chooseProjectFieldToEdit(Register register, String chosenProject) {
         Object[] fields = {5, 4, 3, 2, 1};
@@ -57,8 +55,6 @@ public class PopUpsBuilderProjects extends PopUpsBuilder {
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().chooseStatus(), statusChoices);
     }
 
-    public void fixProjectStatusConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().fixProjectStatus()); }
-
     public String chooseTaskToAddToTheProject(Register register) {
         Object[] taskChoices = register.getTasksIds().toArray();
         return getPrint().showInputDialog(getFrame(), getMessageBuilderProjects().chooseTask(), taskChoices);
@@ -69,27 +65,9 @@ public class PopUpsBuilderProjects extends PopUpsBuilder {
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().ifAddNextTask(), statusChoices);
     }
 
-    public String changeProjectDueDate() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().chooseDueDate()); }
-
-    public void changeProjectDueDateConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectDueDate()); }
-
-    public void changedProjectTitleConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectTitle()); }
-
-    public String chooseNewTitleForProject() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().chooseTitle()); }
-
-    public String enterNewTitleForProject() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().enterProjectTitle()); }
-
-    public String enterNewDueDateForProject() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().enterDueDate()); }
-
-    public void addedNewProjectConfirmation(Register register) { getPrint().showMessage(getFrame(), getMessageBuilderProjects().addedProject(register)); }
-
     public int chooseSortingForProjects() {
         Object[] sortingChoices = {4, 3, 2, 1};
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().chooseProjectsSorting(), sortingChoices);
-    }
-
-    public void printSortedProjects(List<Project> sortedProjects) {
-        getPrint().showMessage(getFrame(), getMessageBuilderProjects().listOfProjects(sortedProjects));
     }
 
     public int chooseFilteringForProjects() {
@@ -97,6 +75,34 @@ public class PopUpsBuilderProjects extends PopUpsBuilder {
         return getPrint().showOptionDialog(getFrame(), getMessageBuilderProjects().chooseFiltering(), filteringChoices);
     }
 
+    // Input taking popups
+    public String changeProjectDueDate() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().chooseDueDate()); }
+
+    public String chooseNewTitleForProject() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().chooseTitle()); }
+
+    public String enterNewTitleForProject() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().enterProjectTitle()); }
+
+    public String enterNewDueDateForProject() { return getPrint().inputLine(getFrame(), getMessageBuilderProjects().enterDueDate()); }
+
+    // Confirmation popups
+    public void projectRemovalConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().removeProjectConfirmation()); }
+
+    public void projectMarkedAsDoneConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().markProjectAsDoneConfirmation()); }
+
+    public void fixProjectStatusConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().fixProjectStatusConfirmation()); }
+
+    public void changeProjectDueDateConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectDueDateConfirmation()); }
+
+    public void changedProjectTitleConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderProjects().changedProjectTitleConfirmation()); }
+
+    public void addedNewProjectConfirmation(Register register) { getPrint().showMessage(getFrame(), getMessageBuilderProjects().addedProjectConfirmation(register)); }
+
+    //  Popup with list of sorted projects
+    public void printSortedProjects(List<Project> sortedProjects) {
+        getPrint().showMessage(getFrame(), getMessageBuilderProjects().listOfProjects(sortedProjects));
+    }
+
+    //  Popup with list of filtered projects
     public void printFilteredProjects(List<Project> filteredProjects) {
         getPrint().showMessage(getFrame(), getMessageBuilderProjects().listOfProjects(filteredProjects));
     }
