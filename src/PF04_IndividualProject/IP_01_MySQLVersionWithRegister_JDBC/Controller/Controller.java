@@ -1,6 +1,6 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Controller;
 
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Register;
 
 public class Controller {
     private ControllerProjects controllerProjects;
@@ -41,14 +41,13 @@ public class Controller {
 
         switch (mainChosen) {
             case 0:                         // Save and quit
-//                saveDataChosen();
+                saveDataChosen();
             case 1:                         // Project choice what to do
                 projectsChosen();
                 break;
             case 2:                         // Task choice what to do
                 tasksChosen();
                 break;
-
             case 3:                         // Print all
                 printAllChosen();
                 break;
@@ -59,24 +58,25 @@ public class Controller {
         MySQLConnector dataReader = new MySQLConnector();
         DataLists dataLists = dataReader.readData();
         getRegister().setTasks(dataLists.getTasks());
-        getRegister().getTasks().stream().forEach(task -> getRegister().getTasksIds().add(task.getId()));
+        getRegister().getTasks().forEach(task -> getRegister().getTasksIds().add(task.getId()));
         getRegister().setProjects(dataLists.getProjects());
-        getRegister().getProjects().stream().forEach(project -> getRegister().getProjectsIds().add(project.getId()));
+        getRegister().getProjects().forEach(project -> getRegister().getProjectsIds().add(project.getId()));
         getRegister().getTasks().stream().filter(task -> !task.getAssignedToProject().equals(""))
                 .forEach(task -> getRegister().addTaskToProject(task.getId(), task.getAssignedToProject()));
     }
 
-//    private void saveDataChosen() {
-//        saveData();
-//        getPopUpsBuilder().saveConfirmation();
-//        System.exit(0);
-//    }
+    private void saveDataChosen() {
+        saveData();
+        getPopUpsBuilder().saveConfirmation();
+        System.exit(0);
+    }
 
-//    private void saveData() {
-//        MySQLOperator dataWriter = new MySQLOperator();
-//        dataWriter.appendNewLines(fileName,
-//                dataWriter.chooseLinesToKeep('d', fileName), getRegister().getProjects(), getRegister().getTasks());
-//    }
+    private void saveData() {
+        MySQLConnector dataWriter = new MySQLConnector();
+        dataWriter.dropDatabase();
+        dataWriter.createDatabase();
+        dataWriter.populateTables(register);
+    }
 
     private void projectsChosen() {
         getControllerProjects().run(getRegister());

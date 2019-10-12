@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

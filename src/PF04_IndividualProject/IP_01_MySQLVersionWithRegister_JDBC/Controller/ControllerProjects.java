@@ -1,7 +1,7 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Controller;
 
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Project;
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Project;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Register;
 
 import java.util.Collections;
 import java.util.Comparator;

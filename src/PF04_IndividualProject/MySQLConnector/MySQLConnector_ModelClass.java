@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.MySQLConnector;
 
 import java.sql.*;
 
@@ -39,7 +39,23 @@ public class MySQLConnector_ModelClass {
         }
     }
 
-    public void readData(String sqlString) {
+
+    public void createTable_CreateCopy(String sqlString) {
+        try
+        {
+            Connection conn = (startConnection());
+            Statement stmt = conn.createStatement();
+            stmt.execute("CREATE TABLE address_book (Last_Name char(50) default ''," +
+                    "First_Name char(50),Email char(50),Phone_Number char(50))");
+            stmt.execute("COPY address_book FROM 'address.dat' DELIMITER ',' NULL 'null'");
+            closeConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("READ - CANNOT EXECUTE =(");
+        }
+    }
+
+    public void readData_Select(String sqlString) {
         try
         {
             Connection conn = (startConnection());
@@ -56,7 +72,7 @@ public class MySQLConnector_ModelClass {
         }
     }
 
-    public void appendData(String sqlString) {
+    public void appendData_InsertUpdateDelete(String sqlString) {
         try
         {
             Connection conn = (startConnection());
@@ -69,7 +85,7 @@ public class MySQLConnector_ModelClass {
         }
     }
 
-    public void updateData(String sqlString) {
+    public void updateData_InsertUpdateDelete(String sqlString) {
         try
         {
             Connection conn = (startConnection());
@@ -82,7 +98,7 @@ public class MySQLConnector_ModelClass {
         }
     }
 
-    public void deleteData(String sqlString) {
+    public void deleteData_InsertUpdateDelete(String sqlString) {
         try
         {
             Connection conn = (startConnection());

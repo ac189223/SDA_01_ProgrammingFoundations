@@ -1,8 +1,8 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Controller;
 
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Project;
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Register;
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Task;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Project;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Task;
 
 public class MessageBuilder {
 
@@ -24,7 +24,7 @@ public class MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    public String saveData() { return  "Your data was saved to file"; }
+    public String saveData() { return  "Your data was saved"; }
 
     public String chooseTask() { return "Choose a task from a list"; }
 
@@ -65,7 +65,7 @@ public class MessageBuilder {
 
     public String listForMain(Register register) {
         StringBuilder builtMessage = new StringBuilder();
-        builtMessage.append("Projects and tasks\n");
+        builtMessage.append("Projects and assigned tasks\n");
         for (Project project: register.getProjects()) {             // Add projects
             builtMessage.append("\n").append(project.getId());
             if (project.getAssignedTasks().size() != 0)  {
@@ -92,6 +92,7 @@ public class MessageBuilder {
                     builtMessage.append(" - unfinished");
             }
         }
+        builtMessage.append("\n\nNot assigned tasks\n");
         for (Task task: register.getTasks()) {
             if (task.getAssignedToProject().equals("")) {
                 builtMessage.append("\n").append(task.getId());

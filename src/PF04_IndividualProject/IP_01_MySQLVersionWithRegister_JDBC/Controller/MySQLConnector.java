@@ -1,7 +1,8 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Controller;
 
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Project;
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Task;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Project;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Task;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,42 +73,67 @@ public class MySQLConnector {
         return new DataLists(tasks, projects);
     }
 
-    public void appendData(String sqlString) {
+    public void dropDatabase() {
         try
         {
             Connection conn = (startConnection());
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sqlString);
-            closeConnection(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("APPEND - CANNOT EXECUTE =(");
-        }
-    }
-
-    public void updateData(String sqlString) {
-        try
-        {
-            Connection conn = (startConnection());
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sqlString);
-            closeConnection(conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("UPDATE - CANNOT EXECUTE =(");
-        }
-    }
-
-    public void deleteData(String sqlString) {
-        try
-        {
-            Connection conn = (startConnection());
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(sqlString);
+            stmt.execute(getSqlString().deleteTables());
             closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("DELETE - CANNOT EXECUTE =(");
         }
     }
+
+    public void createDatabase() {
+        try
+        {
+            Connection conn = (startConnection());
+            Statement stmt = conn.createStatement();
+            stmt.execute(getSqlString().createTableProjects());
+            stmt.execute(getSqlString().createTableTasks());
+            closeConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("CREATE - CANNOT EXECUTE =(");
+        }
+    }
+
+    public void populateTables(Register register) {
+        try {
+            Connection conn = (startConnection());
+            conn.setAutoCommit(false);
+            try (Statement stmt = conn.createStatement()) {
+                register.getProjects()
+                        .forEach(project -> {
+                            try {
+                                stmt.executeUpdate(getSqlString().populateTableProjects(project));
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                System.out.println("POPULATE - CANNOT EXECUTE =(");
+                            }
+                        });
+                register.getTasks()
+                        .forEach(task -> {
+                            try {
+                                stmt.executeUpdate(getSqlString().populateTableTasks(task));
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                                System.out.println("POPULATE - CANNOT EXECUTE =(");
+                            }
+                        });
+                conn.commit();
+            } catch (SQLException e) {
+                conn.rollback();
+                e.printStackTrace();
+                System.out.println("POPULATE - CANNOT EXECUTE =(");
+            }
+            closeConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("POPULATE - CANNOT EXECUTE =(");
+        }
+    }
+
 }

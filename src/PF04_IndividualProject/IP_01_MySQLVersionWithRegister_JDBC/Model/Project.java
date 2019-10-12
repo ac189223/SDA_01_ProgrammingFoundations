@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model;
 
 import java.util.ArrayList;
 

@@ -1,7 +1,7 @@
-package PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Controller;
+package PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Controller;
 
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.Model.Register;
-import PF04_IndividualProject.IP_01_MySQLVersion_JDBC.View.Print;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.Model.Register;
+import PF04_IndividualProject.IP_01_MySQLVersionWithRegister_JDBC.View.Print;
 
 import javax.swing.*;
 
@@ -31,9 +31,7 @@ public class PopUpsBuilder {
         return getPrint().showOptionDialog(getFrame(), getMessageBuilder().chooseMain(register), mains);
     }
 
-    public void saveConfirmation() {
-        getPrint().showMessage(getFrame(), getMessageBuilder().saveData());
-    }
+    public void saveConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().saveData()); }
 
     public void noProjectsInfo() { getPrint().showMessage(getFrame(), getMessageBuilder().noProjects()); }
 
