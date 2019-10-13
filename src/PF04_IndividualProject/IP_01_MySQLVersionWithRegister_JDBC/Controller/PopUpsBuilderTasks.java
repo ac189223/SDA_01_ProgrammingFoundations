@@ -91,8 +91,6 @@ public class PopUpsBuilderTasks extends PopUpsBuilder {
 
     public void fixTaskStatusConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderTasks().fixTaskStatusConfirmation()); }
 
-    public void reassignedTaskConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderTasks().reassignedTaskConfirmation()); }
-
     public void changeTaskDueDateConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderTasks().changedTaskDueDateConfirmation()); }
 
     public void changedTaskTitleConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilderTasks().changedTaskTitleConfirmation()); }

@@ -108,6 +108,7 @@ public class ControllerProjects {
         getPopUpsBuilderProjects().projectMarkedAsDoneConfirmation();                   // Print confirmation
     }
 
+    // Choose field which will be edited
     private void chooseProjectFieldToEdit(Register register, String chosenProject) {
         int chosenField = -1;
         while (chosenField < 0 || chosenField > 4) {                                    // Print popup with choices
@@ -268,7 +269,7 @@ public class ControllerProjects {
     // Print out sorted projects
     private void printOutSortedChosen(Register register) {
         if (register.getProjects().size() == 0) {
-            getPopUpsBuilderProjects().noProjectsInfo();                                // Inform if there are no tasks
+            getPopUpsBuilderProjects().noProjectsInfo();                                // Inform if there are no projects
         } else {
             int chosenSorting = chooseSortingForProjects();                             // Choose sorting
 
@@ -321,7 +322,7 @@ public class ControllerProjects {
     // Print out filtered projects
     private void printOutFilteredOptionChosen(Register register) {
         if (register.getProjects().size() == 0) {
-            getPopUpsBuilderProjects().noProjectsInfo();                            // Inform if there are no tasks
+            getPopUpsBuilderProjects().noProjectsInfo();                            // Inform if there are no projects
         } else {
             int chosenFiltering = chooseFilteringForProjects();                     // Choose filtering
 
