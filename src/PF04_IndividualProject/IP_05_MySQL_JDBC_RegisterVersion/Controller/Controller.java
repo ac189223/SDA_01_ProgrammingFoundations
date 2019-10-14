@@ -84,7 +84,7 @@ public class Controller {
         MySQLConnector dataWriter = new MySQLConnector();
         dataWriter.dropTables();                                      // Delete old tables
         dataWriter.createTables();                                    // Create new tables
-        dataWriter.populateTables(register);                          // Write data into new tables
+        dataWriter.populateTables(register);                            // Write data into new tables
     }
 
     // Work with projects

@@ -102,5 +102,4 @@ public class SQLBuilder {
             done.append("false");
         return done;
     }
-
 }

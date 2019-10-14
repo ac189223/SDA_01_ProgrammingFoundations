@@ -78,6 +78,7 @@ public class MySQLConnector {
         return new DataLists(tasks, projects);
     }
 
+    // Delete tables from database
     public void dropTables() {
         try
         {
@@ -91,6 +92,7 @@ public class MySQLConnector {
         }
     }
 
+    // Recreate tables
     public void createTables() {
         try
         {
@@ -105,6 +107,7 @@ public class MySQLConnector {
         }
     }
 
+    // Populate tables with data
     public void populateTables(Register register) {
         try {
             Connection conn = (startConnection());                            // Establish connection
