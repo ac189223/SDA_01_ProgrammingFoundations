@@ -4,6 +4,10 @@ class Node {                                                // Elements of our l
     int elem;                                               // Identification
     Node next;                                              // Pointing to next element
 
+
+
+
+    
     public Node(int elem, Node next) {
         this.elem = elem;
         this.next = next;
