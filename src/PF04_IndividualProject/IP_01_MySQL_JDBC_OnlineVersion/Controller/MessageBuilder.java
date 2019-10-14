@@ -23,7 +23,7 @@ public class MessageBuilder {
                     .append("\n\n(1) Print all tasks and projects")
                     .append("\n(2) Work with tasks")
                     .append("\n(3) Work with projects")
-                    .append("\n(4) Save and quit");
+                    .append("\n(4) Quit application");
         return String.valueOf(builtMessage);
     }
 
@@ -43,7 +43,7 @@ public class MessageBuilder {
     public String chooseFiltering() { return "Print \n\n(1) Assigned \n(2) Not assigned \n(3) Finished \n(4) Unfinished"; }
 
     // Confirmations
-    public String saveDataConfirmation() { return "Your data was saved"; }
+    public String quitConfirmation() { return "Thank you for using"; }
 
     public String addedTaskToProjectConfirmation(String chosenTask, String chosenProject) {
         return "Task " + chosenTask + " was added to project " + chosenProject;

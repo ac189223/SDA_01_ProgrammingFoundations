@@ -9,18 +9,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerProjects {
-    private MessageBuilderProjects messageBuilderProjects;
     private PopUpsBuilderProjects popUpsBuilderProjects;
 
     public ControllerProjects() {
-        this.setMessageBuilderProjects(new MessageBuilderProjects());
         this.setPopUpsBuilderProjects(new PopUpsBuilderProjects());
     }
 
-    public MessageBuilderProjects getMessageBuilderProjects() { return messageBuilderProjects; }
     public PopUpsBuilderProjects getPopUpsBuilderProjects() { return popUpsBuilderProjects; }
 
-    public void setMessageBuilderProjects(MessageBuilderProjects messageBuilderProjects) { this.messageBuilderProjects = messageBuilderProjects; }
     public void setPopUpsBuilderProjects(PopUpsBuilderProjects popUpsBuilderProjects) { this.popUpsBuilderProjects = popUpsBuilderProjects; }
 
     /** =================    =================    Controller for projects    =================   ================= */

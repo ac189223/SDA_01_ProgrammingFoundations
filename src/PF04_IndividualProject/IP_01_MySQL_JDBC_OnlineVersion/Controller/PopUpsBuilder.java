@@ -33,7 +33,7 @@ public class PopUpsBuilder {
     }
 
     // Confirmation popups
-    public void saveConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().saveDataConfirmation()); }
+    public void quitConfirmation() { getPrint().showMessage(getFrame(), getMessageBuilder().quitConfirmation()); }
 
     public void addedTaskToProjectConfirmation(String chosenTaskToAddToProject, String chosenProject) {
         getPrint().showMessage(getFrame(), getMessageBuilder().addedTaskToProjectConfirmation(chosenTaskToAddToProject, chosenProject));

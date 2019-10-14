@@ -1,5 +1,7 @@
 package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model;
 
+import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface.MySQLController;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,52 +10,63 @@ public class Register {
     private ArrayList<String> tasksIds;
     private ArrayList<Project> projects;
     private ArrayList<String> projectsIds;
+    private MySQLController mySQLController;
 
     public Register() {
         this.setTasks(new ArrayList<>());
         this.setTasksIds(new ArrayList<>());                            // List of existing Ids speeds up search
         this.setProjects(new ArrayList<>());
         this.setProjectsIds(new ArrayList<>());                         // List of existing Ids speeds up search
+        this.setMySQLController(new MySQLController());                 // Accessor to update database
     }
 
     public ArrayList<Task> getTasks() { return tasks; }
     public ArrayList<String> getTasksIds() {return tasksIds; }
     public ArrayList<Project> getProjects() { return projects; }
     public ArrayList<String> getProjectsIds() {return projectsIds; }
+    public MySQLController getMySQLController() { return mySQLController; }
 
     public void setTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
     public void setTasksIds(ArrayList<String> tasksIds) { this.tasksIds = tasksIds; }
     public void setProjects(ArrayList<Project> projects) { this.projects = projects; }
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
+    public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
 
     /** =================    =================    Register of projects and tasks    =================   ================= */
 
     // Adding new task to the list
     public void addTask(Task task) {
-        task.setId("task" + randomId(getTasksIds()));
-        getTasks().add(task);
-        getTasksIds().add(task.getId());
+        task.setId("task" + randomId(getTasksIds()));                               // Create unique Id
+        getTasks().add(task);                                                       // Add task to the register
+        getTasksIds().add(task.getId());                                            // Add task Id to the list
+                                                                                    // Add new task to database
+        getMySQLController().addNewTask(task.getId(), task.getTitle(), task.getDueDate());
     }
 
     // Adding new project to the list
     public void addProject(Project project) {
-        project.setId("proj" + randomId(getProjectsIds()));
-        getProjects().add(project);
-        getProjectsIds().add(project.getId());
+        project.setId("proj" + randomId(getProjectsIds()));                         // Create unique Id
+        getProjects().add(project);                                                 // Add project to the register
+        getProjectsIds().add(project.getId());                                      // Add project Id to the list
+                                                                                    // Add new project to database
+        getMySQLController().addNewProject(project.getId(), project.getTitle(), project.getDueDate());
     }
 
     // Creating unique Id for new task or project
     private String randomId(ArrayList<String> listOfIds) {
         Random random = new Random();
-        String tempId = String.format("%03d", random.nextInt(1000));
+        String tempId = String.format("%03d", random.nextInt(1000));        // Create new Id
         if (listOfIds.size() != 0)
-            while (listOfIds.contains(tempId))
-                tempId = String.format("%03d", random.nextInt(1000));
+            while (listOfIds.contains(tempId))                                     // Check if it is unique
+                tempId = String.format("%03d", random.nextInt(1000));       // Create next one if not unique
         return tempId;
     }
 
     // Mark task as finished
-    public void markTaskAsDone(String id) { findTask(id).setDone(true); }
+    public void markTaskAsDone(String id) {
+        findTask(id).setDone(true);                                               // Mark task as finished in register
+        getMySQLController().markTaskAsDone(id);                                  // Mark task as finished in register
+    }
 
     // Find task in register
     public Task findTask(String id) {
@@ -78,8 +91,11 @@ public class Register {
 
     // Mark project as finished together with all dependent tasks
     public void markProjectAsDoneAlways(String id) {
-        findProject(id).getAssignedTasks().forEach(this::markTaskAsDone);       // Mark task as finished
-        findProject(id).setDone(true);                                          // Mark project as finished
+        findProject(id).getAssignedTasks().forEach(taskId -> {
+            markTaskAsDone(taskId);                                             // Mark task as finished
+        });
+        findProject(id).setDone(true);                                          // Mark project as finished in register
+        getMySQLController().markProjectAsDone(id);                             // Mark project as finished in database
     }
 
     // Find project in register
@@ -92,9 +108,36 @@ public class Register {
 
     // Add task to project
     public void addTaskToProject(String taskId, String projectId) {
-        findTask(taskId).setAssignedToProject(projectId);                       // Set project assignation in task
+        findTask(taskId).setAssignedToProject(projectId);                       // Set project assignation in task in register
+        getMySQLController().addTaskToProject(taskId, projectId);               // Set project assignation in task in database
         findProject(projectId).getAssignedTasks().add(taskId);                  // List task in project as assigned
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Remove single task assignation to project
     public void removeTaskFromProject(String taskId) {

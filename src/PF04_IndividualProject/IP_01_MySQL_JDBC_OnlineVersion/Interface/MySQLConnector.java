@@ -1,16 +1,11 @@
 package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface;
 
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Project;
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Register;
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Task;
-
 import java.sql.*;
-import java.util.ArrayList;
 
 public class MySQLConnector {
-    private SQLBuilder sqlString = new SQLBuilder();
+    private QueryBuilder sqlString = new QueryBuilder();
 
-    public SQLBuilder getSqlString() { return sqlString; }
+    public QueryBuilder getSqlString() { return sqlString; }
 
     /** =================    =================    MySQL database activities    =================   ================= */
 
@@ -44,103 +39,83 @@ public class MySQLConnector {
         }
     }
 
-    // Read data from database
-    public DataLists readData() {
-        ArrayList<Task> tasks = new ArrayList<>();
-        ArrayList<Project> projects = new ArrayList<>();
+
+
+
+
+
+
+
+
+
+    public void createTable_CreateCopy(String sqlString) {
         try
         {
-            Connection conn = (startConnection());                              // Establish connection
+            Connection conn = (startConnection());
             Statement stmt = conn.createStatement();
-            ResultSet rs = null;                                                // Prepare to fetch results
-            rs = stmt.executeQuery(getSqlString().readTasksSqlString());        // Execute select query against tasks table
+            stmt.execute("CREATE TABLE address_book (Last_Name char(50) default ''," +
+                    "First_Name char(50),Email char(50),Phone_Number char(50))");
+            stmt.execute("COPY address_book FROM 'address.dat' DELIMITER ',' NULL 'null'");
+            closeConnection(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("READ - CANNOT EXECUTE =(");
+        }
+    }
+
+    public void readData_Select(String sqlString) {
+        try
+        {
+            Connection conn = (startConnection());
+            Statement stmt = conn.createStatement();
+            ResultSet rs = null;
+            rs = stmt.executeQuery(sqlString);
             while (rs.next())
-                try {                                   // Add to array tasks assigned to projects
-                    tasks.add(new Task(rs.getString(1).trim(), rs.getString(2).trim(),
-                            rs.getString(3).trim().replace("-", ""),
-                            rs.getBoolean(4), rs.getString(5).trim()));
-                } catch (NullPointerException e) {      // Add unassigned tasks to array
-                    tasks.add(new Task(rs.getString(1).trim(), rs.getString(2).trim(),
-                            rs.getString(3).trim().replace("-", ""),
-                            rs.getBoolean(4)));
-                }
-            rs = stmt.executeQuery(getSqlString().readProjectsSqlString());    // Execute select query against tasks table
-            while (rs.next())                                                  // Add projects to array
-                projects.add(new Project(rs.getString(1).trim(),rs.getString(2).trim(),
-                        rs.getString(3).trim().replace("-", ""),
-                        rs.getBoolean(4)));
-            closeConnection(conn);                                             // Close connection
+
+                System.out.println(rs.getString(1).trim() + " " + rs.getString(2).trim());
+            closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("READ - CANNOT EXECUTE =(");                    // Inform if unable to read
+            System.out.println("READ - CANNOT EXECUTE =(");
         }
-
-        return new DataLists(tasks, projects);
     }
 
-    // Delete tables from database
-    public void dropTables() {
+    public void appendData_InsertUpdateDelete(String sqlString) {
         try
         {
-            Connection conn = (startConnection());                            // Establish connection
+            Connection conn = (startConnection());
             Statement stmt = conn.createStatement();
-            stmt.execute(getSqlString().deleteTables());                      // Execute drop query against tables
-            closeConnection(conn);                                            // Close connection
+            stmt.executeUpdate(sqlString);
+            closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("DELETE - CANNOT EXECUTE =(");                 // Inform if unable to delete tables
+            System.out.println("APPEND - CANNOT EXECUTE =(");
         }
     }
 
-    // Recreate tables
-    public void createTables() {
+    public void updateData_InsertUpdateDelete(String sqlString) {
         try
         {
-            Connection conn = (startConnection());                            // Establish connection
+            Connection conn = (startConnection());
             Statement stmt = conn.createStatement();
-            stmt.execute(getSqlString().createTableProjects());               // Execute create queries
-            stmt.execute(getSqlString().createTableTasks());
-            closeConnection(conn);                                            // Close connection
+            stmt.executeUpdate(sqlString);
+            closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("CREATE - CANNOT EXECUTE =(");                 // Inform if unable to create tables
+            System.out.println("UPDATE - CANNOT EXECUTE =(");
         }
     }
 
-    // Populate tables with data
-    public void populateTables(Register register) {
-        try {
-            Connection conn = (startConnection());                            // Establish connection
-            conn.setAutoCommit(false);
-            try (Statement stmt = conn.createStatement()) {
-                register.getProjects()
-                        .forEach(project -> {
-                            try {                                             // Create insert queries against projects
-                                stmt.executeUpdate(getSqlString().populateTableProjects(project));
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                                System.out.println("POPULATE - CANNOT EXECUTE =(");     // Inform if unable to write line
-                            }
-                        });
-                register.getTasks()
-                        .forEach(task -> {
-                            try {                                             // Create insert queries against tasks
-                                stmt.executeUpdate(getSqlString().populateTableTasks(task));
-                            } catch (SQLException e) {
-                                e.printStackTrace();
-                                System.out.println("POPULATE - CANNOT EXECUTE =(");     // Inform if unable to write line
-                            }
-                        });
-                conn.commit();                                                // Execute queries against tables
-            } catch (SQLException e) {
-                conn.rollback();
-                e.printStackTrace();
-                System.out.println("POPULATE - CANNOT EXECUTE =(");           // Inform if unable to write
-            }
-            closeConnection(conn);                                            // Close connection
+    public void deleteData_InsertUpdateDelete(String sqlString) {
+        try
+        {
+            Connection conn = (startConnection());
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sqlString);
+            closeConnection(conn);
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("POPULATE - CANNOT EXECUTE =(");               // Inform if unable to populate
+            System.out.println("DELETE - CANNOT EXECUTE =(");
         }
     }
 }

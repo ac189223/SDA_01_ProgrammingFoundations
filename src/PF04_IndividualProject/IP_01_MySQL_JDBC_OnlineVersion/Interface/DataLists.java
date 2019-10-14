@@ -13,9 +13,9 @@ public final class DataLists {
     private final ArrayList<Task> tasks;
     private final ArrayList<Project> projects;
 
-    public DataLists(ArrayList<Task> tasks, ArrayList<Project> projects) {
-        this.tasks = tasks;
-        this.projects = projects;
+    public DataLists() {
+        this.tasks = new ArrayList<>();
+        this.projects = new ArrayList<>();
     }
 
     public ArrayList<Task> getTasks() { return tasks; }

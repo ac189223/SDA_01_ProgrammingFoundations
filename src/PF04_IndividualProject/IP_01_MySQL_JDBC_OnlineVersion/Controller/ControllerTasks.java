@@ -8,18 +8,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ControllerTasks {
-    private MessageBuilderTasks messageBuilderTasks = new MessageBuilderTasks();
-    private PopUpsBuilderTasks popUpsBuilderTasks = new PopUpsBuilderTasks();
+    private PopUpsBuilderTasks popUpsBuilderTasks;
 
     public ControllerTasks() {
-        this.setMessageBuilderTasks(new MessageBuilderTasks());
         this.setPopUpsBuilderTasks(new PopUpsBuilderTasks());
     }
 
-    public MessageBuilderTasks getMessageBuilderTasks() { return messageBuilderTasks; }
     public PopUpsBuilderTasks getPopUpsBuilderTasks() { return popUpsBuilderTasks; }
 
-    public void setMessageBuilderTasks(MessageBuilderTasks messageBuilderTasks) { this.messageBuilderTasks = messageBuilderTasks; }
     public void setPopUpsBuilderTasks(PopUpsBuilderTasks popUpsBuilderTasks) { this.popUpsBuilderTasks = popUpsBuilderTasks; }
 
     /** =================    =================    Controller for tasks    =================   ================= */

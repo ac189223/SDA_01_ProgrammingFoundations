@@ -1,7 +1,7 @@
 package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Controller;
 
 import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface.DataLists;
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface.MySQLConnector;
+import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface.MySQLController;
 import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Register;
 
 public class Controller {
@@ -44,8 +44,8 @@ public class Controller {
             mainChosen = getPopUpsBuilder().mainChoice(getRegister());
 
         switch (mainChosen) {
-            case 0:                         // Save and quit
-                saveDataChosen();
+            case 0:                         // Quit
+                QuitChosen();
             case 1:                         // Work with projects
                 projectsChosen();
                 break;
@@ -60,7 +60,7 @@ public class Controller {
 
     // Upload data from MySQL database
     private void uploadData() {
-        MySQLConnector dataReader = new MySQLConnector();
+        MySQLController dataReader = new MySQLController();
         DataLists dataLists = dataReader.readData();                    // Retrieve data in DataLists format
                                                                         // And populate registers lists
         getRegister().setTasks(dataLists.getTasks());
@@ -73,18 +73,9 @@ public class Controller {
     }
 
     // Save data
-    private void saveDataChosen() {
-        saveData();                                                     // Save data into MySQL database
-        getPopUpsBuilder().saveConfirmation();                          // Print confirmation
+    private void QuitChosen() {
+        getPopUpsBuilder().quitConfirmation();                          // Print confirmation
         System.exit(0);                                          // Close application
-    }
-
-    // Save data into MySQL database
-    private void saveData() {
-        MySQLConnector dataWriter = new MySQLConnector();
-        dataWriter.dropTables();                                      // Delete old tables
-        dataWriter.createTables();                                    // Create new tables
-        dataWriter.populateTables(register);                            // Write data into new tables
     }
 
     // Work with projects

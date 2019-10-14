@@ -3,7 +3,7 @@ package PF04_IndividualProject.IP_05_MySQL_JDBC_RegisterVersion.Interface;
 import PF04_IndividualProject.IP_05_MySQL_JDBC_RegisterVersion.Model.Project;
 import PF04_IndividualProject.IP_05_MySQL_JDBC_RegisterVersion.Model.Task;
 
-public class SQLBuilder {
+public class SQLQueryBuilder {
 
     /** =================    =================    SQL queries    =================   ================= */
 
