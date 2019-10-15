@@ -32,25 +32,7 @@ public class Register {
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
     public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
 
-    /** =================    =================    Register of projects and tasks    =================   ================= */
-
-    // Adding new task to the list
-    public void addTask(Task task) {
-        task.setId("task" + randomId(getTasksIds()));                               // Create unique Id
-        getTasks().add(task);                                                       // Add task to the register
-        getTasksIds().add(task.getId());                                            // Add task Id to the list
-                                                                                    // Add new task to database
-        getMySQLController().addNewTask(task.getId(), task.getTitle(), task.getDueDate());
-    }
-
-    // Adding new project to the list
-    public void addProject(Project project) {
-        project.setId("proj" + randomId(getProjectsIds()));                         // Create unique Id
-        getProjects().add(project);                                                 // Add project to the register
-        getProjectsIds().add(project.getId());                                      // Add project Id to the list
-                                                                                    // Add new project to database
-        getMySQLController().addNewProject(project.getId(), project.getTitle(), project.getDueDate());
-    }
+    /** =================    =================    Register    =================   ================= */
 
     // Creating unique Id for new task or project
     private String randomId(ArrayList<String> listOfIds) {
@@ -62,50 +44,6 @@ public class Register {
         return tempId;
     }
 
-    // Mark task as finished
-    public void markTaskAsDone(String id) {
-        findTask(id).setDone(true);                                               // Mark task as finished in register
-        getMySQLController().markTaskAsDone(id);                                  // Mark task as finished in register
-    }
-
-    // Find task in register
-    public Task findTask(String id) {
-        for (Task task: getTasks())
-            if (task.getId().equals(id))
-                return task;                                                    // Return task
-        return null;                                                            // Return null if task was not found
-    }
-
-    // Mark project as finished if dependent tasks are finished
-    public void markProjectAsDoneDependent(String id) {
-        boolean check = true;
-        for (String taskId: findProject(id).getAssignedTasks()) {               // Go through tasks
-            if (!findTask(taskId).ifDone())
-                check = false;                                                  // if any dependent task is unfinished
-        }
-        if (check)
-            findProject(id).setDone(true);                                      // Mark project as finished
-        else
-            System.out.println("Mark all dependent tasks as finished first");   // Ask to correct tasks statuses
-    }
-
-    // Mark project as finished together with all dependent tasks
-    public void markProjectAsDoneAlways(String id) {
-        findProject(id).getAssignedTasks().forEach(taskId -> {
-            markTaskAsDone(taskId);                                             // Mark task as finished
-        });
-        findProject(id).setDone(true);                                          // Mark project as finished in register
-        getMySQLController().markProjectAsDone(id);                             // Mark project as finished in database
-    }
-
-    // Find project in register
-    public Project findProject(String id) {
-        for (Project project: getProjects())
-            if (project.getId().equals(id))
-                return project;                                                 // Return project
-        return null;                                                            // Return null if project was not found
-    }
-
     // Add task to project
     public void addTaskToProject(String taskId, String projectId) {
         findTask(taskId).setAssignedToProject(projectId);                       // Set project assignation in task in register
@@ -113,38 +51,13 @@ public class Register {
         findProject(projectId).getAssignedTasks().add(taskId);                  // List task in project as assigned
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Remove single task assignation to project
     public void removeTaskFromProject(String taskId) {
         if (findTask(taskId).getAssignedToProject() != "") {                    // If task is assigned
-                                                                                // Remove it from the list in project
+            // Remove it from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
-            findTask(taskId).setAssignedToProject("");                          // Remove project assignation in task
+            findTask(taskId).setAssignedToProject("");                          // Remove project assignation in task in register
+            getMySQLController().setTaskAssignationToNull(taskId);              // Remove project assignation in task in database
         }
     }
 
@@ -153,53 +66,10 @@ public class Register {
         ArrayList<String> assignedTasks = findProject(projectId).getAssignedTasks();
         while (assignedTasks.size() > 0) {                                      // While there are tasks assigned
             findTask(assignedTasks.get(0)).setAssignedToProject("");            // Remove project assignation in  first task
-                                                                                // Remove first task from the list in project
+            getMySQLController().setTaskAssignationToNull(assignedTasks.get(0));// Remove it also in database
+            // Remove first task from the list in project
             findProject(projectId).getAssignedTasks().remove(assignedTasks.get(0));
         }
-    }
-
-    // Remove task from register
-    public void removeTask(String taskId) {
-        if (!findTask(taskId).getAssignedToProject().equals(""))                // If task is assigned to any project
-                                                                                // Remove task from the list in project
-            findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
-        getTasks().remove(findTask(taskId));                                    // Remove task from register
-        getTasksIds().remove(taskId);                                           // Remove task Id form list
-    }
-
-    // Remove project from register together with all dependent tasks
-    public void removeProjectAlways(String projectId) {
-        for (String taskId: findProject(projectId).getAssignedTasks()) {        // For all dependent tasks
-            getTasksIds().remove(taskId);                                       // Remove task from register
-            getTasks().remove(findTask(taskId));                                // Remove task Id form list
-        }
-        getProjectsIds().remove(projectId);                                     // Remove project from register
-        getProjects().remove(findProject(projectId));                           // Remove project Id form list
-    }
-
-    // Remove project from register if it does not have dependent tasks
-    public void removeProjectDependent(String projectId) {
-        if (findProject(projectId).getAssignedTasks().size() == 0) {            // If there are no dependent tasks
-            getProjectsIds().remove(projectId);                                 // Remove project from register
-            getProjects().remove(findProject(projectId));                       // Remove project Id form list
-        } else
-            System.out.println("Remove or delete all dependent tasks first");   // Ask to remove tasks first
-    }
-
-    // Set status of chosen task
-    public void setTaskStatus(String chosenTask, int chosenStatus) {
-        if (chosenStatus == 0)
-            findTask(chosenTask).setDone(false);                                // Set as unfinished
-        else if (chosenStatus == 1)
-            findTask(chosenTask).setDone(true);                                 // Set as finished
-    }
-
-    // Set status of chosen project
-    public void setProjectStatus(String chosenProject, int chosenStatus) {
-        if (chosenStatus == 0)
-            findProject(chosenProject).setDone(false);                         // Set as unfinished
-        else if (chosenStatus == 1)
-            markProjectAsDoneAlways(chosenProject);                             // Set as finished together with dependent tasks
     }
 
     // Printout to the console to check if data was imported correctly
@@ -237,5 +107,147 @@ public class Register {
                 .append(": ").append(taskToAppend.getTitle())
                 .append(" with due date ").append(taskToAppend.getDueDate()).append("\n");
         return taskAppendix;
+    }
+
+    /** =================    =================    Register for tasks    =================   ================= */
+
+    // Adding new task to the list
+    public void addTask(Task task) {
+        task.setId("task" + randomId(getTasksIds()));                               // Create unique Id
+        getTasks().add(task);                                                       // Add task to the register
+        getTasksIds().add(task.getId());                                            // Add task Id to the list
+                                                                                    // Add new task to database
+        getMySQLController().addNewTask(task.getId(), task.getTitle(), task.getDueDate());
+    }
+
+    // Mark task as finished
+    public void markTaskAsDone(String id) {
+        findTask(id).setDone(true);                                               // Mark task as finished in register
+        getMySQLController().markTaskAsDone(id);                                  // Mark task as finished in register
+    }
+
+    // Find task in register
+    public Task findTask(String id) {
+        for (Task task: getTasks())
+            if (task.getId().equals(id))
+                return task;                                                    // Return task
+        return null;                                                            // Return null if task was not found
+    }
+
+    // Remove task from register
+    public void removeTask(String taskId) {
+        if (!findTask(taskId).getAssignedToProject().equals(""))                // If task is assigned to any project
+            // Remove task from the list in project
+            findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
+        getTasks().remove(findTask(taskId));                                    // Remove task from register
+        getMySQLController().removeTask(taskId);                                // Remove task from database
+        getTasksIds().remove(taskId);                                           // Remove task Id form list
+    }
+
+    // Set status of chosen task
+    public void setTaskStatus(String chosenTask, int chosenStatus) {
+        if (chosenStatus == 0) {
+            findTask(chosenTask).setDone(false);                                // Set task as unfinished in register
+            getMySQLController().markTaskAsNotDone(chosenTask);                 // Set task as unfinished in database
+        } else if (chosenStatus == 1) {
+            findTask(chosenTask).setDone(true);                                 // Set task as finished in register
+            getMySQLController().markProjectAsDone(chosenTask);                 // Set task as finished in database
+        }
+    }
+
+    // Set due date of chosen task
+    public void setTaskDueDate(String chosenTask, String chosenDueDate) {
+        findTask(chosenTask).setDueDate(chosenDueDate);                         // Set task due date in register
+        getMySQLController().setTaskDueDate(chosenTask, chosenDueDate);         // Set task due date in database
+    }
+
+    // Set title of chosen task
+    public void setTaskTitle(String chosenTask, String chosenTitle) {
+        findTask(chosenTask).setTitle(chosenTitle);                             // Set task title in register
+        getMySQLController().setTaskTitle(chosenTask, chosenTitle);             // Set task title in database
+    }
+
+    /** =================    =================    Register for projects    =================   ================= */
+
+    // Adding new project to the list
+    public void addProject(Project project) {
+        project.setId("proj" + randomId(getProjectsIds()));                         // Create unique Id
+        getProjects().add(project);                                                 // Add project to the register
+        getProjectsIds().add(project.getId());                                      // Add project Id to the list
+                                                                                    // Add new project to database
+        getMySQLController().addNewProject(project.getId(), project.getTitle(), project.getDueDate());
+    }
+
+    // Mark project as finished if dependent tasks are finished
+    public void markProjectAsDoneDependent(String id) {
+        boolean check = true;
+        for (String taskId: findProject(id).getAssignedTasks()) {               // Go through tasks
+            if (!findTask(taskId).ifDone())
+                check = false;                                                  // if any dependent task is unfinished
+        }
+        if (check)
+            findProject(id).setDone(true);                                      // Mark project as finished
+        else
+            System.out.println("Mark all dependent tasks as finished first");   // Ask to correct tasks statuses
+    }
+
+    // Mark project as finished together with all dependent tasks
+    public void markProjectAsDoneAlways(String id) {
+        findProject(id).getAssignedTasks().forEach(taskId -> {
+            markTaskAsDone(taskId);                                             // Mark task as finished
+        });
+        findProject(id).setDone(true);                                          // Mark project as finished in register
+        getMySQLController().markProjectAsDone(id);                             // Mark project as finished in database
+    }
+
+    // Find project in register
+    public Project findProject(String id) {
+        for (Project project: getProjects())
+            if (project.getId().equals(id))
+                return project;                                                 // Return project
+        return null;                                                            // Return null if project was not found
+    }
+
+    // Remove project from register together with all dependent tasks
+    public void removeProjectAlways(String projectId) {
+        for (String taskId: findProject(projectId).getAssignedTasks()) {        // For all dependent tasks
+            getTasks().remove(findTask(taskId));                                // Remove task from register
+            getMySQLController().removeTask(taskId);                            // Remove task from database
+            getTasksIds().remove(taskId);                                       // Remove task Id form list
+        }
+        getProjects().remove(findProject(projectId));                           // Remove project from register
+        getMySQLController().removeProject(projectId);                          // Remove project from database
+        getProjectsIds().remove(projectId);                                     // Remove project Id form list
+    }
+
+    // Remove project from register if it does not have dependent tasks
+    public void removeProjectDependent(String projectId) {
+        if (findProject(projectId).getAssignedTasks().size() == 0) {            // If there are no dependent tasks
+            getProjects().remove(findProject(projectId));                       // Remove project from register
+            getMySQLController().removeProject(projectId);                          // Remove project from database
+            getProjectsIds().remove(projectId);                                 // Remove project Id form list
+        } else
+            System.out.println("Remove or delete all dependent tasks first");   // Ask to remove tasks first
+    }
+
+    // Set status of chosen project
+    public void setProjectStatus(String chosenProject, int chosenStatus) {
+        if (chosenStatus == 0) {
+            findProject(chosenProject).setDone(false);                         // Set project as unfinished in register
+            getMySQLController().markProjectAsNotDone(chosenProject);          // Set project as unfinished in database
+        } else if (chosenStatus == 1)
+            markProjectAsDoneAlways(chosenProject);                             // Set as finished together with dependent tasks
+    }
+
+    // Set due date of chosen project
+    public void setProjectDueDate(String chosenProject, String chosenDueDate) {
+        findProject(chosenProject).setDueDate(chosenDueDate);                   // Set project due date in register
+        getMySQLController().setProjectDueDate(chosenProject, chosenDueDate);   // Set project due date in database
+    }
+
+    // Set title of chosen project
+    public void setProjectTitle(String chosenProject, String chosenTitle) {
+        findProject(chosenProject).setTitle(chosenTitle);                       // Set project title in register
+        getMySQLController().setProjectTitle(chosenProject, chosenTitle);       // Set project title in database
     }
 }

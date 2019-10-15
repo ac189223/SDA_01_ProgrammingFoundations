@@ -189,14 +189,14 @@ public class ControllerTasks {
             } while (chosenDueDate.equals(""));
         } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));     // Check if date is valid
 
-        register.findTask(chosenTask).setDueDate(chosenDueDate);                    // Change due date of chosen task
-        getPopUpsBuilderTasks().changeTaskDueDateConfirmation();                    // Print confirmation
+        register.setTaskDueDate(chosenTask, chosenDueDate);                                 // Change due date of chosen task
+        getPopUpsBuilderTasks().changeTaskDueDateConfirmation();                            // Print confirmation
     }
 
     // Change title of chosen task
     private void changeTaskTitle(Register register, String chosenTask) {
         String chosenTitle = chooseNewTitleForTask();                               // Get new title
-        register.findTask(chosenTask).setTitle(chosenTitle);                        // Change title of chosen task
+        register.setTaskTitle(chosenTask, chosenTitle);                             // Change title of chosen task
         getPopUpsBuilderTasks().changedTaskTitleConfirmation();                     // Print confirmation
     }
 

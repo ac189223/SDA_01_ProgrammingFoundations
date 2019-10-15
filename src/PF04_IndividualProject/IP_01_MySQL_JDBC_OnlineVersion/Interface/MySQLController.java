@@ -42,7 +42,7 @@ public class MySQLController {
         return dataLists;
     }
 
-    // Append tasks to result set
+    // Append tasks from database to result set
     private void createTasks(DataLists dataLists, ResultSet rs) throws SQLException {
         while (rs.next())
             try {                                                                       // Add to array tasks assigned to projects
@@ -59,7 +59,7 @@ public class MySQLController {
             }
     }
 
-    // Append projects to result set
+    // Append projects from database to result set
     private void createProjects(DataLists dataLists, ResultSet rs) throws SQLException {
         while (rs.next())                                                               // Add projects to array
             dataLists.getProjects().add(new Project(rs.getString(1).trim(),
@@ -68,6 +68,37 @@ public class MySQLController {
                     rs.getBoolean(4)));
     }
 
+    // Assign task to the project
+    public void addTaskToProject(String taskId, String projectId) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().addTaskToProject(taskId, projectId));      // Execute add task to project query
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("ADD TASK TO PROJECT - CANNOT EXECUTE =(");                  // Inform if unable to add task to project
+        }
+    }
+
+    // Set task assignation to project to null (unassigned task)
+    public void setTaskAssignationToNull(String taskId) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setTaskAssignationToNull(taskId));         // Execute remove assignation
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("REMOVE PROJECT ASSIGNATION - CANNOT EXECUTE =(");           // Inform if unable to remove
+        }
+    }
+
+    /** =================    =================    MySQL controller for tasks    =================   ================= */
+
+    // Add new task
     public void addNewTask(String id, String title, String dueDate) {
         try
         {
@@ -81,6 +112,79 @@ public class MySQLController {
         }
     }
 
+    // Mark task as finished
+    public void markTaskAsDone(String taskId) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().markTaskAsDone(taskId));                   // Execute mark task finished query
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("MARK TASK AS FINISHED - CANNOT EXECUTE =(");                    // Inform if unable to mark as finished
+        }
+    }
+
+    // Mark task as unfinished
+    public void markTaskAsNotDone(String taskId) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().markTaskAsNotDone(taskId));                // Execute mark task unfinished query
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("MARK TASK AS UNFINISHED - CANNOT EXECUTE =(");              // Inform if unable to mark as unfinished
+        }
+    }
+
+    // Remove task
+    public void removeTask(String taskId) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().removeTask(taskId));                       // Execute remove task query
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("REMOVE TASK - CANNOT EXECUTE =(");                          // Inform if unable to remove task
+        }
+    }
+
+    // Set task due date
+    public void setTaskDueDate(String taskId, String dueDate) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setTaskDueDate(taskId, dueDate));          // Execute set due date for task
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SET TASK DUE DATE - CANNOT EXECUTE =(");                    // Inform if unable to set
+        }
+    }
+
+    // Set task title
+    public void setTaskTitle(String taskId, String title) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setTaskTitle(taskId, title));              // Execute set title for task
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SET TASK TITLE - CANNOT EXECUTE =(");                       // Inform if unable to set
+        }
+    }
+
+    /** =================    =================    MySQL controller for projects    =================   ================= */
+
+    // Add new project
     public void addNewProject(String id, String title, String dueDate) {
         try
         {
@@ -94,42 +198,73 @@ public class MySQLController {
         }
     }
 
-    public void markTaskAsDone(String id) {
+    // Mark project as finished
+    public void markProjectAsDone(String projectId) {
         try
         {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate(getQueryBuilder().markTaskAsDone(id));                       // Execute mark task done query
+            stmt.executeUpdate(getQueryBuilder().markProjectAsDone(projectId));             // Execute mark project finished query
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("MARK TASK AS DONE - CANNOT EXECUTE =(");                    // Inform if unable to mark as done
+            System.out.println("MARK PROJECT AS FINISHED - CANNOT EXECUTE =(");             // Inform if unable to mark as finished
         }
     }
 
-    public void markProjectAsDone(String id) {
+    // Mark project as unfinished
+    public void markProjectAsNotDone(String projectId) {
         try
         {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate(getQueryBuilder().markProjectAsDone(id));                       // Execute mark project done query
+            stmt.executeUpdate(getQueryBuilder().markProjectAsNotDone(projectId));          // Execute mark project unfinished query
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("MARK PROJECT AS DONE - CANNOT EXECUTE =(");                 // Inform if unable to mark as done
+            System.out.println("MARK PROJECT AS UNFINISHED - CANNOT EXECUTE =(");           // Inform if unable to mark as unfinished
         }
     }
 
-    public void addTaskToProject(String taskId, String projectId) {
+    // Remove project
+    public void removeProject(String projectId) {
         try
         {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
-            stmt.executeUpdate(getQueryBuilder().addTaskToProject(taskId, projectId));      // Execute add task to project query
+            stmt.executeUpdate(getQueryBuilder().removeProject(projectId));                 // Execute remove project query
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("ADD TASK TO PROJECT - CANNOT EXECUTE =(");                  // Inform if unable to add task to project
+            System.out.println("REMOVE PROJECT - CANNOT EXECUTE =(");                          // Inform if unable to remove project
+        }
+    }
+
+    // Set project due date
+    public void setProjectDueDate(String projectId, String dueDate) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setProjectDueDate(projectId, dueDate));    // Execute set due date for project
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SET PROJECT DUE DATE - CANNOT EXECUTE =(");                 // Inform if unable to set
+        }
+    }
+
+    // Set project title
+    public void setProjectTitle(String projectId, String title) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setProjectTitle(projectId, title));        // Execute set title for project
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SET PROJECT TITLE - CANNOT EXECUTE =(");                    // Inform if unable to set
         }
     }
 }

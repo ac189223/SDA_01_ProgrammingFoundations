@@ -205,16 +205,16 @@ public class ControllerProjects {
                     chosenDueDate = getPopUpsBuilderProjects().changeProjectDueDate();      // Ask for due date input
                 } while (chosenDueDate == null);
             } while (chosenDueDate.equals(""));
-        } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));    // Check if date is valid
+        } while (!dateValidator.isThisDateValid(chosenDueDate, "yyyyMMdd"));     // Check if date is valid
 
-        register.findProject(chosenProject).setDueDate(chosenDueDate);                  // Change due date of chosen project
-        getPopUpsBuilderProjects().changeProjectDueDateConfirmation();                  // Print confirmation
+        register.setProjectDueDate(chosenProject, chosenDueDate);                           // Change due date of chosen project
+        getPopUpsBuilderProjects().changeProjectDueDateConfirmation();                      // Print confirmation
     }
 
     // Change title of chosen project
     private void changeProjectTitle(Register register, String chosenProject) {
         String chosenTitle = chooseNewTitleForProject();                                // Get new title
-        register.findProject(chosenProject).setTitle(chosenTitle);                      // Change title of chosen project
+        register.setProjectTitle(chosenProject, chosenTitle);                           // Change title of chosen project
         getPopUpsBuilderProjects().changedProjectTitleConfirmation();                   // Print confirmation
     }
 
@@ -237,6 +237,17 @@ public class ControllerProjects {
         getPopUpsBuilderProjects().addedNewProjectConfirmation(register);               // Print confirmation
     }
 
+    // Get title for new project
+    private String enterNewTitleForProject() {
+        String newTitle = "";
+        do {
+            do {
+                newTitle = getPopUpsBuilderProjects().enterNewTitleForProject();          // Ask for title input
+            } while (newTitle == null);
+        } while (newTitle.equals(""));
+        return newTitle;
+    }
+
     // Get due date for new project
     private String enterNewDueDateForProject() {
         String newDueDate = "";
@@ -249,17 +260,6 @@ public class ControllerProjects {
             } while (newDueDate.equals(""));
         } while (!dateValidator.isThisDateValid(newDueDate, "yyyyMMdd"));       // Check if date is valid
         return newDueDate;
-    }
-
-    // Get title for new project
-    private String enterNewTitleForProject() {
-        String newTitle = "";
-        do {
-            do {
-                newTitle = getPopUpsBuilderProjects().enterNewTitleForProject();          // Ask for title input
-            } while (newTitle == null);
-        } while (newTitle.equals(""));
-        return newTitle;
     }
 
     // Print out sorted projects
@@ -360,6 +360,4 @@ public class ControllerProjects {
         }
         return chosenFiltering;
     }
-
-
 }
