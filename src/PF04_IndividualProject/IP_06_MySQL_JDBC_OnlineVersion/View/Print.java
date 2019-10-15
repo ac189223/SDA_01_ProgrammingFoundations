@@ -1,6 +1,6 @@
-package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.View;
+package PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.View;
 
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Controller.Controller;
+import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Controller.Controller;
 
 import javax.swing.*;
 

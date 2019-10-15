@@ -1,8 +1,8 @@
-package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Controller;
+package PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Controller;
 
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Project;
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Register;
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model.Task;
+import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Project;
+import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Register;
+import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Task;
 
 public class MessageBuilder {
 

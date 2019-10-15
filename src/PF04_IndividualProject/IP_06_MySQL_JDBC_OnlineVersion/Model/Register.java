@@ -1,6 +1,6 @@
-package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Model;
+package PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model;
 
-import PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface.MySQLController;
+import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Interface.MySQLController;
 
 import java.util.ArrayList;
 import java.util.Random;

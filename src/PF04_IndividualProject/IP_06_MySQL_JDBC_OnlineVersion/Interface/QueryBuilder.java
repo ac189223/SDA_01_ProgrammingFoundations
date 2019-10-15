@@ -1,4 +1,4 @@
-package PF04_IndividualProject.IP_01_MySQL_JDBC_OnlineVersion.Interface;
+package PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Interface;
 
 public class QueryBuilder {
 
