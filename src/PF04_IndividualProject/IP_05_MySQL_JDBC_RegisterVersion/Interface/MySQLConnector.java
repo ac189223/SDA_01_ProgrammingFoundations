@@ -8,9 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class MySQLConnector {
-    private SQLBuilder sqlString = new SQLBuilder();
+    private SQLQueryBuilder sqlString = new SQLQueryBuilder();
 
-    public SQLBuilder getSqlString() { return sqlString; }
+    public SQLQueryBuilder getSqlString() { return sqlString; }
 
     /** =================    =================    MySQL database activities    =================   ================= */
 
