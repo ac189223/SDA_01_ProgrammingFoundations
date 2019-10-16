@@ -8,6 +8,9 @@ import java.sql.*;
 public class MySQLController {
     private QueryBuilder queryBuilder;
     private MySQLConnector mySQLConnector;
+    private final String CREATE = "creation_date";
+    private final String UPDATE = "last_update";
+    private final String DELETE = "deletion_date";
 
     public MySQLController () {
         this.setQueryBuilder(new QueryBuilder());
@@ -16,6 +19,9 @@ public class MySQLController {
 
     public QueryBuilder getQueryBuilder() { return queryBuilder; }
     public MySQLConnector getMySQLConnector() { return mySQLConnector; }
+    public String getCREATE() { return CREATE; }
+    public String getUPDATE() { return UPDATE; }
+    public String getDELETE() { return DELETE; }
 
     public void setQueryBuilder(QueryBuilder queryBuilder) { this.queryBuilder = queryBuilder; }
     public void setMySQLConnector(MySQLConnector mySQLConnector) { this.mySQLConnector = mySQLConnector; }
@@ -75,6 +81,8 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().addTaskToProject(taskId, projectId));      // Execute add task to project query
+            updateTaskLogDate(taskId, getUPDATE());                                         // Update log date for task
+            updateProjectLogDate(projectId, getUPDATE());                                   // Update log task for project
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -83,12 +91,14 @@ public class MySQLController {
     }
 
     // Set task assignation to project to null (unassigned task)
-    public void setTaskAssignationToNull(String taskId) {
+    public void setTaskAssignationToNull(String taskId, String projectId) {
         try
         {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().setTaskAssignationToNull(taskId));         // Execute remove assignation
+            updateTaskLogDate(taskId, getUPDATE());                                         // Update log date for task
+            updateProjectLogDate(projectId, getUPDATE());                                   // Update log task for project
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,6 +129,7 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().markTaskAsDone(taskId));                   // Execute mark task finished query
+            updateTaskLogDate(taskId, getUPDATE());                                         // Update log date for task
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -133,6 +144,7 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().markTaskAsNotDone(taskId));                // Execute mark task unfinished query
+            updateTaskLogDate(taskId, getUPDATE());                                         // Update log date for task
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -142,16 +154,17 @@ public class MySQLController {
 
     // Remove task
     public void removeTask(String taskId) {
-        try
-        {
-            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(getQueryBuilder().removeTask(taskId));                       // Execute remove task query
-            getMySQLConnector().closeConnection(conn);                                      // Close connection
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("REMOVE TASK - CANNOT EXECUTE =(");                          // Inform if unable to remove task
-        }
+        updateTaskLogDate(taskId, getDELETE());                                             // Update log date for task
+//        try
+//        {
+//            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+//            Statement stmt = conn.createStatement();
+//            stmt.executeUpdate(getQueryBuilder().removeTask(taskId));                       // Execute remove task query
+//            getMySQLConnector().closeConnection(conn);                                      // Close connection
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.out.println("REMOVE TASK - CANNOT EXECUTE =(");                          // Inform if unable to remove task
+//        }
     }
 
     // Set task due date
@@ -161,6 +174,7 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().setTaskDueDate(taskId, dueDate));          // Execute set due date for task
+            updateTaskLogDate(taskId, getUPDATE());                                         // Update log date for task
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -175,10 +189,25 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().setTaskTitle(taskId, title));              // Execute set title for task
+            updateTaskLogDate(taskId, getUPDATE());                                         // Update log date for task
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("SET TASK TITLE - CANNOT EXECUTE =(");                       // Inform if unable to set
+        }
+    }
+
+    // Set task date as timestamp for creation_date, last_update or deletion_date
+    public void updateTaskLogDate(String taskId, String fieldName) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setTaskLogDate(taskId, fieldName));        // Execute set date for task
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SET TASK LOG DATE - CANNOT EXECUTE =(");                    // Inform if unable to set
         }
     }
 
@@ -205,6 +234,7 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().markProjectAsDone(projectId));             // Execute mark project finished query
+            updateProjectLogDate(projectId, getUPDATE());                                   // Update log task for project
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -219,6 +249,7 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().markProjectAsNotDone(projectId));          // Execute mark project unfinished query
+            updateProjectLogDate(projectId, getUPDATE());                                   // Update log task for project
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -228,16 +259,17 @@ public class MySQLController {
 
     // Remove project
     public void removeProject(String projectId) {
-        try
-        {
-            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(getQueryBuilder().removeProject(projectId));                 // Execute remove project query
-            getMySQLConnector().closeConnection(conn);                                      // Close connection
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("REMOVE PROJECT - CANNOT EXECUTE =(");                          // Inform if unable to remove project
-        }
+        updateProjectLogDate(projectId, getDELETE());                                       // Update log task for project
+//        try
+//        {
+//            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+//            Statement stmt = conn.createStatement();
+//            stmt.executeUpdate(getQueryBuilder().removeProject(projectId));                 // Execute remove project query
+//            getMySQLConnector().closeConnection(conn);                                      // Close connection
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            System.out.println("REMOVE PROJECT - CANNOT EXECUTE =(");                          // Inform if unable to remove project
+//        }
     }
 
     // Set project due date
@@ -247,6 +279,7 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().setProjectDueDate(projectId, dueDate));    // Execute set due date for project
+            updateProjectLogDate(projectId, getUPDATE());                                   // Update log task for project
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
@@ -261,10 +294,25 @@ public class MySQLController {
             Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(getQueryBuilder().setProjectTitle(projectId, title));        // Execute set title for project
+            updateProjectLogDate(projectId, getUPDATE());                                   // Update log task for project
             getMySQLConnector().closeConnection(conn);                                      // Close connection
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("SET PROJECT TITLE - CANNOT EXECUTE =(");                    // Inform if unable to set
+        }
+    }
+
+    // Set project date as timestamp for creation_date, last_update or deletion_date
+    public void updateProjectLogDate(String projectId, String fieldName) {
+        try
+        {
+            Connection conn = (getMySQLConnector().startConnection());                      // Establish connection
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(getQueryBuilder().setProjectLogDate(projectId, fieldName));  // Execute set date for project
+            getMySQLConnector().closeConnection(conn);                                      // Close connection
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("SET PROJECT LOG DATE - CANNOT EXECUTE =(");                 // Inform if unable to set
         }
     }
 }

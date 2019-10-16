@@ -57,7 +57,8 @@ public class Register {
             // Remove it from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
             findTask(taskId).setAssignedToProject("");                          // Remove project assignation in task in register
-            getMySQLController().setTaskAssignationToNull(taskId);              // Remove project assignation in task in database
+                                                                                // Remove project assignation in task in database
+            getMySQLController().setTaskAssignationToNull(taskId, findTask(taskId).getAssignedToProject());
         }
     }
 
@@ -66,8 +67,9 @@ public class Register {
         ArrayList<String> assignedTasks = findProject(projectId).getAssignedTasks();
         while (assignedTasks.size() > 0) {                                      // While there are tasks assigned
             findTask(assignedTasks.get(0)).setAssignedToProject("");            // Remove project assignation in  first task
-            getMySQLController().setTaskAssignationToNull(assignedTasks.get(0));// Remove it also in database
-            // Remove first task from the list in project
+                                                                                // Remove it also in database
+            getMySQLController().setTaskAssignationToNull(assignedTasks.get(0), projectId);
+                                                                                // Remove first task from the list in project
             findProject(projectId).getAssignedTasks().remove(assignedTasks.get(0));
         }
     }
@@ -103,7 +105,11 @@ public class Register {
             taskAppendix.append("(+)");
         else
             taskAppendix.append("(-)");
-        taskAppendix.append("        ").append(taskToAppend.getId())
+        if (taskToAppend.getAssignedToProject().equals(""))
+            taskAppendix.append("  ");
+        else
+            taskAppendix.append("        ");
+        taskAppendix.append(taskToAppend.getId())
                 .append(": ").append(taskToAppend.getTitle())
                 .append(" with due date ").append(taskToAppend.getDueDate()).append("\n");
         return taskAppendix;

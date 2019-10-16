@@ -6,12 +6,12 @@ public class QueryBuilder {
 
     // SQL queries to read tasks data from database
     public String readTasksSqlString() {
-        return "SELECT id, title, due_date, status, project_id FROM tasks;";
+        return "SELECT id, title, due_date, status, project_id FROM tasks WHERE deletion_date IS NULL;";
     }
 
     // SQL queries to read projects data from database
     public String readProjectsSqlString() {
-        return "SELECT id, title, due_date, status FROM projects;";
+        return "SELECT id, title, due_date, status FROM projects WHERE deletion_date IS NULL;";
     }
 
     /** =================    =================    SQL queries for tasks    =================   ================= */
@@ -51,6 +51,11 @@ public class QueryBuilder {
     // SQL query to set task title
     public String setTaskTitle(String taskId, String title) {
         return "UPDATE tasks SET title = '" + title + "' WHERE id = '" + taskId + "';";
+    }
+
+    // SQL query to set log dates for task
+    public String setTaskLogDate(String taskId, String fieldName) {
+        return "UPDATE projects SET " + fieldName + "  = CURRENT_TIMESTAMP WHERE id = '" + taskId + "';";
     }
 
     /** =================    =================    SQL queries for projects    =================   ================= */
@@ -101,6 +106,11 @@ public class QueryBuilder {
     // SQL query to set project title
     public String setProjectTitle(String projectId, String title) {
         return "UPDATE projects SET title = '" + title + "' WHERE id = '" + projectId + "';";
+    }
+
+    // SQL query to set log dates for project
+    public String setProjectLogDate(String projectId, String fieldName) {
+        return "UPDATE projects SET " + fieldName + "  = CURRENT_TIMESTAMP WHERE id = '" + projectId + "';";
     }
 
     /** =================    =================    Conversion    =================   ================= */
