@@ -41,7 +41,7 @@ public class ControllerProjects {
     /**
      * Printing main menu for projects
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      */
     public void optionChoice(Register register) {
         int optionChosen = -1;
@@ -69,7 +69,7 @@ public class ControllerProjects {
     /**
      * Printing menu of options for edition for projects
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      */
     private void editProjectChosen(Register register) {
         if (register.getProjects().size() == 0) {
@@ -97,7 +97,7 @@ public class ControllerProjects {
     /**
      * Choosing project to work with
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      */
     private String chooseProjectToEdit(Register register) {
         String chosenProject;
@@ -110,7 +110,7 @@ public class ControllerProjects {
     /**
      * Choosing what to do with chosen projects
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     project, that we will work with
      * @return                  integer value representing chosen activity
      */
@@ -125,7 +125,7 @@ public class ControllerProjects {
     /**
      * Removing project from register
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     project, that will be removed
      */
     private void removeProjectChosen(Register register, String chosenProject) {
@@ -136,7 +136,7 @@ public class ControllerProjects {
     /**
      * Marking project as finished
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     Id of the project, that will be removed
      */
     private void markProjectAsDone(Register register, String chosenProject) {
@@ -147,7 +147,7 @@ public class ControllerProjects {
     /**
      * Choosing field of the project, which will be edited
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     Id of the project, that will have field edited
      */
     private void chooseProjectFieldToEdit(Register register, String chosenProject) {
@@ -177,7 +177,7 @@ public class ControllerProjects {
     /**
      * Changing status of chosen project
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     Id of the project, that will be removed
      */
     private void changeProjectStatus(Register register, String chosenProject) {
@@ -200,7 +200,7 @@ public class ControllerProjects {
     /**
      * Assigning tasks to the chosen project
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     Id of the projects, that tasks will be assigned to
      */
     private void assignNewTasksToProject(Register register, String chosenProject) {
@@ -270,7 +270,7 @@ public class ControllerProjects {
     /**
      * Changing due date of chosen project
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     Id of the project, that will get new new date
      */
     private void changeProjectDueDate(Register register, String chosenProject) {
@@ -291,7 +291,7 @@ public class ControllerProjects {
     /**
      * Changing title of chosen project
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      * @param chosenProject     Id of the project, that will be renamed
      */
     private void changeProjectTitle(Register register, String chosenProject) {
@@ -318,7 +318,7 @@ public class ControllerProjects {
     /**
      * Adding new project to the register
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      */
     private void addNewProjectChosen(Register register) {
         String newTitle = enterNewTitleForProject();                                    // Get title
@@ -363,7 +363,7 @@ public class ControllerProjects {
     /**
      * Printing out list of projects (sorted)
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      */
     private void printOutSortedChosen(Register register) {
         if (register.getProjects().size() == 0) {
@@ -424,7 +424,7 @@ public class ControllerProjects {
     /**
      * Printing out filtered list of projects (sorted)
      *
-     * @param register          register containing projects
+     * @param register          register with tasks and projects
      */
     private void printOutFilteredOptionChosen(Register register) {
         if (register.getProjects().size() == 0) {

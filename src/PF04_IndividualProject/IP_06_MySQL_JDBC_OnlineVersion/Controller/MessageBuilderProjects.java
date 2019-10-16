@@ -5,11 +5,22 @@ import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Register;
 
 import java.util.List;
 
+/**
+ * Represents an extension of messageBuilder done for projects to build messages, that will be shown in popups
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class MessageBuilderProjects extends MessageBuilder {
 
-    /** =================    =================    Projects messages    =================   ================= */
+    /* =================    =================    Methods for projects    =================   ================= */
 
-    // Message for projects main menu
+    /**
+     * Building message for main menu for projects
+     *
+     * @param register                  register with tasks and projects
+     * @return                          message in String format
+     */
     public String chooseOptionForProject(Register register) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("You have ")
@@ -29,7 +40,13 @@ public class MessageBuilderProjects extends MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    // Edit activities menu for projects
+    /**
+     * Building message for menu of edit activities for projects
+     *
+     * @param register                  register with tasks and projects
+     * @param chosenProject             Id of the chosen project
+     * @return                          message in String format
+     */
     public String chooseActivityForProject(Register register, String chosenProject) {
         String builtMessage = "Choose activity for " + chosenProject + " (" +
                 register.findProject(chosenProject).getTitle() + ")" +
@@ -40,15 +57,21 @@ public class MessageBuilderProjects extends MessageBuilder {
         return builtMessage;
     }
 
-    // Update fields possibilities menu for projects (with actual values printed)
-    public String chooseProjectField(Register register, String chosenTask) {
+    /**
+     * Building message for menu of possible fields to be update for project (with actual values)
+     *
+     * @param register                  register with tasks and projects
+     * @param chosenProject             Id of the chosen project
+     * @return                          message in String format
+     */
+    public String chooseProjectField(Register register, String chosenProject) {
         StringBuilder builtMessage = new StringBuilder();
-        builtMessage.append("Choose field to update for ").append(chosenTask)
-                .append("\n\n(1) Title (").append(register.findProject(chosenTask).getTitle()).append(")")
-                .append("\n(2) Due date (").append(register.findProject(chosenTask).getDueDate()).append(")")
+        builtMessage.append("Choose field to update for ").append(chosenProject)
+                .append("\n\n(1) Title (").append(register.findProject(chosenProject).getTitle()).append(")")
+                .append("\n(2) Due date (").append(register.findProject(chosenProject).getDueDate()).append(")")
                 .append("\n(3) Assign tasks")
                 .append("\n(4) Status");
-        if (register.findProject(chosenTask).ifDone())
+        if (register.findProject(chosenProject).ifDone())
             builtMessage.append(" (finished)");
         else
             builtMessage.append(" (unfinished)");
@@ -56,33 +79,52 @@ public class MessageBuilderProjects extends MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    // Choices
+    /**
+     * Building messages for different popups with choices for projects
+     *
+     * @return                          message in String format
+     */
     public String ifAddNextTask() {
         return "Choose an option" + "\n\n(1) Add next task" + "\n(2) Go to main menu";
     }
-
-    public String enterProjectTitle() { return  "Enter project title"; }
-
     public String chooseProjectsSorting() {
         return  "Print projects sorted by \n\n(1) Title \n(2) Id \n(3) Due date \n(4) Amount of tasks";
     }
 
-    // Confirmations
+    /**
+     * Building messages for input popup to enter project title
+     *
+     * @return                          message in String format
+     */
+    public String enterProjectTitle() { return  "Enter project title"; }
+
+    /**
+     * Building messages for popups with confirmations
+     *
+     * @return                          message in String format
+     */
     public String removeProjectConfirmation() { return "Project was removed from the register"; }
-
     public String markProjectAsDoneConfirmation() { return "Project was marked as finished"; }
-
     public String fixProjectStatusConfirmation() { return  "Project status was fixed"; }
-
     public String changedProjectDueDateConfirmation() { return  "Project due date was changed"; }
-
     public String changedProjectTitleConfirmation() { return  "Project title was changed"; }
 
+    /**
+     * Building messages for popups with confirmations of adding project to the register
+     *
+     * @param register                  register with tasks and projects
+     * @return                          message in String format
+     */
     public String addedProjectConfirmation(Register register) {
         return "New project was added as " + register.getProjects().get(register.getProjects().size() - 1).getId();
     }
 
-    // Print out for filtered or sorted projects
+    /**
+     * Building messages for popup with list of filtered or sorted projects
+     *
+     * @param projects                  list of projects
+     * @return                          filtered or sorted list in String format
+     */
     public String listOfProjects(List<Project> projects) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Projects\n");

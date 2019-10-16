@@ -4,11 +4,22 @@ import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Project;
 import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Register;
 import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Task;
 
+/**
+ * Represents a messageBuilder to build messages, that will be shown in popups
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class MessageBuilder {
 
-    /** =================    =================    Messages    =================   ================= */
+    /* =================    =================    Methods    =================   ================= */
 
-    // Message for main menu
+    /**
+     * Building message for main menu
+     *
+     * @param register                  register containing tasks and projects
+     * @return                          message in String format
+     */
     public String chooseMain(Register register) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("You have ").
@@ -27,41 +38,69 @@ public class MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    // Choices
+    /**
+     * Building messages for different popups with choices
+     *
+     * @return                          message in String format
+     */
     public String chooseTask() { return "Choose a task from a list"; }
-
     public String chooseProject() { return "Choose project from a list"; }
-
     public String chooseStatus() { return "Choose status from below \n\n(1) Finished \n(2) Unfinished"; }
-
-    public String chooseDueDate() { return "Enter new due date (yyyyMMdd)"; }
-
-    public String chooseTitle() { return "Enter new title"; }
-
-    public String enterDueDate() { return "Enter due date (yyyyMMdd)"; }
-
     public String chooseFiltering() { return "Print \n\n(1) Assigned \n(2) Not assigned \n(3) Finished \n(4) Unfinished"; }
 
-    // Confirmations
+    /**
+     * Building messages for different input popups to enter values
+     *
+     * @return                          message in String format
+     */
+    public String chooseDueDate() { return "Enter new due date (yyyyMMdd)"; }
+    public String chooseTitle() { return "Enter new title"; }
+    public String enterDueDate() { return "Enter due date (yyyyMMdd)"; }
+
+    /**
+     * Building messages for popup with confirmation of quiting application
+     *
+     * @return                          message in String format
+     */
     public String quitConfirmation() { return "Thank you for using"; }
 
+    /**
+     * Building messages for popup with confirmation of adding task to the project
+     *
+     * @param chosenTask                Id of the task, that was added
+     * @param chosenProject             Id of the project, that above task was added to
+     * @return                          message in String format
+     */
     public String addedTaskToProjectConfirmation(String chosenTask, String chosenProject) {
         return "Task " + chosenTask + " was added to project " + chosenProject;
     }
 
-    // Information
+    /**
+     * Building messages for different popups with information
+     *
+     * @return                          message in String format
+     */
+    public String noProjectsInfo() { return "There are no projects stored"; }
+    public String noTasksInfo() { return "There are no tasks stored"; }
+    public String noTasksNoProjects() { return "There are no tasks and no projects stored"; }
+
+    /**
+     * Building messages for popup with information, that task was already added to the project
+     *
+     * @param chosenTask                Id of the task, that was added
+     * @param chosenProject             Id of the project, that above task was added to
+     * @return                          message in String format
+     */
     public String taskAlreadyInProjectInfo(String chosenTask, String chosenProject) {
         return "Task " + chosenTask + " was already added to project " + chosenProject;
     }
 
-    public String noProjectsInfo() { return "There are no projects stored"; }
-
-    public String noTasksInfo() { return "There are no tasks stored"; }
-
-
-    public String noTasksNoProjects() { return "There are no tasks and no projects stored"; }
-
-    // Print out from main menu
+    /**
+     * Printing out all tasks and projects from the main menu
+     *
+     * @param register                  register containing tasks and projects
+     * @return                          list in String format
+     */
     public String listForMain(Register register) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Projects and assigned tasks\n");
@@ -81,7 +120,12 @@ public class MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    // Add projects to list printed from main menu
+    /**
+     * Adding project to list printed from main menu
+     *
+     * @param project               project to be added
+     * @return                      appendix to the list created until that moment, containing data of one project
+     */
     public Appendable addProjectToListForMain(Project project) {
         StringBuilder appendix = new StringBuilder();
         appendix.append("\n    ").append(project.getId());
@@ -99,7 +143,12 @@ public class MessageBuilder {
         return appendix;
     }
 
-    // Add tasks to list printed from main menu
+    /**
+     * Adding task to list printed from main menu
+     *
+     * @param task                  task to be added
+     * @return                      appendix to the list created until that moment, containing data of one task
+     */
     public Appendable addTaskToListForMain(Task task) {
         StringBuilder appendix = new StringBuilder();
         appendix.append("\n    ").append(task.getId());
@@ -114,16 +163,16 @@ public class MessageBuilder {
         return appendix;
     }
 
-    // Counters
+    /**
+     * Counting amount of tasks or projects, finished or unfinished
+     *
+     * @param register              register of tasks and projects
+     * @return                      amount, that was requested
+     */
     int amountOfTasks(Register register) { return amountOfTasksDone(register) + amountOfTasksToDo(register); }
-
     int amountOfTasksDone(Register register) { return (int) register.getTasks().stream().filter(Task::ifDone).count(); }
-
     int amountOfTasksToDo(Register register) { return (int) register.getTasks().stream().filter(task -> !task.ifDone()).count(); }
-
     int amountOfProjects(Register register) { return amountOfProjectsDone(register) + amountOfProjectsToDo(register); }
-
     int amountOfProjectsDone(Register register) { return (int) register.getProjects().stream().filter(Project::ifDone).count(); }
-
     int amountOfProjectsToDo(Register register) { return (int) register.getProjects().stream().filter(project -> !project.ifDone()).count(); }
 }

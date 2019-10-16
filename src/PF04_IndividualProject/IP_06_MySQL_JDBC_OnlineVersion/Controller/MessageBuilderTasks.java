@@ -5,11 +5,22 @@ import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Task;
 
 import java.util.List;
 
+/**
+ * Represents an extension of messageBuilder done for tasks to build messages, that will be shown in popups
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class MessageBuilderTasks extends MessageBuilder {
 
-    /** =================    =================    Tasks messages    =================   ================= */
+    /* =================    =================    Methods for tasks    =================   ================= */
 
-    // Message for tasks main menu
+    /**
+     * Building message for main menu for the tasks
+     *
+     * @param register                  register with tasks and projects
+     * @return                          message in String format
+     */
     public String chooseOptionForTask(Register register) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("You have ")
@@ -29,7 +40,13 @@ public class MessageBuilderTasks extends MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    // Edit activities menu for tasks
+    /**
+     * Building message for menu of edit activities for tasks
+     *
+     * @param register                  register with tasks and projects
+     * @param chosenTask                Id of the chosen task
+     * @return                          message in String format
+     */
     public String chooseActivityForTask(Register register, String chosenTask) {
         String builtMessage = "Choose activity for " + chosenTask + " (" +
                 register.findTask(chosenTask).getTitle() + ")" +
@@ -40,7 +57,13 @@ public class MessageBuilderTasks extends MessageBuilder {
         return builtMessage;
     }
 
-    // Update fields possibilities menu for tasks (with actual values printed)
+    /**
+     * Building message for menu of possible fields to be update for tasks (with actual values)
+     *
+     * @param register                  register with tasks and projects
+     * @param chosenTask                Id of the chosen task
+     * @return                          message in String format
+     */
     public String chooseTaskField(Register register, String chosenTask) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Choose field to update for ").append(chosenTask)
@@ -58,35 +81,54 @@ public class MessageBuilderTasks extends MessageBuilder {
         return String.valueOf(builtMessage);
     }
 
-    // Choices
+    /**
+     * Building messages for input popup to enter task title
+     *
+     * @return                          message in String format
+     */
     public String enterTaskTitle() { return  "Enter task title"; }
 
+    /**
+     * Building message for popup with choices of sorting for tasks
+     *
+     * @return                          message in String format
+     */
     public String chooseTasksSorting() {
         return "Print tasks sorted by \n\n(1) Title \n(2) Id \n(3) Due date \n(4) Project";
     }
 
-    // Confirmations
+    /**
+     * Building messages for popups with confirmations
+     *
+     * @return                          message in String format
+     */
     public String removeTaskConfirmation() { return "Task was removed from the register"; }
-
     public String markTaskAsDoneConfirmation() { return "Task was marked as finished"; }
-
     public String fixTaskStatusConfirmation() { return  "Task status was fixed"; }
-
     public String reassignedTaskConfirmation() { return "Task was reassigned"; }
-
     public String changedTaskDueDateConfirmation() { return  "Task due date was changed"; }
-
     public String changedTaskTitleConfirmation() { return  "Task title was changed"; }
 
+    /**
+     * Building messages for popups with confirmations of adding task to the register
+     *
+     * @param register                  register with tasks and projects
+     * @return                          message in String format
+     */
     public String addedTaskConfirmation(Register register) {
         return "New task was added as " + register.getTasks().get(register.getTasks().size() - 1).getId();
     }
 
-    // Print out for filtered or sorted tasks
-    public String listOfTasks(List<Task> sortedTasks) {
+    /**
+     * Building messages for popup with list of filtered or sorted tasks
+     *
+     * @param tasks                     list of tasks
+     * @return                          filtered or sorted list in String format
+     */
+    public String listOfTasks(List<Task> tasks) {
         StringBuilder builtMessage = new StringBuilder();
         builtMessage.append("Tasks\n");
-        sortedTasks.forEach(task -> builtMessage.append(addTaskToListForMain(task)));   // Add tasks to list
+        tasks.forEach(task -> builtMessage.append(addTaskToListForMain(task)));   // Add tasks to list
         return String.valueOf(builtMessage);
     }
 }
