@@ -2,14 +2,21 @@ package PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Interface;
 
 import java.sql.*;
 
+/**
+ * Represents a connector to MySQL database
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class MySQLConnector {
-    private QueryBuilder sqlString = new QueryBuilder();
 
-    public QueryBuilder getSqlString() { return sqlString; }
+    /* =================    =================    Methods    =================   ================= */
 
-    /** =================    =================    MySQL database activities    =================   ================= */
-
-    // Connection with database setup
+    /**
+     * Establishing connection with MySQL database
+     *
+     * @return              working connection to the database or throwing SQLException if unable to connect
+     */
     public Connection startConnection()
     {
         Connection conn;                                         // Setup connection properties
@@ -29,7 +36,11 @@ public class MySQLConnector {
         return null;                                            // Return null if unable to connect
     }
 
-    // Close connection with database
+    /**
+     * Closing connection with database or throwing SQLException if unable to do it
+     *
+     * @param conn          connection, that will be closed
+     */
     public void closeConnection(Connection conn) {
         try
         {

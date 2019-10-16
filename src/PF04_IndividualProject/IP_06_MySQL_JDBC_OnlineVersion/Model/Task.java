@@ -1,5 +1,11 @@
 package PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model;
 
+/**
+ * Represents a task
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class Task {
     private String id;
     private String title;
@@ -7,9 +13,13 @@ public class Task {
     private boolean done;
     private String assignedToProject;
 
-    /** =================    =================    Tasks    =================   ================= */
 
-    // Creation of new task with name and due date
+    /**
+     * Constructor for creation of a new task with defined name and due date
+     *
+     * @param title                 title of the task
+     * @param dueDate               due date of the task (must be given as YYYYMMDD)
+     */
     public Task(String title, String dueDate) {
         this.setTitle(title);
         this.setDueDate(dueDate);
@@ -17,7 +27,14 @@ public class Task {
         this.setAssignedToProject("");
     }
 
-    // Creation of unassigned task fetched from database
+    /**
+     * Constructor for creation of unassigned task fetched from database
+     *
+     * @param id                    unique id of task
+     * @param title                 title of the task
+     * @param dueDate               must be given as YYYYMMDD
+     * @param done                  true for finished tasks, false for unfinished
+     */
     public Task(String id, String title, String dueDate, boolean done) {
         this.setId(id);
         this.setTitle(title);
@@ -26,7 +43,15 @@ public class Task {
         this.setAssignedToProject("");
     }
 
-    // Creation of task (assigned to existing project) fetched from database
+    /**
+     * Constructor for creation of task (assigned to existing project) fetched from database
+     *
+     * @param id                    unique id of task
+     * @param title                 title of the task
+     * @param dueDate               must be given as YYYYMMDD
+     * @param done                  true for finished tasks, false for unfinished
+     * @param assignedToProject     id of the project, that task is assigned to
+     */
     public Task(String id, String title, String dueDate, boolean done, String assignedToProject) {
         this.setId(id);
         this.setTitle(title);
@@ -35,12 +60,18 @@ public class Task {
         this.setAssignedToProject(assignedToProject);
     }
 
+    /**
+     * Getters for this class
+     */
     public String getId() { return id; }
     public String getTitle() { return title; }
     public String getDueDate() { return dueDate; }
     public boolean ifDone() { return done; }
     public String getAssignedToProject() { return assignedToProject; }
 
+    /**
+     * Setters for this class
+     */
     public void setId(String id) { this.id = id; }
     public void setTitle(String title) { this.title = title; }
     public void setDueDate(String dueDate) { this.dueDate = dueDate; }

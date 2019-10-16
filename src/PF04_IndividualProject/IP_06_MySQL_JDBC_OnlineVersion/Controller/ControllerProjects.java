@@ -8,26 +8,42 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a controller to control the flow of projects part of application
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class ControllerProjects {
     private PopUpsBuilderProjects popUpsBuilderProjects;
 
+    /**
+     * Constructor of a ready to work with controller containing popUpsBuilder
+     */
     public ControllerProjects() {
         this.setPopUpsBuilderProjects(new PopUpsBuilderProjects());
     }
 
+    /**
+     * Getter for this class
+     */
     public PopUpsBuilderProjects getPopUpsBuilderProjects() { return popUpsBuilderProjects; }
 
-    public void setPopUpsBuilderProjects(PopUpsBuilderProjects popUpsBuilderProjects) { this.popUpsBuilderProjects = popUpsBuilderProjects; }
-
-    /** =================    =================    Controller for projects    =================   ================= */
-
-    // Main program for projects
-    public void run(Register register) {
-        optionChoice(register);                         // Start with projects
+    /**
+     * Setter for this class
+     */
+    public void setPopUpsBuilderProjects(PopUpsBuilderProjects popUpsBuilderProjects) {
+        this.popUpsBuilderProjects = popUpsBuilderProjects;
     }
 
-    // Main menu for projects, first choice
-    private void optionChoice(Register register) {
+    /* =================    =================    Methods for projects    =================   ================= */
+
+    /**
+     * Printing main menu for projects
+     *
+     * @param register          register containing projects
+     */
+    public void optionChoice(Register register) {
         int optionChosen = -1;
         while (optionChosen < 0 || optionChosen > 4)
             optionChosen = getPopUpsBuilderProjects().chooseOptionForProject(register);
@@ -50,7 +66,11 @@ public class ControllerProjects {
         }
     }
 
-    // Edit project was chosen
+    /**
+     * Printing menu of options for edition for projects
+     *
+     * @param register          register containing projects
+     */
     private void editProjectChosen(Register register) {
         if (register.getProjects().size() == 0) {
             getPopUpsBuilderProjects().noProjectsInfo();                                // Inform if there are no projects
@@ -74,7 +94,11 @@ public class ControllerProjects {
         }
     }
 
-    // Choose project to work with
+    /**
+     * Choosing project to work with
+     *
+     * @param register          register containing projects
+     */
     private String chooseProjectToEdit(Register register) {
         String chosenProject;
         do {
@@ -83,7 +107,13 @@ public class ControllerProjects {
         return chosenProject;
     }
 
-    // Choose what to do
+    /**
+     * Choosing what to do with chosen projects
+     *
+     * @param register          register containing projects
+     * @param chosenProject     project, that we will work with
+     * @return                  integer value representing chosen activity
+     */
     private int chooseActivityForProject(Register register, String chosenProject) {
         int chosenActivity = -1;
         while (chosenActivity < 0 || chosenActivity > 3) {                                // Print popup with choices
@@ -92,19 +122,34 @@ public class ControllerProjects {
         return chosenActivity;
     }
 
-    // Remove project from register
+    /**
+     * Removing project from register
+     *
+     * @param register          register containing projects
+     * @param chosenProject     project, that will be removed
+     */
     private void removeProjectChosen(Register register, String chosenProject) {
         register.removeProjectAlways(chosenProject);                                    // Remove project
         getPopUpsBuilderProjects().projectRemovalConfirmation();                        // Print confirmation
     }
 
-    // Mark project as done
+    /**
+     * Marking project as finished
+     *
+     * @param register          register containing projects
+     * @param chosenProject     Id of the project, that will be removed
+     */
     private void markProjectAsDone(Register register, String chosenProject) {
         register.markProjectAsDoneAlways(chosenProject);                                // Mark project as done
         getPopUpsBuilderProjects().projectMarkedAsDoneConfirmation();                   // Print confirmation
     }
 
-    // Choose field which will be edited
+    /**
+     * Choosing field of the project, which will be edited
+     *
+     * @param register          register containing projects
+     * @param chosenProject     Id of the project, that will have field edited
+     */
     private void chooseProjectFieldToEdit(Register register, String chosenProject) {
         int chosenField = -1;
         while (chosenField < 0 || chosenField > 4) {                                    // Print popup with choices
@@ -129,14 +174,21 @@ public class ControllerProjects {
         }
     }
 
-    // Change status of chosen project
+    /**
+     * Changing status of chosen project
+     *
+     * @param register          register containing projects
+     * @param chosenProject     Id of the project, that will be removed
+     */
     private void changeProjectStatus(Register register, String chosenProject) {
         int chosenStatus = chooseProjectStatus();                           // Choose new status
         register.setProjectStatus(chosenProject, chosenStatus);             // Change status of chosen project
         getPopUpsBuilderProjects().fixProjectStatusConfirmation();          // Print confirmation
     }
 
-    // Choose new status
+    /**
+     * Choosing new status for chosen project
+     */
     private int chooseProjectStatus() {
         int chosenStatus = -1;
         while (chosenStatus < 0 || chosenStatus > 1) {
@@ -145,7 +197,12 @@ public class ControllerProjects {
         return chosenStatus;
     }
 
-    // Assign tasks to chosen project
+    /**
+     * Assigning tasks to the chosen project
+     *
+     * @param register          register containing projects
+     * @param chosenProject     Id of the projects, that tasks will be assigned to
+     */
     private void assignNewTasksToProject(Register register, String chosenProject) {
         if (register.getTasks().size() == 0) {
             getPopUpsBuilderProjects().noTasksInfo();                                       // Inform if there are no tasks
@@ -161,7 +218,11 @@ public class ControllerProjects {
         }
     }
 
-    // Choose task to add to chosen project
+    /**
+     * Choosing task to add to chosen project
+     *
+     * @param register          register containing tasks
+     */
     private String chooseTaskToAddToTheProject(Register register) {
         String chosenTaskToAddToProject;
         do {
@@ -172,7 +233,13 @@ public class ControllerProjects {
         return chosenTaskToAddToProject;
     }
 
-    // Assign tasks to chosen project
+    /**
+     * Assigning task to the project
+     *
+     * @param register                      register containing tasks and projects
+     * @param chosenTaskToAddToProject      Id of the task, that will be assigned
+     * @param chosenProject                 Id of the project, that the above task will be assigned to
+     */
     private void addTaskToTheProject(Register register, String chosenProject, String chosenTaskToAddToProject) {
         if (!register.findTask(chosenTaskToAddToProject).getAssignedToProject().equals(chosenProject)) {
                                                                                         // Assign task if it was not assigned
@@ -184,7 +251,12 @@ public class ControllerProjects {
         }
     }
 
-    // Ask if want to add next task
+    /**
+     * Asking if user want to assign next task to the project
+     *
+     * @param addNextTask               true value, as before user wanted to assign a task
+     * @return                          choice of the user - true to assign next, false to go back to main menu
+     */
     private boolean ifAddNextTaskToProject(boolean addNextTask) {
         int ifAddNext = -1;
         while (ifAddNext < 0 || ifAddNext > 1) {
@@ -195,7 +267,12 @@ public class ControllerProjects {
         return addNextTask;                                                                 // If Yes
     }
 
-    // Change due date of chosen project
+    /**
+     * Changing due date of chosen project
+     *
+     * @param register          register containing projects
+     * @param chosenProject     Id of the project, that will get new new date
+     */
     private void changeProjectDueDate(Register register, String chosenProject) {
         String chosenDueDate = "";
         DateValidator dateValidator = new DateValidator();
@@ -211,14 +288,23 @@ public class ControllerProjects {
         getPopUpsBuilderProjects().changeProjectDueDateConfirmation();                      // Print confirmation
     }
 
-    // Change title of chosen project
+    /**
+     * Changing title of chosen project
+     *
+     * @param register          register containing projects
+     * @param chosenProject     Id of the project, that will be renamed
+     */
     private void changeProjectTitle(Register register, String chosenProject) {
         String chosenTitle = chooseNewTitleForProject();                                // Get new title
         register.setProjectTitle(chosenProject, chosenTitle);                           // Change title of chosen project
         getPopUpsBuilderProjects().changedProjectTitleConfirmation();                   // Print confirmation
     }
 
-    // Get new title
+    /**
+     * Getting a new title for the project
+     *
+     * @return                  String value entered by the user
+     */
     private String chooseNewTitleForProject() {
         String chosenTitle = "";
         do {
@@ -229,7 +315,11 @@ public class ControllerProjects {
         return chosenTitle;
     }
 
-    // Add new project
+    /**
+     * Adding new project to the register
+     *
+     * @param register          register containing projects
+     */
     private void addNewProjectChosen(Register register) {
         String newTitle = enterNewTitleForProject();                                    // Get title
         String newDueDate = enterNewDueDateForProject();                                // Get due date
@@ -237,7 +327,11 @@ public class ControllerProjects {
         getPopUpsBuilderProjects().addedNewProjectConfirmation(register);               // Print confirmation
     }
 
-    // Get title for new project
+    /**
+     * Getting a title for a new project
+     *
+     * @return                  String value entered by the user
+     */
     private String enterNewTitleForProject() {
         String newTitle = "";
         do {
@@ -248,7 +342,11 @@ public class ControllerProjects {
         return newTitle;
     }
 
-    // Get due date for new project
+    /**
+     * Getting a due date for a new project
+     *
+     * @return                  String value entered by the user, must be in format YYYYMMDD
+     */
     private String enterNewDueDateForProject() {
         String newDueDate = "";
         DateValidator dateValidator = new DateValidator();
@@ -262,7 +360,11 @@ public class ControllerProjects {
         return newDueDate;
     }
 
-    // Print out sorted projects
+    /**
+     * Printing out list of projects (sorted)
+     *
+     * @param register          register containing projects
+     */
     private void printOutSortedChosen(Register register) {
         if (register.getProjects().size() == 0) {
             getPopUpsBuilderProjects().noProjectsInfo();                                // Inform if there are no projects
@@ -306,7 +408,11 @@ public class ControllerProjects {
         }
     }
 
-    // Choose sorting
+    /**
+     * Choosing of sorting method for projects
+     *
+     * @return                  int value representing method of sorting
+     */
     private int chooseSortingForProjects() {
         int chosenSorting = -1;
         while (chosenSorting < 0 || chosenSorting > 3) {
@@ -315,7 +421,11 @@ public class ControllerProjects {
         return chosenSorting;
     }
 
-    // Print out filtered projects
+    /**
+     * Printing out filtered list of projects (sorted)
+     *
+     * @param register          register containing projects
+     */
     private void printOutFilteredOptionChosen(Register register) {
         if (register.getProjects().size() == 0) {
             getPopUpsBuilderProjects().noProjectsInfo();                            // Inform if there are no projects
@@ -352,7 +462,11 @@ public class ControllerProjects {
         }
     }
 
-    // Choose filtering
+    /**
+     * Choosing of filtering method for projects
+     *
+     * @return                  int value representing method of filtering
+     */
     private int chooseFilteringForProjects() {
         int chosenFiltering = -1;
         while (chosenFiltering < 0 || chosenFiltering > 3) {

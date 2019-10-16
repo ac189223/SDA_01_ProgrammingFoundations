@@ -4,12 +4,21 @@ import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Interface.DataLists
 import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Interface.MySQLController;
 import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Model.Register;
 
+/**
+ * Represents a controller to update data from MySQL database and control the flow of application after main menu choice
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class Controller {
     private ControllerProjects controllerProjects;
     private ControllerTasks controllerTasks;
     private PopUpsBuilder popUpsBuilder;
     private Register register;
 
+    /**
+     * Constructor of a ready to work with controller containing dependent controllers, popUpsBuilder and register for data
+     */
     public Controller() {
         this.setControllerProjects(new ControllerProjects());
         this.setControllerTasks(new ControllerTasks());
@@ -17,19 +26,29 @@ public class Controller {
         this.setRegister(new Register());
     }
 
+    /**
+     * Getters for this class
+     */
     public ControllerProjects getControllerProjects() { return controllerProjects; }
     public ControllerTasks getControllerTasks() { return controllerTasks; }
     public PopUpsBuilder getPopUpsBuilder() { return popUpsBuilder; }
     public Register getRegister() { return register; }
 
+    /**
+     * Setters for this class
+     */
     public void setControllerProjects(ControllerProjects controllerProjects) { this.controllerProjects = controllerProjects; }
     public void setControllerTasks(ControllerTasks controllerTasks) { this.controllerTasks = controllerTasks; }
     public void setPopUpsBuilder(PopUpsBuilder popUpsBuilder) { this.popUpsBuilder = popUpsBuilder; }
     public void setRegister(Register register) { this.register = register; }
 
-    /** =================    =================    Controller    =================   ================= */
+    /* =================    =================    Methods    =================   ================= */
 
-    // Main program
+    /**
+     * Main method
+     * Uploading data from MySQL database
+     * Presenting first choice to the user (as many times as he wants, until he will select to quit)
+     */
     public void run() {
         uploadData();                                   // Upload data from MySQL database
         getRegister().printStatus();                    // Check if successful
@@ -37,7 +56,9 @@ public class Controller {
         while (true) { mainChoice(); }                  // Start with popups and get back to main menu every time
     }
 
-    // Main menu, first choice
+    /**
+     * Printing main menu, that is containing values for the first choice
+     */
     private void mainChoice() {
         int mainChosen = -1;
         while (mainChosen < 0 || mainChosen > 3)
@@ -58,7 +79,9 @@ public class Controller {
         }
     }
 
-    // Upload data from MySQL database
+    /**
+     * Uploading data from MySQL database into lists stored in the register
+     */
     private void uploadData() {
         MySQLController dataReader = new MySQLController();
         DataLists dataLists = dataReader.readData();                    // Retrieve data in DataLists format
@@ -72,23 +95,32 @@ public class Controller {
                 .forEach(task -> getRegister().addTaskToProject(task.getId(), task.getAssignedToProject()));
     }
 
-    // Save data
+    /**
+     * Quiting application with printing good bye message
+     */
     private void QuitChosen() {
         getPopUpsBuilder().quitConfirmation();                          // Print confirmation
         System.exit(0);                                          // Close application
     }
 
-    // Work with projects
+    /**
+     * Starting dependent controller to work with projects
+     */
     private void projectsChosen() {
-        getControllerProjects().run(getRegister());
-    }           // Run projects register
+        getControllerProjects().optionChoice(getRegister());                   // Run projects register
+    }
 
-    // Work with tasks
+    /**
+     * Starting dependent controller to work with tasks
+     */
     private void tasksChosen() {
-        getControllerTasks().run(getRegister());
-    }                 // Run tasks register
+        getControllerTasks().optionChoice(getRegister());                      // Run tasks register
+    }
 
-    // Print out all tasks and projects
+    /**
+     * Printing out all stored projects (sorted by Id) with assigned to them tasks (sorted by Id)
+     * Printing all tasks without assignation (sorted by Id) under above list
+     */
     private void printAllChosen() {
         if (getRegister().getTasks().size() == 0 && getRegister().getProjects().size() == 0) {
             getPopUpsBuilder().noTasksNoProjectsInfo();                     // Inform if database is empty

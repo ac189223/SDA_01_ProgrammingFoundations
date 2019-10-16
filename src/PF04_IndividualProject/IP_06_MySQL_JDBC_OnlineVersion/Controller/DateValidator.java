@@ -4,10 +4,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Represents a dateValidator to check the format of date entered by the user
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class DateValidator {
 
-    /** =================    =================    Date format validation    =================   ================= */
+    /* =================    =================    Methods    =================   ================= */
 
+    /**
+     * Checking if the format of date is valid
+     *
+     * @param dateToValidate            entered by user date that must be validated
+     * @param dateFromat                proper format of date
+     * @return                          true if entered date matches the format, false otherwise
+     */
     public boolean isThisDateValid(String dateToValidate, String dateFromat){
 
         if (dateToValidate == null) { return false; }                   // Empty date is not valid

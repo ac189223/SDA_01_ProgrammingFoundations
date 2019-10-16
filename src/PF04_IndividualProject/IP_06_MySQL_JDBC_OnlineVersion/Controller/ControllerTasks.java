@@ -7,26 +7,40 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a controller to control the flow of tasks part of application
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class ControllerTasks {
     private PopUpsBuilderTasks popUpsBuilderTasks;
 
-    public ControllerTasks() {
-        this.setPopUpsBuilderTasks(new PopUpsBuilderTasks());
-    }
+    /**
+     * Constructor of a ready to work with controller containing popUpsBuilder
+     */
+    public ControllerTasks() { this.setPopUpsBuilderTasks(new PopUpsBuilderTasks()); }
 
+    /**
+     * Getter for this class
+     */
     public PopUpsBuilderTasks getPopUpsBuilderTasks() { return popUpsBuilderTasks; }
 
-    public void setPopUpsBuilderTasks(PopUpsBuilderTasks popUpsBuilderTasks) { this.popUpsBuilderTasks = popUpsBuilderTasks; }
-
-    /** =================    =================    Controller for tasks    =================   ================= */
-
-    // Main program for tasks
-    public void run(Register register) {
-        optionChoice(register);                         // Start with tasks
+    /**
+     * Setter for this class
+     */
+    public void setPopUpsBuilderTasks(PopUpsBuilderTasks popUpsBuilderTasks) {
+        this.popUpsBuilderTasks = popUpsBuilderTasks;
     }
 
-    // Main menu for tasks, first choice
-    private void optionChoice(Register register) {
+    /* =================    =================    Methods for tasks    =================   ================= */
+
+    /**
+     * Printing main menu for tasks
+     *
+     * @param register          register containing tasks
+     */
+    public void optionChoice(Register register) {
         int optionChosen = -1;
         while (optionChosen < 0 || optionChosen > 4)
             optionChosen = getPopUpsBuilderTasks().chooseOptionForTask(register);
@@ -49,7 +63,11 @@ public class ControllerTasks {
         }
     }
 
-    // Edit task was chosen
+    /**
+     * Printing menu of options for edition for tasks
+     *
+     * @param register          register containing tasks
+     */
     private void editTaskChosen(Register register) {
         if (register.getProjects().size() == 0) {
             getPopUpsBuilderTasks().noTasksInfo();                                // Inform if there are no tasks
@@ -73,7 +91,11 @@ public class ControllerTasks {
         }
     }
 
-    // Choose task to work with
+    /**
+     * Choosing task to work with
+     *
+     * @param register          register containing tasks
+     */
     private String chooseTaskToEdit(Register register) {
         String chosenTask;
         do {
@@ -82,7 +104,13 @@ public class ControllerTasks {
         return chosenTask;
     }
 
-    // Choose what to do
+    /**
+     * Choosing what to do with chosen task
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that we will work with
+     * @return                  integer value representing chosen activity
+     */
     private int chooseActivityForTask(Register register, String chosenTask) {
         int chosenActivity = -1;
         while (chosenActivity < 0 || chosenActivity > 3) {                              // Print popup with choices
@@ -91,22 +119,37 @@ public class ControllerTasks {
         return chosenActivity;
     }
 
-    // Remove task from register
+    /**
+     * Removing task from register
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will be removed
+     */
     private void removeTaskChosen(Register register, String chosenTask) {
         register.removeTask(chosenTask);                                                // Remove task
         getPopUpsBuilderTasks().taskRemovalConfirmation();                              // Print confirmation
     }
 
-    // Mark task as done
+    /**
+     * Marking task as finished
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will be removed
+     */
     private void markTaskAsDone(Register register, String chosenTask) {
         register.markTaskAsDone(chosenTask);                                            // Mark project as done
         getPopUpsBuilderTasks().taskMarkedAsDoneConfirmation();                         // Print confirmation
     }
 
-    // Choose field which will be edited
+    /**
+     * Choosing field of the task, which will be edited
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will have field edited
+     */
     private void chooseTaskFieldToEdit(Register register, String chosenTask) {
         int chosenField = -1;
-        while (chosenField < 0 || chosenField > 4) {                                    // Print popup with choices
+        while (chosenField < 0 || chosenField > 4) {                            // Print popup with choices
             chosenField = getPopUpsBuilderTasks().chooseTaskFieldToEdit(register, chosenTask);
 
             switch (chosenField) {
@@ -128,14 +171,21 @@ public class ControllerTasks {
         }
     }
 
-    // Change status of chosen task
+    /**
+     * Changing status of chosen task
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will be removed
+     */
     private void changeTaskStatus(Register register, String chosenTask) {
         int chosenStatus = chooseTaskStatus();                                  // Choose new status
         register.setTaskStatus(chosenTask, chosenStatus);                       // Change status of chosen task
         getPopUpsBuilderTasks().fixTaskStatusConfirmation();                    // Print confirmation
     }
 
-    // Choose new status
+    /**
+     * Choosing new status for chosen task
+     */
     private int chooseTaskStatus() {
         int chosenStatus = -1;
         while (chosenStatus < 0 || chosenStatus > 1) {
@@ -144,17 +194,26 @@ public class ControllerTasks {
         return chosenStatus;
     }
 
-    // Assign task to project
+    /**
+     * Assigning task to a project
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will be assigned
+     */
     private void assignToProject(Register register, String chosenTask) {
         if (register.getProjects().size() == 0) {
-            getPopUpsBuilderTasks().noProjectsInfo();                           // Inform if there are no projects
+            getPopUpsBuilderTasks().noProjectsInfo();                                   // Inform if there are no projects
         } else {
             String chosenProjectToAssignTo = chooseProjectToAssignTo(register);         // Choose project to assign to
             assignTaskToTheProject(register, chosenTask, chosenProjectToAssignTo);      // Assign task to chosen project
         }
     }
 
-    // Choose project to assign task to it
+    /**
+     * Choosing project to assign task to it
+     *
+     * @param register          register containing projects
+     */
     private String chooseProjectToAssignTo(Register register) {
         String chosenProjectToAssignTo;
         do {
@@ -165,7 +224,13 @@ public class ControllerTasks {
         return chosenProjectToAssignTo;
     }
 
-    // Assign task to chosen project
+    /**
+     * Assigning task to the chosen project
+     *
+     * @param register                      register containing tasks and projects
+     * @param chosenTask                    Id of the task, that will be assigned
+     * @param chosenProjectToAssignTo       Id of the project, that the above task will be assigned to
+     */
     private void assignTaskToTheProject(Register register, String chosenTask, String chosenProjectToAssignTo) {
         if (!register.findTask(chosenTask).getAssignedToProject().equals(chosenProjectToAssignTo)) {
                                                                             // Assign task if it was not assigned
@@ -177,7 +242,12 @@ public class ControllerTasks {
         }
     }
 
-    // Change due date of chosen task
+    /**
+     * Changing due date of chosen task
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will get new new date
+     */
     private void changeTaskDueDate(Register register, String chosenTask) {
         String chosenDueDate = "";
         DateValidator dateValidator = new DateValidator();
@@ -193,14 +263,23 @@ public class ControllerTasks {
         getPopUpsBuilderTasks().changeTaskDueDateConfirmation();                            // Print confirmation
     }
 
-    // Change title of chosen task
+    /**
+     * Changing title of chosen task
+     *
+     * @param register          register containing tasks
+     * @param chosenTask        Id of the task, that will be renamed
+     */
     private void changeTaskTitle(Register register, String chosenTask) {
         String chosenTitle = chooseNewTitleForTask();                               // Get new title
         register.setTaskTitle(chosenTask, chosenTitle);                             // Change title of chosen task
         getPopUpsBuilderTasks().changedTaskTitleConfirmation();                     // Print confirmation
     }
 
-    // Get new title
+    /**
+     * Getting a new title for the task
+     *
+     * @return                  String value entered by the user
+     */
     private String chooseNewTitleForTask() {
         String chosenTitle = "";
         do {
@@ -211,7 +290,11 @@ public class ControllerTasks {
         return chosenTitle;
     }
 
-    // Add new task
+    /**
+     * Adding new task to the register
+     *
+     * @param register          register containing tasks
+     */
     private void addNewTaskChosen(Register register) {
         String newTitle = enterNewTitleForTask();                               // Get title
         String newDueDate = enterNewDueDateForTask();                           // Get due date
@@ -219,7 +302,11 @@ public class ControllerTasks {
         getPopUpsBuilderTasks().addedNewTaskConfirmation(register);             // Print confirmation
     }
 
-    // Get due date for new task
+    /**
+     * Getting a due date for a new task
+     *
+     * @return                  String value entered by the user, must be in format YYYYMMDD
+     */
     private String enterNewDueDateForTask() {
         String newDueDate = "";
         DateValidator dateValidator = new DateValidator();
@@ -233,7 +320,11 @@ public class ControllerTasks {
         return newDueDate;
     }
 
-    // Get title for new task
+    /**
+     * Getting a title for a new task
+     *
+     * @return                  String value entered by the user
+     */
     private String enterNewTitleForTask() {
         String newTitle = "";
         do {
@@ -244,7 +335,11 @@ public class ControllerTasks {
         return newTitle;
     }
 
-    // Print out sorted tasks
+    /**
+     * Printing out list of tasks (sorted)
+     *
+     * @param register          register containing tasks
+     */
     private void printOutSortedChosen(Register register) {
         if (register.getProjects().size() == 0) {
             getPopUpsBuilderTasks().noTasksInfo();                                      // Inform if there are no tasks
@@ -284,7 +379,11 @@ public class ControllerTasks {
         }
     }
 
-    // Choose sorting
+    /**
+     * Choosing of sorting method for tasks
+     *
+     * @return                  int value representing method of sorting
+     */
     private int chooseSortingForTasks() {
         int chosenSorting = -1;
         while (chosenSorting < 0 || chosenSorting > 3) {
@@ -293,7 +392,11 @@ public class ControllerTasks {
         return chosenSorting;
     }
 
-    // Print out filtered tasks
+    /**
+     * Printing out filtered list of tasks (sorted)
+     *
+     * @param register          register containing tasks
+     */
     private void printOutFilteredOptionChosen(Register register) {
         if (register.getTasks().size() == 0) {
             getPopUpsBuilderTasks().noTasksInfo();                                  // Inform if there are no tasks
@@ -343,7 +446,11 @@ public class ControllerTasks {
         }
     }
 
-    // Choose filtering
+    /**
+     * Choosing of filtering method for tasks
+     *
+     * @return                  int value representing method of filtering
+     */
     private int chooseFilteringForTasks() {
         int chosenFiltering = -1;
         while (chosenFiltering < 0 || chosenFiltering > 3) {

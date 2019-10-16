@@ -5,6 +5,12 @@ import PF04_IndividualProject.IP_06_MySQL_JDBC_OnlineVersion.Interface.MySQLCont
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Represents a register containing tasks, projects and controller for database
+ *
+ * @author andrzejcalka
+ * @author =-_-=
+ */
 public class Register {
     private ArrayList<Task> tasks;
     private ArrayList<String> tasksIds;
@@ -12,6 +18,9 @@ public class Register {
     private ArrayList<String> projectsIds;
     private MySQLController mySQLController;
 
+    /**
+     * Constructor of a ready to work with register containing empty ArrayLists and controller for database
+     */
     public Register() {
         this.setTasks(new ArrayList<>());
         this.setTasksIds(new ArrayList<>());                            // List of existing Ids speeds up search
@@ -20,21 +29,32 @@ public class Register {
         this.setMySQLController(new MySQLController());                 // Accessor to update database
     }
 
+    /**
+     * Getters for this class
+     */
     public ArrayList<Task> getTasks() { return tasks; }
     public ArrayList<String> getTasksIds() {return tasksIds; }
     public ArrayList<Project> getProjects() { return projects; }
     public ArrayList<String> getProjectsIds() {return projectsIds; }
     public MySQLController getMySQLController() { return mySQLController; }
 
+    /**
+     * Setters for this class
+     */
     public void setTasks(ArrayList<Task> tasks) { this.tasks = tasks; }
     public void setTasksIds(ArrayList<String> tasksIds) { this.tasksIds = tasksIds; }
     public void setProjects(ArrayList<Project> projects) { this.projects = projects; }
     public void setProjectsIds(ArrayList<String> projectsIds) { this.projectsIds = projectsIds; }
     public void setMySQLController(MySQLController mySQLController) { this.mySQLController = mySQLController; }
 
-    /** =================    =================    Register    =================   ================= */
+    /* =================    =================    Methods    =================   ================= */
 
-    // Creating unique Id for new task or project
+    /**
+     * Creating unique Id for new task or project
+     *
+     * @param listOfIds         list of ids that exist till now
+     * @return                  random, unique it
+     */
     private String randomId(ArrayList<String> listOfIds) {
         Random random = new Random();
         String tempId = String.format("%03d", random.nextInt(1000));        // Create new Id
@@ -44,17 +64,26 @@ public class Register {
         return tempId;
     }
 
-    // Add task to project
+    /**
+     * Adding task to a chosen project
+     *
+     * @param taskId            id of task, that will be added
+     * @param projectId         id of project, that task will be added to
+     */
     public void addTaskToProject(String taskId, String projectId) {
         findTask(taskId).setAssignedToProject(projectId);                       // Set project assignation in task in register
         getMySQLController().addTaskToProject(taskId, projectId);               // Set project assignation in task in database
         findProject(projectId).getAssignedTasks().add(taskId);                  // List task in project as assigned
     }
 
-    // Remove single task assignation to project
+    /**
+     * Removing single task assignation
+     *
+     * @param taskId            id of the task, that will be unassigned
+     */
     public void removeTaskFromProject(String taskId) {
         if (findTask(taskId).getAssignedToProject() != "") {                    // If task is assigned
-            // Remove it from the list in project
+                                                                                // Remove it from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
             findTask(taskId).setAssignedToProject("");                          // Remove project assignation in task in register
                                                                                 // Remove project assignation in task in database
@@ -62,7 +91,11 @@ public class Register {
         }
     }
 
-    // Remove all tasks assigned to the project
+    /**
+     * Removing all tasks assigned to the project
+     *
+     * @param projectId         id of the project, that tasks will be removed from
+     */
     public void removeAllTasksFromProject(String projectId) {
         ArrayList<String> assignedTasks = findProject(projectId).getAssignedTasks();
         while (assignedTasks.size() > 0) {                                      // While there are tasks assigned
@@ -74,7 +107,9 @@ public class Register {
         }
     }
 
-    // Printout to the console to check if data was imported correctly
+    /**
+     * Printout to the console to check if data was imported correctly
+     */
     public void printStatus() {
         StringBuilder statusMessage = new StringBuilder();
         for (Project project: getProjects()) {                                  // Add project to the printout
@@ -98,7 +133,9 @@ public class Register {
         System.out.println("==============  =-_-=  ================");
     }
 
-    // Prepare appendix for task to the printout after data import
+    /**
+     * Prepare appendix for task to the printout after data import
+     */
     private Appendable taskAppendix(Task taskToAppend) {
         StringBuilder taskAppendix = new StringBuilder();
         if (taskToAppend.ifDone())
@@ -115,9 +152,13 @@ public class Register {
         return taskAppendix;
     }
 
-    /** =================    =================    Register for tasks    =================   ================= */
+    /* =================    =================    Methods for tasks    =================   ================= */
 
-    // Adding new task to the list
+    /**
+     * Adding new task to the list
+     *
+     * @param task              task, that will be added to the list
+     */
     public void addTask(Task task) {
         task.setId("task" + randomId(getTasksIds()));                               // Create unique Id
         getTasks().add(task);                                                       // Add task to the register
@@ -126,13 +167,22 @@ public class Register {
         getMySQLController().addNewTask(task.getId(), task.getTitle(), task.getDueDate());
     }
 
-    // Mark task as finished
+    /**
+     * Marking task as finished
+     *
+     * @param id                id of the task, that will be marked as finished
+     */
     public void markTaskAsDone(String id) {
         findTask(id).setDone(true);                                               // Mark task as finished in register
         getMySQLController().markTaskAsDone(id);                                  // Mark task as finished in register
     }
 
-    // Find task in register
+    /**
+     * Finding task in register
+     *
+     * @param id                id, that we are looking for among ids of tasks stored in the register
+     * @return                  task, that has a proper id or null, if task was not found
+     */
     public Task findTask(String id) {
         for (Task task: getTasks())
             if (task.getId().equals(id))
@@ -140,17 +190,26 @@ public class Register {
         return null;                                                            // Return null if task was not found
     }
 
-    // Remove task from register
+    /**
+     * Removing task from register
+     *
+     * @param taskId            id of the task, that will be removed from the register
+     */
     public void removeTask(String taskId) {
         if (!findTask(taskId).getAssignedToProject().equals(""))                // If task is assigned to any project
-            // Remove task from the list in project
+                                                                                // Remove task from the list in project
             findProject(findTask(taskId).getAssignedToProject()).getAssignedTasks().remove(taskId);
         getTasks().remove(findTask(taskId));                                    // Remove task from register
         getMySQLController().removeTask(taskId);                                // Remove task from database
         getTasksIds().remove(taskId);                                           // Remove task Id form list
     }
 
-    // Set status of chosen task
+    /**
+     * Setting status of chosen task
+     *
+     * @param chosenTask        task, that will work on
+     * @param chosenStatus      status, that we will set for above task (0 for unfinished tasks, 1 for finished ones)
+     */
     public void setTaskStatus(String chosenTask, int chosenStatus) {
         if (chosenStatus == 0) {
             findTask(chosenTask).setDone(false);                                // Set task as unfinished in register
@@ -161,20 +220,35 @@ public class Register {
         }
     }
 
-    // Set due date of chosen task
+    /**
+     * Setting due date of chosen task
+     *
+     * @param chosenTask        task, that will work on
+     * @param chosenDueDate     due date, that we will set for above task (date format YYYYMMDD)
+     */
     public void setTaskDueDate(String chosenTask, String chosenDueDate) {
         findTask(chosenTask).setDueDate(chosenDueDate);                         // Set task due date in register
         getMySQLController().setTaskDueDate(chosenTask, chosenDueDate);         // Set task due date in database
     }
 
-    // Set title of chosen task
+    /**
+     * Set title of chosen task
+     *
+     * @param chosenTask        task, that will work on
+     * @param chosenTitle       title, that we will set for above task
+     */
     public void setTaskTitle(String chosenTask, String chosenTitle) {
         findTask(chosenTask).setTitle(chosenTitle);                             // Set task title in register
         getMySQLController().setTaskTitle(chosenTask, chosenTitle);             // Set task title in database
     }
 
-    /** =================    =================    Register for projects    =================   ================= */
+    /* =================    =================    Methods for projects    =================   ================= */
 
+    /**
+     * Adding new project to the list
+     *
+     * @param project           project, that will be added to the list
+     */
     // Adding new project to the list
     public void addProject(Project project) {
         project.setId("proj" + randomId(getProjectsIds()));                         // Create unique Id
@@ -184,7 +258,11 @@ public class Register {
         getMySQLController().addNewProject(project.getId(), project.getTitle(), project.getDueDate());
     }
 
-    // Mark project as finished if dependent tasks are finished
+    /**
+     * Marking project as finished if dependent tasks are finished
+     *
+     * @param id                id of the project, that will be marked as finished
+     */
     public void markProjectAsDoneDependent(String id) {
         boolean check = true;
         for (String taskId: findProject(id).getAssignedTasks()) {               // Go through tasks
@@ -197,16 +275,23 @@ public class Register {
             System.out.println("Mark all dependent tasks as finished first");   // Ask to correct tasks statuses
     }
 
-    // Mark project as finished together with all dependent tasks
+    /**
+     * Marking project as finished together with all dependent tasks
+     *
+     * @param id                id of the project, that will be marked as finished
+     */
     public void markProjectAsDoneAlways(String id) {
-        findProject(id).getAssignedTasks().forEach(taskId -> {
-            markTaskAsDone(taskId);                                             // Mark task as finished
-        });
+        findProject(id).getAssignedTasks().forEach(this::markTaskAsDone);       // Mark assigned tasks as finished
         findProject(id).setDone(true);                                          // Mark project as finished in register
         getMySQLController().markProjectAsDone(id);                             // Mark project as finished in database
     }
 
-    // Find project in register
+    /**
+     * Finding project in register
+     *
+     * @param id                id, that we are looking for among ids of projects stored in the register
+     * @return                  project, that has a proper id or null, if project was not found
+     */
     public Project findProject(String id) {
         for (Project project: getProjects())
             if (project.getId().equals(id))
@@ -214,7 +299,11 @@ public class Register {
         return null;                                                            // Return null if project was not found
     }
 
-    // Remove project from register together with all dependent tasks
+    /**
+     * Remove project from register together with all dependent tasks
+     *
+     * @param projectId         id of the project, that will be removed from the register
+     */
     public void removeProjectAlways(String projectId) {
         for (String taskId: findProject(projectId).getAssignedTasks()) {        // For all dependent tasks
             getTasks().remove(findTask(taskId));                                // Remove task from register
@@ -226,17 +315,26 @@ public class Register {
         getProjectsIds().remove(projectId);                                     // Remove project Id form list
     }
 
-    // Remove project from register if it does not have dependent tasks
+    /**
+     * Removing project from register if it does not have dependent tasks
+     *
+     * @param projectId         id of the project, that will be removed from the register
+     */
     public void removeProjectDependent(String projectId) {
         if (findProject(projectId).getAssignedTasks().size() == 0) {            // If there are no dependent tasks
             getProjects().remove(findProject(projectId));                       // Remove project from register
-            getMySQLController().removeProject(projectId);                          // Remove project from database
+            getMySQLController().removeProject(projectId);                      // Remove project from database
             getProjectsIds().remove(projectId);                                 // Remove project Id form list
         } else
             System.out.println("Remove or delete all dependent tasks first");   // Ask to remove tasks first
     }
 
-    // Set status of chosen project
+    /**
+     * Setting status of chosen project
+     *
+     * @param chosenProject     project, that will work on
+     * @param chosenStatus      status, that we will set for above projects (0 for unfinished projects, 1 for finished ones)
+     */
     public void setProjectStatus(String chosenProject, int chosenStatus) {
         if (chosenStatus == 0) {
             findProject(chosenProject).setDone(false);                         // Set project as unfinished in register
@@ -245,13 +343,23 @@ public class Register {
             markProjectAsDoneAlways(chosenProject);                             // Set as finished together with dependent tasks
     }
 
-    // Set due date of chosen project
+    /**
+     * Setting due date of chosen project
+     *
+     * @param chosenProject     project, that will work on
+     * @param chosenDueDate     due date, that we will set for above project (date format YYYYMMDD)
+     */
     public void setProjectDueDate(String chosenProject, String chosenDueDate) {
         findProject(chosenProject).setDueDate(chosenDueDate);                   // Set project due date in register
         getMySQLController().setProjectDueDate(chosenProject, chosenDueDate);   // Set project due date in database
     }
 
-    // Set title of chosen project
+    /**
+     * Set title of chosen project
+     *
+     * @param chosenProject     project, that will work on
+     * @param chosenTitle       title, that we will set for above project
+     */
     public void setProjectTitle(String chosenProject, String chosenTitle) {
         findProject(chosenProject).setTitle(chosenTitle);                       // Set project title in register
         getMySQLController().setProjectTitle(chosenProject, chosenTitle);       // Set project title in database
