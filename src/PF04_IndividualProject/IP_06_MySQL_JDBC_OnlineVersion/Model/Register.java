@@ -59,7 +59,7 @@ public class Register {
         Random random = new Random();
         String tempId = String.format("%03d", random.nextInt(1000));        // Create new Id
         if (listOfIds.size() != 0)
-            while (listOfIds.contains(tempId))                                     // Check if it is unique
+            while (listOfIds.toString().contains(tempId))                          // Check if it is unique
                 tempId = String.format("%03d", random.nextInt(1000));       // Create next one if not unique
         return tempId;
     }
