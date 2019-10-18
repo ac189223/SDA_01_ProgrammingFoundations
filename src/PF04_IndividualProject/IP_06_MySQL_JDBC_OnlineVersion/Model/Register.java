@@ -160,7 +160,8 @@ public class Register {
      * @param task              task, that will be added to the list
      */
     public void addTask(Task task) {
-        task.setId("task" + randomId(getTasksIds()));                               // Create unique Id
+        if (task.getId() == null)
+            task.setId("task" + randomId(getTasksIds()));                           // Create unique Id
         getTasks().add(task);                                                       // Add task to the register
         getTasksIds().add(task.getId());                                            // Add task Id to the list
                                                                                     // Add new task to database
@@ -251,7 +252,8 @@ public class Register {
      */
     // Adding new project to the list
     public void addProject(Project project) {
-        project.setId("proj" + randomId(getProjectsIds()));                         // Create unique Id
+        if (project.getId() == null)
+            project.setId("proj" + randomId(getProjectsIds()));                     // Create unique Id
         getProjects().add(project);                                                 // Add project to the register
         getProjectsIds().add(project.getId());                                      // Add project Id to the list
                                                                                     // Add new project to database
