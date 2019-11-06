@@ -1,4 +1,4 @@
-package TransparentGUI;
+package Random.TransparentGUI;
 
 import javax.swing.*;
 import java.awt.*;

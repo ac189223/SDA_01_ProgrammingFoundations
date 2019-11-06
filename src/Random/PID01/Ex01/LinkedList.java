@@ -1,4 +1,4 @@
-package PID01.Ex01;
+package Random.PID01.Ex01;
 
 class Node {                                                // Elements of our list
     int elem;                                               // Identification

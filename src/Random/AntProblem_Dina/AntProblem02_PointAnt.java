@@ -1,10 +1,11 @@
-package AntProblem_Dina;
+package Random.AntProblem_Dina;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class AntProblem01_PrintHoney {
-    private static AntProblem01_PrintHoney antProblem = new AntProblem01_PrintHoney();
+public class AntProblem02_PointAnt {
+    private static AntProblem02_PointAnt antProblem = new AntProblem02_PointAnt();
     // Input
     // R N A B X
     // X hard cells
@@ -18,6 +19,7 @@ public class AntProblem01_PrintHoney {
     private ArrayList<Integer> softCells;
     private int[][][] honey;    // number of cell, minimum number of steps from A
     private Random random = new Random();
+    private Point ant;
 
     public int getR() { return R; }
     public int getN() { return N; }
@@ -28,6 +30,7 @@ public class AntProblem01_PrintHoney {
     public int getCells() { return cells; }
     public ArrayList<Integer> getSoftCells() { return softCells; }
     public int[][][] getHoney() { return honey; }
+    public Point getAnt() { return ant; }
 
     public void setR(int r) { R = r; }
     public void setN(int n) { N = n; }
@@ -38,12 +41,13 @@ public class AntProblem01_PrintHoney {
     public void setCells(int cells) { this.cells = cells; }
     public void setSoftCells(ArrayList<Integer> softCells) { this.softCells = softCells; }
     public void setHoney(int[][][] honey) { this.honey = honey; }
+    public void setAnt(Point ant) { this.ant = ant; }
 
     public static void main(String[] args) {
         antProblem.readData();
         antProblem.createHoney();
         antProblem.printHoney();
-        antProblem.goForIt();
+        antProblem.moveTheAnt(antProblem.getA(), antProblem.getN());
     }
 
     private void readData() {
@@ -84,6 +88,11 @@ public class AntProblem01_PrintHoney {
             getHoney()[r] = new int[length][];
             for (int pos = 0; pos < length; pos++) {
                 getHoney()[r][pos] = new int[]{num, getCells(), 0};
+                if (num == getA()) {
+                    setAnt(new Point(r, pos));
+                    getHoney()[r][pos][1] = 0;
+                    getHoney()[r][pos][2] = num;
+                }
                 num++;
             }
             if (r < R - 1)
@@ -105,8 +114,10 @@ public class AntProblem01_PrintHoney {
         }
     }
 
-    private void goForIt() {
-
+    private void moveTheAnt(int comingFrom, int stepsLeft) {
+        // right
+        if  (getAnt().y != getHoney()[getAnt().x].length - 1)
+            setAnt(new Point(getAnt().x, getAnt().y + 1));
     }
 
 
