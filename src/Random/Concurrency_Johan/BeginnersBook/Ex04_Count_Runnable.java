@@ -1,5 +1,14 @@
 package Random.Concurrency_Johan.BeginnersBook;
 
+/**
+ * https://beginnersbook.com/2013/03/multithreading-in-java/
+ *
+ * Creating a thread in Java
+ *
+ * There are two ways to create a thread in Java:
+ * 1) By extending Thread class.
+ * 2) By implementing Runnable interface.
+ */
 class Ex04_Count_Runnable implements Runnable {
     Thread mythread ;
     Ex04_Count_Runnable() {
@@ -26,7 +35,7 @@ class RunnableExample {
         Ex04_Count_Runnable cnt = new Ex04_Count_Runnable();
         try {
             while(cnt.mythread.isAlive()) {
-                System.out.println("Main thread will be alive till the child thread is live");
+                System.out.println("Main thread will be alive till the child thread is alive");
                 Thread.sleep(1500);
             }
         } catch(InterruptedException e) {

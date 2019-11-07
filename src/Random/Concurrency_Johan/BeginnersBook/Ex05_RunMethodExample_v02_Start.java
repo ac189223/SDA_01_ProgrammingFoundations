@@ -1,6 +1,8 @@
 package Random.Concurrency_Johan.BeginnersBook;
 
 /**
+ * https://beginnersbook.com/2015/03/why-dont-we-call-run-method-directly-why-call-start-method/
+ *
  * Why don’t we call run() method directly, why call start() method?
  *
  * We can call run() method if we want but then it would behave just like a
