@@ -1,4 +1,4 @@
-package Random.Concurrency_Johan.BeginnersBook;
+package Random.Concurrency_Multithreading_Johan.BeginnersBook;
 
 public class Ex07_JoinExample2 {
     public static void main(String[] args) {

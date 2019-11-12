@@ -1,4 +1,4 @@
-package Random.Concurrency_Johan.BeginnersBook;
+package Random.Concurrency_Multithreading_Johan.BeginnersBook;
 
 public class Ex06_MyThread_01_Thread extends Thread {
 

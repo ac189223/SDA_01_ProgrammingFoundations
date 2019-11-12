@@ -1,4 +1,4 @@
-package Random.Concurrency_Johan.BeginnersBook;
+package Random.Concurrency_Multithreading_Johan.BeginnersBook;
 
 /**
  *https://beginnersbook.com/2013/03/multithreading-in-java/

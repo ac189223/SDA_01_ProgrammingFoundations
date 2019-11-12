@@ -1,4 +1,4 @@
-package Random.Concurrency_Johan.BeginnersBook;
+package Random.Concurrency_Multithreading_Johan.BeginnersBook;
 
 /**
  * https://beginnersbook.com/2015/03/why-dont-we-call-run-method-directly-why-call-start-method/
@@ -19,7 +19,7 @@ package Random.Concurrency_Johan.BeginnersBook;
  *
  * Lets have a look at the below code to understand this situation.
  */
-public class Ex05_RunMethodExample_v02_Start implements Runnable {
+public class Ex05_RunMethodExample_v01_Run implements Runnable {
     public void run() {
         for(int i=1; i<=3; i++) {
             try {
@@ -32,9 +32,9 @@ public class Ex05_RunMethodExample_v02_Start implements Runnable {
     }
 
     public static void main(String args[]) {
-        Thread th1 = new Thread(new Ex05_RunMethodExample_v02_Start(), "th1");
-        Thread th2 = new Thread(new Ex05_RunMethodExample_v02_Start(), "th2");
-        th1.start();
-        th2.start();
+        Thread th1 = new Thread(new Ex05_RunMethodExample_v01_Run(), "th1");
+        Thread th2 = new Thread(new Ex05_RunMethodExample_v01_Run(), "th2");
+        th1.run();
+        th2.run();
     }
 }

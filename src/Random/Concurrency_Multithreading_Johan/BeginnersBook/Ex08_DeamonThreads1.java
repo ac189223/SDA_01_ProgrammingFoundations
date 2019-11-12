@@ -1,4 +1,4 @@
-package Random.Concurrency_Johan.BeginnersBook;
+package Random.Concurrency_Multithreading_Johan.BeginnersBook;
 
 public class Ex08_DeamonThreads1 extends Thread {
 
