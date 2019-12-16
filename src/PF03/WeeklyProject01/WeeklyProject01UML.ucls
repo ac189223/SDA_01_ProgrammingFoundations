@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.3" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
+  realizations="true" associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="src.PF03.WeeklyProject01.Customer" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/Customer.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="168" y="1195"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="src.PF03.WeeklyProject01.Order" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/Order.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="179" y="694"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="src.PF03.WeeklyProject01.Article" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/Article.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="907" y="680"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="src.PF03.WeeklyProject01.CustomerCompany" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/CustomerCompany.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="211" y="1552"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="src.PF03.WeeklyProject01.Supplier" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/Supplier.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="917" y="1180"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="src.PF03.WeeklyProject01.OrderLine" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/OrderLine.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="586" y="501"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="7" language="java" name="src.PF03.WeeklyProject01.CustomerReg" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/CustomerReg.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="177" y="174"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="8" language="java" name="src.PF03.WeeklyProject01.SupplierReg" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/SupplierReg.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="497" y="156"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="src.PF03.WeeklyProject01.CustomerPrivate" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/CustomerPrivate.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="613" y="1552"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="src.PF03.WeeklyProject01.ArticleReg" project="ProgrammingFoundations" 
+    file="/ProgrammingFoundations/src/PF03/WeeklyProject01/ArticleReg.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="785" y="156"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <association id="12">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="13" name="article"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="3" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="15">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="16" name="order"/>      
+      <multiplicity id="17" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="2" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="18">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="19" name="orderedBy"/>      
+      <multiplicity id="20" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="21">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="22" name="supplier"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="24">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
